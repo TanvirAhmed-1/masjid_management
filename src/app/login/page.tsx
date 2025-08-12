@@ -1,6 +1,9 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import { useLoginMutation } from "@/src/redux/features/auth/authApi"; // তোমার authApi এর পাথ
 
 type LoginFormData = {
   email: string;
@@ -8,52 +11,102 @@ type LoginFormData = {
 };
 
 export default function LoginPage() {
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>();
+  const [loginRequest, { isLoading, error }] = useLoginMutation();
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log("Login Data:", data);
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      // 1️⃣ API কল
+      const res = await loginRequest({
+        username: data.email,
+        password: data.password,
+      }).unwrap();
+
+      // 2️⃣ Redux এ ডেটা সেট
+      dispatch(
+        setLoginData({
+          username: res.username,
+          password: data.password,
+        })
+      );
+
+      // 3️⃣ রিডাইরেক্ট
+      router.push("/");
+
+      console.log("✅ Login Success:", res);
+    } catch (err) {
+      console.error("❌ Login Failed:", err);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[url('/images/login.jpg')] bg-cover backdrop-blur-xl bg-center">
+    <div className="min-h-screen flex items-center justify-center bg-[url('/images/login.jpg')] bg-cover bg-center">
       <div className="bg-white/70 backdrop-blur-xl p-8 rounded-xl shadow-lg w-full max-w-md border border-emerald-300">
-        <h2 className="text-3xl font-bold text-center text-emerald-700 mb-6">Masjid Login</h2>
+        <h2 className="text-3xl font-bold text-center text-emerald-700 mb-6">
+          Masjid Login
+        </h2>
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-emerald-900">Email</label>
+            <label className="block text-sm font-medium text-emerald-900">
+              Email
+            </label>
             <input
               type="email"
               {...register("email", { required: "Email is required" })}
               className="mt-1 block w-full rounded-lg border border-emerald-300 bg-white/70 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email.message}</p>
+            )}
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-emerald-900">Password</label>
+            <label className="block text-sm font-medium text-emerald-900">
+              Password
+            </label>
             <input
               type="password"
               {...register("password", { required: "Password is required" })}
               className="mt-1 block w-full rounded-lg border border-emerald-300 bg-white/70 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password.message}</p>
+            )}
           </div>
 
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg font-semibold shadow-md"
+            disabled={isLoading}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg font-semibold shadow-md disabled:opacity-50"
           >
-            Login
+            {isLoading ? "Logging in..." : "Login"}
           </button>
+
+          {/* API Error */}
+          {error && (
+            <p className="text-red-500 text-sm mt-2">
+              {typeof error === "string"
+                ? error
+                : "Login failed. Please check your credentials."}
+            </p>
+          )}
         </form>
 
-        <p className="text-center text-sm text-gray-100 mt-4">
+        <p className="text-center text-sm text-gray-700 mt-4">
           Don’t have an account?{" "}
-          <a href="/register" className="text-yellow-300 hover:underline">Register</a>
+          <a href="/register" className="text-emerald-600 hover:underline">
+            Register
+          </a>
         </p>
       </div>
     </div>

@@ -1,6 +1,9 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useRegisterMutation } from "@/src/redux/features/auth/authApi"; // তোমার authApi path
+import { setCredentials } from "@/src/redux/features/auth/authSlice";
 
 type RegisterFormData = {
   name: string;
@@ -10,14 +13,32 @@ type RegisterFormData = {
 };
 
 export default function RegisterPage() {
+  const dispatch = useDispatch();
+  const [registerUser, { isLoading, error }] = useRegisterMutation();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>();
 
-  const onSubmit = (data: RegisterFormData) => {
-    console.log("Register Data:", data);
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      const res = await registerUser(data).unwrap();
+
+      // Redux এ user ডেটা সেভ করো
+      dispatch(
+        setCredentials({
+          username: res.username || data.email,
+          token: res.token || null,
+          category: data.category,
+        })
+      );
+
+      console.log("Registered successfully:", res);
+    } catch (err) {
+      console.error("Register error:", err);
+    }
   };
 
   return (
@@ -97,10 +118,20 @@ export default function RegisterPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg font-semibold shadow-md"
+            disabled={isLoading}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg font-semibold shadow-md disabled:opacity-50"
           >
-            Register
+            {isLoading ? "Registering..." : "Register"}
           </button>
+
+          {/* API Error */}
+          {error && (
+            <p className="text-red-500 text-sm mt-2">
+              {typeof error === "string"
+                ? error
+                : "Registration failed. Please try again."}
+            </p>
+          )}
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-4">

@@ -10,7 +10,7 @@ type User = {
 };
 
 export default function UserList() {
-  const { data: users, error, isLoading } = useGetAllUsersQuery();
+  const { data: users, error, isLoading } = useGetAllUsersQuery(undefined);
 
   if (isLoading) return <p>Loading users...</p>;
 

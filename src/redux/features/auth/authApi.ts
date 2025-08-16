@@ -4,7 +4,7 @@ const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation({
       query: (body) => ({
-        url: "/users/register", // তোমার backend register route
+        url: "/users/register",
         method: "POST",
         body,
       }),
@@ -16,11 +16,12 @@ const authApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["user"],
     }),
 
 getAllUsers: builder.query({
   query: () => "/users",
-  providesTags: ["users"],  // বেশি উপযুক্ত
+  providesTags: ["user"], 
 }),
 
     updateUserProfile: builder.mutation({

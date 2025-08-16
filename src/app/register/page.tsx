@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { useRegisterMutation } from "@/src/redux/features/auth/authApi"; // তোমার authApi path
+import { useRegisterMutation } from "@/src/redux/features/auth/authApi";
 import { setCredentials } from "@/src/redux/features/auth/authSlice";
 
 type RegisterFormData = {
@@ -26,7 +26,6 @@ export default function RegisterPage() {
     try {
       const res = await registerUser(data).unwrap();
 
-      // Redux এ user ডেটা সেভ করো
       dispatch(
         setCredentials({
           username: res.username || data.email,

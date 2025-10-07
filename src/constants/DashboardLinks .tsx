@@ -10,14 +10,14 @@ export const DashboardLinks = [
     icon: <FaTachometerAlt className="text-teal-600" />,
   },
   {
-    title: "Data",
+    title: "Collection",
     route: null,
     hasChildren: true,
     icon: <FaGear className="text-teal-600" />,
     subRoutes: [
-      { title: "one", route: "/case" },
-      { title: "Two", route: "#" },
-      { title: "three", route: "#" },
+      { title: "Friday Collection", route: "/friday-collection" },
+      { title: "Others  Collection", route: "others-collection" },
+     
     ],
   },
   {
@@ -37,9 +37,9 @@ export const DashboardLinks = [
     hasChildren: true,
     icon: <IoDocumentsSharp className="text-teal-600" size={16} />,
     subRoutes: [
-        { title: "one", route: "#" },
-        { title: "Two", route: "#" },
-        { title: "three", route: "#" },
+      { title: "one", route: "#" },
+      { title: "Two", route: "#" },
+      { title: "three", route: "#" },
     ],
   },
   {
@@ -48,9 +48,9 @@ export const DashboardLinks = [
     hasChildren: true,
     icon: <FaUsers className="text-teal-600" size={16} />,
     subRoutes: [
-        { title: "one", route: "#" },
-        { title: "Two", route: "#" },
-        { title: "three", route: "#" },
+      { title: "one", route: "#" },
+      { title: "Two", route: "#" },
+      { title: "three", route: "#" },
     ],
   },
 ];

@@ -11,9 +11,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/components/ui/dialog";
-import FormProviderWrapper from "@/src/components/shared/FormProviderWrapper";
 import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
 import RHFInput from "@/src/components/shared/RHFInput";
+import { FormProviderWrapper } from "../../../shared/FormProviderWrapper";
 
 type FridayCollectionForm = {
   todayDate: string;
@@ -46,25 +46,24 @@ export function AddFridayCollectionModal() {
               label="Today Date"
               name="todayDate"
               placeholder="Enter Today Date"
-              required="Date is required"
+              rules={{ required: "Father Name must be filled!" }}
             />
             <RHFInput
               label="Amount"
               name="amount"
               placeholder="Enter Amount"
-              required="Amount is required"
+              rules={{ required: "Amount must be filled" }}
             />
             <RHFInput
               label="Member Name"
               name="memberName"
               placeholder="Enter Member Name"
-              required="Member Name is required"
+              rules={{ required: "Member Name must be filled!" }}
             />
             <RHFInput
               label="Another Member Name"
               name="anotherMemberName"
               placeholder="Enter Another Member Name"
-              required="Another Member Name is required"
             />
           </div>
 

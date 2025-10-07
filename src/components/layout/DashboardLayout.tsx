@@ -229,7 +229,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
 
         {/* Main Content */}
         <main className="flex-1 p-3 sm:p-4 lg:p-6 bg-[url('/images/background.svg')] bg-cover bg-center bg-no-repeat overflow-auto">
-          <div className="bg-white/35 sm:bg-white/40  rounded-lg sm:rounded-xl shadow-sm p-3 sm:p-4 lg:p-6 min-h-full border border-gray-100">
+          <div className="bg-white/10 sm:bg-white/40  rounded-lg sm:rounded-xl shadow-sm p-3 sm:p-4 lg:p-6 min-h-full border border-gray-100">
             {children}
           </div>
         </main>

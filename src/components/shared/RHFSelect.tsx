@@ -1,60 +1,72 @@
 "use client";
 
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useFormContext, Controller } from "react-hook-form";
+import { Label } from "../ui/label";
 
-interface Option {
-  label: string;
-  value: string;
-}
-
-interface RHFSelectProps {
-  label: string;
+type RHFSelectProps = {
   name: string;
-  options: Option[];
+  label: string;
   placeholder?: string;
-  required?: boolean | string;
-}
+  options: { label: string; value: string }[];
+  defaultValue?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rules?: Record<string, any>;
+};
 
-const RHFSelect: React.FC<RHFSelectProps> = ({
-  label,
+export default function RHFSelect({
   name,
+  label,
+  placeholder,
   options,
-  placeholder = "Select an option",
-  required = false,
-}) => {
+  defaultValue,
+  rules,
+}: RHFSelectProps) {
   const {
-    register,
+    control,
     formState: { errors },
   } = useFormContext();
 
-  const fieldError = errors?.[name]?.message as string | undefined;
+  const error = errors[name]?.message as string;
 
   return (
-    <div className="mb-4">
-      <label
-        htmlFor={name}
-        className="block text-gray-700 text-sm font-bold mb-2"
-      >
-        {label}
-      </label>
-      <select
-        id={name}
-        {...register(name, { required })}
-        className={`w-full rounded-lg border-2 p-2 text-sm focus:outline-none ${
-          fieldError ? "border-red-500" : "border-gray-300"
-        }`}
-      >
-        <option value="">{placeholder || `Select ${label}`}</option>
-        {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
-      {fieldError && <p className="text-red-500 text-sm mt-1">{fieldError}</p>}
+    <div className="flex flex-col gap-2 flex-1 w-full">
+      <Label htmlFor={name}>{label}</Label>
+      <Controller
+        name={name}
+        control={control}
+        rules={rules}
+        defaultValue={defaultValue || ""} // set default value
+        render={({ field }) => (
+          <Select value={field.value} onValueChange={field.onChange}>
+            <SelectTrigger
+              className={`w-full bg-white border ${
+                error ? "border-red-500" : "border-gray-400"
+              }`}
+            >
+              <SelectValue placeholder={placeholder} />
+            </SelectTrigger>
+            <SelectContent
+              className={`bg-white border ${
+                error ? "border-red-500" : "border-gray-400"
+              }`}
+            >
+              {options.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+      />
+      {error && <span className="text-sm text-red-500">{error}</span>}
     </div>
   );
-};
-
-export default RHFSelect;
+}

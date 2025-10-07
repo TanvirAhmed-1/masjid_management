@@ -2,24 +2,24 @@
 
 import { ReactNode } from "react";
 import {
-  useForm,
   FormProvider,
-  SubmitHandler,
-  FieldValues,
+  useForm,
   UseFormProps,
+  FieldValues,
+  SubmitHandler,
 } from "react-hook-form";
 
-type FormProviderWrapperProps<T extends FieldValues = FieldValues> = {
+type FormWrapperProps<T extends FieldValues> = {
   onSubmit: SubmitHandler<T>;
-  children: ReactNode;
   defaultValues?: UseFormProps<T>["defaultValues"];
+  children: ReactNode;
 };
 
-function FormProviderWrapper<T extends FieldValues = FieldValues>({
+export function FormProviderWrapper<T extends FieldValues>({
   onSubmit,
-  children,
   defaultValues,
-}: FormProviderWrapperProps<T>) {
+  children,
+}: FormWrapperProps<T>) {
   const methods = useForm<T>({ defaultValues });
 
   return (
@@ -28,5 +28,3 @@ function FormProviderWrapper<T extends FieldValues = FieldValues>({
     </FormProvider>
   );
 }
-
-export default FormProviderWrapper;

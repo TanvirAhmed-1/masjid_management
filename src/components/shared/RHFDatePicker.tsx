@@ -1,90 +1,80 @@
 "use client";
 
-import * as React from "react";
+import React, { useState } from "react";
 import { useFormContext, Controller } from "react-hook-form";
-import { ChevronDownIcon } from "lucide-react";
+import { format } from "date-fns";
 
-import { Button } from "@/src/components/ui/button";
-import { Calendar } from "@/src/components/ui/calendar";
-import { Label } from "@/src/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/src/components/ui/popover";
+//import { Button } from "@/components/ui/button";
+import { CalendarIcon } from "lucide-react";
+import { Label } from "../ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Button } from "../ui/button";
+import { Calendar } from "../ui/calendar";
 
-interface RHFDatePickerProps {
-  label: string;
+type RHFDatePickerProps = {
   name: string;
+  label: string;
   placeholder?: string;
-  required?: boolean | string;
-}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rules?: Record<string, any>;
+};
 
-const RHFDatePicker: React.FC<RHFDatePickerProps> = ({
-  label,
+export default function RHFDatePicker({
   name,
-  placeholder = "Select date",
-  required = false,
-}) => {
+  label,
+  placeholder = "Pick a date",
+  rules,
+}: RHFDatePickerProps) {
   const {
     control,
     formState: { errors },
   } = useFormContext();
 
-  const fieldError = errors?.[name]?.message as string | undefined;
+  const error = errors[name]?.message as string;
+
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="mb-4">
-      <Label
-        htmlFor={name}
-        className="block text-gray-700 text-sm font-bold mb-2"
-      >
-        {label}
-      </Label>
+    <div className="flex flex-col gap-2 flex-1 w-full">
+      <Label htmlFor={name}>{label}</Label>
       <Controller
-        control={control}
         name={name}
-        rules={{ required }}
-        render={({ field }) => {
-          const [open, setOpen] = React.useState(false);
-          return (
+        control={control}
+        rules={rules}
+        render={({ field }) => (
+          <>
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <Button
-                  type="button"
                   variant="outline"
-                  id={name}
-                  className={`w-full justify-between font-normal ${
-                    fieldError ? "border-red-500" : "border-gray-300"
+                  className={`w-full justify-start text-left font-normal bg-white border ${
+                    error ? "border-red-500" : "border-gray-400"
                   }`}
+                  onClick={() => setOpen(!open)}
                 >
-                  {field.value
-                    ? new Date(field.value).toLocaleDateString()
-                    : placeholder}
-                  <ChevronDownIcon />
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {field.value ? (
+                    format(field.value, "dd/MM/yyyy")
+                  ) : (
+                    <span className="text-muted-foreground">{placeholder}</span>
+                  )}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent
-                className="w-auto overflow-hidden p-0"
-                align="start"
-              >
+              <PopoverContent className="w-auto p-0 bg-white border border-gray-400">
                 <Calendar
                   mode="single"
-                  selected={field.value ? new Date(field.value) : undefined}
-                  captionLayout="dropdown"
+                  selected={field.value}
                   onSelect={(date) => {
-                    field.onChange(date?.toISOString()); // save ISO string to form
+                    field.onChange(date);
                     setOpen(false);
                   }}
                 />
               </PopoverContent>
             </Popover>
-          );
-        }}
+            {error && <span className="text-sm text-red-500">{error}</span>}
+          </>
+        )}
       />
-      {fieldError && <p className="text-red-500 text-sm mt-1">{fieldError}</p>}
     </div>
   );
-};
-
-export default RHFDatePicker;
+}

@@ -3,8 +3,12 @@
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import { useLoginMutation } from "@/src/redux/features/auth/authApi"; // তোমার authApi এর পাথ
-import { setLoginData } from "@/src/redux/features/auth/authSlice"; // Adjust the path if needed
+import { setTokenCookie } from "@/src/redux/server/storeCookies";
+import { login } from "@/src/redux/features/auth/authSlice";
+import { toast } from "react-hot-toast";
+import RHFInput from "@/src/components/shared/RHFInput";
+import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
+import { useLoginMutation } from "@/src/redux/features/auth/authApi";
 
 type LoginFormData = {
   email: string;
@@ -12,37 +16,30 @@ type LoginFormData = {
 };
 
 export default function LoginPage() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormData>();
-  const [loginRequest, { isLoading, error }] = useLoginMutation();
+  const [loginRequest, { isLoading, error }] =useLoginMutation()
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const onSubmit = async (data: LoginFormData) => {
-    try {
-      // 1️⃣ API কল
-      const res = await loginRequest({
-        username: data.email,
-        password: data.password,
-      }).unwrap();
+  const handleSubmit = async (data: LoginFormData) => {
+    console.log(data);
 
-      // 2️⃣ Redux এ ডেটা সেট
+    try {
+      const res = await loginRequest(data).unwrap();
+
       dispatch(
-        setLoginData({
-          username: res.username,
-          password: data.password,
+        login({
+          username: res?.result.username,
+          token: res?.result.token,
         })
       );
 
-      // 3️⃣ রিডাইরেক্ট
-      router.push("/");
+      if (res?.result.token) {
+        await setTokenCookie(res?.result.token);
+      }
 
-      console.log("✅ Login Success:", res);
-    } catch (err) {
-      console.error("❌ Login Failed:", err);
+      router.push("/");
+    } catch (error) {
+      console.log("Login Fail", error);
     }
   };
 
@@ -53,55 +50,48 @@ export default function LoginPage() {
           Masjid Login
         </h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-emerald-900">
-              Email
-            </label>
-            <input
+        {/* ✅ Wrap with FormProvider so RHFInput works */}
+        <FormProviderWrapper<LoginFormData> onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <RHFInput
+              label="Email"
+              name="email"
+              placeholder="Enter Email Address"
               type="email"
-              {...register("email", { required: "Email is required" })}
-              className="mt-1 block w-full rounded-lg border border-emerald-300 bg-white/70 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              rules={{
+                required: "Email address is required!",
+              }}
             />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email.message}</p>
-            )}
-          </div>
 
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-emerald-900">
-              Password
-            </label>
-            <input
+            <RHFInput
+              name="password"
+              label="Password"
+              placeholder="Enter Password"
               type="password"
-              {...register("password", { required: "Password is required" })}
-              className="mt-1 block w-full rounded-lg border border-emerald-300 bg-white/70 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              rules={{
+                required: "Password is required!",
+              }}
             />
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg font-semibold shadow-md disabled:opacity-50 transition-all"
+            >
+              {isLoading ? "Logging in..." : "Login"}
+            </button>
+
+            {/*  API Error */}
+            {error && (
+              <p className="text-red-500 text-sm mt-2 text-center">
+                {typeof error === "string"
+                  ? error
+                  : "Login failed. Please check your credentials."}
+              </p>
             )}
           </div>
-
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg font-semibold shadow-md disabled:opacity-50"
-          >
-            {isLoading ? "Logging in..." : "Login"}
-          </button>
-
-          {/* API Error */}
-          {error && (
-            <p className="text-red-500 text-sm mt-2">
-              {typeof error === "string"
-                ? error
-                : "Login failed. Please check your credentials."}
-            </p>
-          )}
-        </form>
+        </FormProviderWrapper>
 
         <p className="text-center text-sm text-gray-700 mt-4">
           Don’t have an account?{" "}

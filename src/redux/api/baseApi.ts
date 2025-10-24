@@ -6,7 +6,7 @@ import { removeTokenCookie } from "../server/storeCookies";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dynamicBaseQuery = async (args: any, api: any, extraOptions: any) => {
   try {
-    const baseUrl = "http://localhost:6000/api";
+    const baseUrl = "http://localhost:5000/api";
     const rawBaseQuery = fetchBaseQuery({
       baseUrl,
       credentials: "include",

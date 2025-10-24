@@ -1,13 +1,12 @@
 import { baseApi } from "../../api/baseApi";
 
-
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
 login: builder.mutation({
   query: (body) => {
-    console.log("Login body:", body); // ✅ debug জন্য
+    console.log("Login body:", body); 
     return {
-      url: "/login", // no leading slash
+      url: "/login", 
       method: "POST",
       body,
     };

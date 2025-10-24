@@ -1,6 +1,5 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { setTokenCookie } from "@/src/redux/server/storeCookies";
@@ -16,16 +15,17 @@ type LoginFormData = {
 };
 
 export default function LoginPage() {
-  const [loginRequest, { isLoading, error }] =useLoginMutation()
+  const [loginRequest, { isLoading, error }] = useLoginMutation();
   const dispatch = useDispatch();
   const router = useRouter();
 
   const handleSubmit = async (data: LoginFormData) => {
-    console.log(data);
-
     try {
-      const res = await loginRequest(data).unwrap();
-
+      const res = await toast.promise(loginRequest(data).unwrap(), {
+        loading: "Logging in...",
+        success: "Login Successful!",
+        error: "Login failed. Please check your credentials.",
+      });
       dispatch(
         login({
           username: res?.result.username,
@@ -49,8 +49,6 @@ export default function LoginPage() {
         <h2 className="text-3xl font-bold text-center text-emerald-700 mb-6">
           Masjid Login
         </h2>
-
-        {/* ✅ Wrap with FormProvider so RHFInput works */}
         <FormProviderWrapper<LoginFormData> onSubmit={handleSubmit}>
           <div className="space-y-4">
             <RHFInput

@@ -17,18 +17,17 @@ export const DashboardLinks = [
     subRoutes: [
       { title: "Friday Collection", route: "/friday-collection" },
       { title: "Others  Collection", route: "others-collection" },
-     
     ],
   },
   {
-    title: "Title2",
+    title: "Ramadan",
     route: null,
     hasChildren: true,
     icon: <FaFile className="text-teal-600" />,
     subRoutes: [
-      { title: "one", route: "#" },
-      { title: "Two", route: "#" },
-      { title: "three", route: "#" },
+      { title: "Ramadan Data SetUp", route: "/ramadan-datasetup" },
+      { title: "Iftar", route: "/ramadan-iftar" },
+      { title: "Itikaf", route: "itikaf" },
     ],
   },
   {

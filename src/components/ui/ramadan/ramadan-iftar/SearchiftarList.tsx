@@ -5,7 +5,6 @@ import { FormProviderWrapper } from "../../../shared/FormProviderWrapper";
 import RHFDatePicker from "../../../shared/RHFDatePicker";
 import RHFInput from "@/src/components/shared/RHFInput";
 import { Button } from "../../button";
-import { useFormContext } from "react-hook-form";
 
 type FormValue = {
   ramadanYear: string;
@@ -13,12 +12,10 @@ type FormValue = {
   name: string;
 };
 
-const SearchOthersCollection = () => {
+const SearchiftarList = () => {
   const onSaveForm = (data: FormValue) => {
     console.log("Form Submitted:", data);
   };
-
-  const { reset } = useFormContext<FormValue>();
 
   return (
     <div className="my-4">
@@ -30,17 +27,9 @@ const SearchOthersCollection = () => {
             placeholder="Enter Ramadan year"
           />
 
-          <RHFInput
-            label="Name"
-            name="name"
-            placeholder="Enter name"
-          />
+          <RHFInput label="Name" name="name" placeholder="Enter name" />
 
-          <RHFDatePicker
-            label="Date"
-            name="date"
-            placeholder="Enter Date"
-          />
+          <RHFDatePicker label="Date" name="date" placeholder="Enter Date" />
 
           <div className="flex items-end gap-2">
             <Button
@@ -52,7 +41,6 @@ const SearchOthersCollection = () => {
             <Button
               type="button"
               className="flex items-center gap-1 bg-gray-700 text-white hover:bg-gray-800 transition"
-              onClick={() => reset()}
             >
               <IoReload /> Reset
             </Button>
@@ -63,4 +51,4 @@ const SearchOthersCollection = () => {
   );
 };
 
-export default SearchOthersCollection;
+export default SearchiftarList;

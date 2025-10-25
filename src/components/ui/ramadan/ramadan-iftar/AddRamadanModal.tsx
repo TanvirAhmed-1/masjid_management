@@ -14,17 +14,18 @@ import {
 import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
 import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "../../../shared/FormProviderWrapper";
+import { FcNumericalSorting21 } from "react-icons/fc";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 type Doner = {
   serialNumber: string;
   iftarDate: string;
   name: string;
+  dayName: string;
 };
 
 type OthersCollectionForm = {
-  date: string;
-  dayName: string;
+  ramadanYear: string;
   doners: Doner[];
 };
 
@@ -36,39 +37,39 @@ function AddOthersCollectionModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-teal-500 hover:bg-teal-600 text-white flex justify-center items-center">
-          <IoMdAdd className="mr-1" />
+        <Button className="bg-teal-500 hover:bg-teal-600 text-white font-medium flex justify-center items-center gap-1">
+          <IoMdAdd />
           Add Others Collection
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="w-full md:max-w-6xl">
         <DialogHeader>
-          <DialogTitle>Create Ifter List</DialogTitle>
+          <DialogTitle className="font-semibold text-2xl">
+            Create Iftar List
+          </DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper<OthersCollectionForm>
           defaultValues={{
-            date: "",
-            dayName: "",
-            doners: [{ serialNumber: "", iftarDate: "", name: "" }],
+            ramadanYear: "",
+            doners: [
+              { serialNumber: "", iftarDate: "", name: "", dayName: "" },
+            ],
           }}
           onSubmit={onSubmit}
         >
           <div className="p-6 max-h-[70vh] overflow-y-auto space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <RHFDatePicker
-                label="Date"
-                name="date"
-                placeholder="Enter Date"
-                rules={{ required: "Date is required!" }}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <RHFInput
-                label="Day Name"
-                name="dayName"
-                placeholder="Enter day name"
-                rules={{ required: "Day name is required!" }}
+                label="Ramadan Year"
+                name="ramadanYear"
+                placeholder="Enter Ramadan Year"
+                rules={{ required: "Ramadan Year is required!" }}
               />
+              <div className="flex justify-center">
+                <FcNumericalSorting21 className="size-10 animate-bounce ..."></FcNumericalSorting21>
+              </div>
             </div>
 
             <DonerFields />
@@ -95,31 +96,39 @@ function DonerFields() {
 
   return (
     <div className="space-y-4">
-      <div className="font-semibold text-lg mb-2">Doner List</div>
+      <div className="font-semibold text-lg mb-2">Add Name List</div>
 
       {fields.map((field, index) => (
         <div
           key={field.id}
-          className="grid grid-cols-3 gap-3 items-end border p-3 rounded-md bg-gray-50 relative"
+          className="grid grid-cols-1 md:grid-cols-4 gap-3 items-end border p-3 rounded-md bg-gray-50 relative"
         >
           <RHFInput
             label="Serial Number"
             name={`doners.${index}.serialNumber`}
             placeholder="Enter serial number"
             defaultValue={field.serialNumber}
+            rules={{ required: "Serial number required" }}
           />
-
-          <RHFDatePicker
-            label="Iftar Date"
-            name={`doners.${index}.iftarDate`}
-            placeholder="Enter Iftar Date"
-          />
-
           <RHFInput
             label="Name"
             name={`doners.${index}.name`}
             placeholder="Enter name"
             defaultValue={field.name}
+            rules={{ required: "Name required" }}
+          />
+          <RHFDatePicker
+            label="Iftar Date"
+            name={`doners.${index}.iftarDate`}
+            placeholder="Enter Iftar Date"
+            rules={{ required: "Iftar Date required" }}
+          />
+          <RHFInput
+            label="Day Name"
+            name={`doners.${index}.dayName`}
+            placeholder="Enter Day Name"
+            defaultValue={field.dayName}
+            rules={{ required: "Day name is required!" }}
           />
 
           {fields.length > 1 && (
@@ -138,12 +147,14 @@ function DonerFields() {
       <div className="flex justify-end">
         <button
           type="button"
-          onClick={() => append({ serialNumber: "", iftarDate: "", name: "" })}
-          className="text-teal-600 bg-teal-100 px-3 py-2 rounded-md hover:bg-teal-200 hover:text-teal-700 transition flex items-center gap-1"
+          onClick={() =>
+            append({ serialNumber: "", iftarDate: "", name: "", dayName: "" })
+          }
+          className="text-teal-600 font-medium bg-teal-100 px-3 py-2 rounded-md hover:bg-teal-200 hover:text-teal-700 transition flex items-center gap-1"
           title="Add Doner"
         >
           <IoMdAdd size={20} />
-          Add Doner
+          Add
         </button>
       </div>
     </div>

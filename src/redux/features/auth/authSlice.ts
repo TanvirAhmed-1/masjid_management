@@ -12,6 +12,7 @@ const initialState: TAuthData = {
   token: null,
 };
 
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -20,7 +21,11 @@ const authSlice = createSlice({
       const { username, token, password } = action.payload;
       state.username = username;
       state.token = token;
+
+       console.log("Login authslice payload:", action.payload);
+
       state.password = password;
+      
     },
     logout: (state) => {
       state.username = null;
@@ -31,6 +36,7 @@ const authSlice = createSlice({
       state.token = action.payload;
     },
   },
+  
 });
 
 export const { login, logout, setToken } = authSlice.actions;

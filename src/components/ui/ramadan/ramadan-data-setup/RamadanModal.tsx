@@ -13,6 +13,7 @@ import {
 } from "@/src/components/ui/dialog";
 import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
+import { useCreateRamadanYearMutation } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 
 type FormData = {
   titleName: string;
@@ -20,13 +21,20 @@ type FormData = {
 };
 
 function RamadanModal() {
-  const onSubmit = (data: FormData) => {
+  const [createYear, { isLoading }] = useCreateRamadanYearMutation();
+
+  const onSubmit = async (data: FormData) => {
     console.log("Form Submitted:", data);
+    try {
+      const result = await createYear(data).unwrap();
+      console.log("date create succesfully", result);
+    } catch (error) {
+      console.log("date create Error", error);
+    }
   };
 
   return (
     <Dialog>
-
       <DialogTrigger asChild>
         <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2 font-medium">
           <IoMdAdd className="text-lg" />
@@ -37,7 +45,7 @@ function RamadanModal() {
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold text-gray-800">
-            Create Ramadan  Year
+            Create Ramadan Year
           </DialogTitle>
           <p className="text-sm text-gray-500">
             input ramadan year and title like Ramadan (2026)
@@ -57,7 +65,6 @@ function RamadanModal() {
               placeholder="Enter participant's name"
               rules={{ required: "Participant name is required" }}
             />
-           
           </div>
 
           <DialogFooter className="mt-6 flex justify-end gap-2">
@@ -68,7 +75,7 @@ function RamadanModal() {
               type="submit"
               className="bg-teal-600 hover:bg-teal-700 text-white"
             >
-              Save Participant
+              {isLoading?"Saving..":"Save"}
             </Button>
           </DialogFooter>
         </FormProviderWrapper>
@@ -78,4 +85,3 @@ function RamadanModal() {
 }
 
 export default RamadanModal;
-

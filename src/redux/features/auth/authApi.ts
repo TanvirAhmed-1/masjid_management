@@ -1,4 +1,6 @@
 import { baseApi } from "../../api/baseApi";
+import { setTokenCookie } from "../../server/storeCookies";
+import { login } from "./authSlice";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -8,6 +10,18 @@ const authApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          const token = data.result.token;
+          const username = data.result.name;
+
+          dispatch(login({ username, token }));
+          await setTokenCookie(token);
+        } catch (error) {
+          console.error("Login failed:", error);
+        }
+      },
       invalidatesTags: ["user"],
     }),
     register: builder.mutation({
@@ -22,8 +36,8 @@ const authApi = baseApi.injectEndpoints({
       providesTags: ["user"],
     }),
     updateUserProfile: builder.mutation({
-      query: ({ id, ...data }) => ({
-        url: `users/${id}`, // backend PUT route এর সাথে match
+      query: ({ id, data }) => ({
+        url: `users/${id}`,
         method: "PUT",
         body: data,
       }),

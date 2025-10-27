@@ -19,16 +19,15 @@ const ramadanDataSetUpApi = baseApi.injectEndpoints({
       invalidatesTags: ["ramadanYear"],
     }),
 
-    // 🟢 UPDATE Ramadan year
+    //  UPDATE Ramadan year
     updateRamadanYear: builder.mutation({
-      query: ({ id, ...body }) => ({
+      query: ({ id, data }) => ({
         url: `/ramadan-data-setups/${id}`,
-        method: "PUT", 
-        body,
+        method: "PUT",
+        body:data,
       }),
       invalidatesTags: ["ramadanYear"],
     }),
-
 
     deleteRamadanYear: builder.mutation({
       query: (id: string) => ({
@@ -38,7 +37,6 @@ const ramadanDataSetUpApi = baseApi.injectEndpoints({
       invalidatesTags: ["ramadanYear"],
     }),
   }),
-
 });
 
 export const {

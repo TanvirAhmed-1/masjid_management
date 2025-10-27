@@ -1,5 +1,4 @@
 "use client";
-
 import { DashboardLinks } from "@/src/constants/DashboardLinks ";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,9 +13,15 @@ import {
   FaBell,
 } from "react-icons/fa";
 import { RiArrowDropRightLine } from "react-icons/ri";
+import LogoutMenu from "../ui/logout";
+import { useAppSelector } from "@/src/redux/hook";
+
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+    const username = useAppSelector((state) => state.auth.username);
+
+    console.log("username", username);
 
   // Mobile sidebar state
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -217,10 +222,11 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
               {/* User Profile */}
               <div className="flex items-center gap-2 px-2 sm:px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 bg-emerald-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs font-semibold">A</span>
+                  {/* <span className="text-white text-xs font-semibold"></span> */}
+                  <LogoutMenu/>
                 </div>
                 <span className="text-sm text-gray-700 font-medium hidden sm:block">
-                  Admin
+                 {username? username: "Admin"}
                 </span>
               </div>
             </div>

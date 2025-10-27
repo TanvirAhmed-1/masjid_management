@@ -4,6 +4,7 @@ import React from "react";
 import { Button } from "../../button";
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
+import EditRamadanModal from "./EditRamadanModal";
 
 export interface RamadanData {
   id: string;
@@ -48,7 +49,7 @@ const RamadanRow = () => {
                   {/* View Button */}
                   <Button
                     type="button"
-                    className="bg-teal-500 hover:bg-teal-600 text-white p-2 rounded-lg shadow-sm transition-all duration-200"
+                    className="bg-teal-500 hover:bg-teal-600 text-white p-2  shadow-sm transition-all duration-200"
                     size="sm"
                     title="View"
                   >
@@ -56,19 +57,13 @@ const RamadanRow = () => {
                   </Button>
 
                   {/* Edit Button */}
-                  <Button
-                    type="button"
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-lg shadow-sm transition-all duration-200"
-                    size="sm"
-                    title="Edit"
-                  >
-                    <FaEdit size={14} />
-                  </Button>
+                  <EditRamadanModal item={item} />
+
 
                   {/* Delete Button */}
                   <Button
                     type="button"
-                    className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg shadow-sm transition-all duration-200"
+                    className="bg-red-500 hover:bg-red-600 text-white p-2  shadow-sm transition-all duration-200"
                     size="sm"
                     title="Delete"
                   >

@@ -2,8 +2,12 @@
 
 import React from "react";
 import { Button } from "../../button";
-import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
-import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
+import { FaEye, FaTrashAlt } from "react-icons/fa";
+import Swal from "sweetalert2";
+import {
+  useDeleteRamadanYearMutation,
+  useGetRamadanYearQuery,
+} from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import EditRamadanModal from "./EditRamadanModal";
 
 export interface RamadanData {
@@ -17,11 +21,48 @@ export interface RamadanData {
 
 const RamadanRow = () => {
   const { data: ramadanYear, isLoading } = useGetRamadanYearQuery(undefined);
-  console.log("Ramadan Year", ramadanYear);
+  const [removeYear, { isLoading: deleteLoding }] =
+    useDeleteRamadanYearMutation();
 
   if (isLoading) {
     return <p className="text-center py-6">Loading...</p>;
   }
+
+  // delete the item
+
+  const handleDelete = async (id: string) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be Delete this Item!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await removeYear(id).unwrap();
+
+          Swal.fire({
+            title: "Deleted!",
+            text: "Year has been deleted successfully.",
+            icon: "success",
+            timer: 1800,
+            showConfirmButton: false,
+          });
+
+          console.log("Delete successfully", res);
+        } catch (error) {
+          Swal.fire({
+            title: "Failed!",
+            text: "Something went wrong!",
+            icon: "error",
+          });
+        }
+      }
+    });
+  };
 
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md bg-white">
@@ -46,23 +87,13 @@ const RamadanRow = () => {
               <td>{item.ramadanYear}</td>
               <td>
                 <div className="flex justify-center items-center gap-2">
-                  {/* View Button */}
-                  <Button
-                    type="button"
-                    className="bg-teal-500 hover:bg-teal-600 text-white p-2  shadow-sm transition-all duration-200"
-                    size="sm"
-                    title="View"
-                  >
-                    <FaEye size={14} />
-                  </Button>
-
                   {/* Edit Button */}
                   <EditRamadanModal item={item} />
-
 
                   {/* Delete Button */}
                   <Button
                     type="button"
+                    onClick={() => handleDelete(item.id)}
                     className="bg-red-500 hover:bg-red-600 text-white p-2  shadow-sm transition-all duration-200"
                     size="sm"
                     title="Delete"

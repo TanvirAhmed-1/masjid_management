@@ -7,7 +7,7 @@ const itikafApi = baseApi.injectEndpoints({
         url: "/itikafs",
         method: "GET",
       }),
-      providesTags: ["itikaf"],
+      providesTags: ["ifterlist"],
     }),
     createItikaf: builder.mutation({
       query: (body) => ({
@@ -15,7 +15,7 @@ const itikafApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["itikaf"],
+      invalidatesTags: ["ifterlist"],
     }),
     updateItikaf: builder.mutation({
       query: ({ id, data }) => ({
@@ -23,14 +23,21 @@ const itikafApi = baseApi.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["itikaf"],
+      invalidatesTags: ["ifterlist"],
+    }),
+    deletedonername: builder.mutation({
+      query: (id: string) => ({
+        url: `/ifterlists/doner/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["ifterlist"],  
     }),
     deleteItikaf: builder.mutation({
       query: (id: string) => ({
         url: `/itikafs/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["itikaf"],
+      invalidatesTags: ["ifterlist"],
     }),
   }),
 });
@@ -40,4 +47,5 @@ export const {
   useCreateItikafMutation,
   useUpdateItikafMutation,
   useDeleteItikafMutation,
+  useDeletedonernameMutation
 } = itikafApi;

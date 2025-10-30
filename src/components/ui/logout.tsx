@@ -27,7 +27,6 @@ function LogoutMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer h-10 w-10">
-          <AvatarImage src="/images/profilePic.jpg" alt="user" />
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-24 h-28 ml-12 bg-gray-300 rounded-lg   ">

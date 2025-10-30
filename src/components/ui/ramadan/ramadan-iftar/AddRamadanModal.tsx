@@ -18,7 +18,9 @@ import { FcNumericalSorting21 } from "react-icons/fc";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import RHFSelect from "@/src/components/shared/RHFSelect";
-import { useCreateifterlistMutation } from "@/src/redux/features/ramadan/ifterlist";
+import { useCreateifterlistMutation } from "@/src/redux/features/ramadan/iftarlist";
+import toast from "react-hot-toast";
+
 
 type Doner = {
   serialNumber: string;
@@ -45,11 +47,25 @@ function AddRamadanModal() {
   const onSubmit = async (data: OthersCollectionForm) => {
     console.log("Form Submitted:", data);
 
+    const payload = {
+      ramadanyearId: data.ramadanYear,
+      doners: data.doners.map((item) => ({
+        serialNumber: item.serialNumber,
+        name: item.name,
+        iftarDate: new Date(item.iftarDate).toISOString(), 
+        dayName: item.dayName.charAt(0).toUpperCase() + item.dayName.slice(1),
+      })),
+    };
+
+    console.log("Payload to send:", payload);
+
     try {
-      const result = await createIftar(data).unwrap();
-      console.log("date create succesfully", result);
-    } catch (error) {
-      console.log("date create Error", error);
+      const result = await createIftar(payload).unwrap();
+      console.log("Iftar list created successfully", result);
+      toast.success("Iftar list created successfully!");
+    } catch (error: any) {
+      console.log("Iftar creation error", error);
+      toast.error(error?.data?.message || "Failed to create iftar list");
     }
   };
 
@@ -58,7 +74,7 @@ function AddRamadanModal() {
       <DialogTrigger asChild>
         <Button className="bg-teal-500 hover:bg-teal-600 text-white font-medium flex justify-center items-center gap-1">
           <IoMdAdd />
-          Add Others Collection
+          Add Iftar List
         </Button>
       </DialogTrigger>
 
@@ -73,7 +89,7 @@ function AddRamadanModal() {
           defaultValues={{
             ramadanYear: "",
             doners: [
-              { serialNumber: "", iftarDate: "", name: "", dayName: "" },
+              { serialNumber: "1", iftarDate: "", name: "", dayName: "" },
             ],
           }}
           onSubmit={onSubmit}
@@ -84,11 +100,11 @@ function AddRamadanModal() {
                 options={ramadanYearOptions}
                 label="Ramadan Year"
                 name="ramadanYear"
-                placeholder="Enter Ramadan Year"
+                placeholder="Select Ramadan Year"
                 rules={{ required: "Ramadan Year is required!" }}
               />
-              <div className="flex justify-center">
-                <FcNumericalSorting21 className="size-10 animate-bounce ..."></FcNumericalSorting21>
+              <div className="flex justify-center items-center">
+                <FcNumericalSorting21 className="size-10 animate-bounce" />
               </div>
             </div>
 
@@ -97,9 +113,13 @@ function AddRamadanModal() {
 
           <DialogFooter className="mt-4 flex justify-end gap-2">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" type="button">
+                Cancel
+              </Button>
             </DialogClose>
-            <Button type="submit">{isLoading ? "Saving..." : "Save"}</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Saving..." : "Save"}
+            </Button>
           </DialogFooter>
         </FormProviderWrapper>
       </DialogContent>
@@ -114,9 +134,20 @@ function DonerFields() {
     name: "doners",
   });
 
+  // Auto-generate serial numbers
+  const handleAddDoner = () => {
+    const nextSerial = (fields.length + 1).toString();
+    append({ 
+      serialNumber: nextSerial, 
+      iftarDate: "", 
+      name: "", 
+      dayName: "" 
+    });
+  };
+
   return (
     <div className="space-y-4">
-      <div className="font-semibold text-lg mb-2">Add Name List</div>
+      <div className="font-semibold text-lg mb-2">Add Doner List</div>
 
       {fields.map((field, index) => (
         <div
@@ -140,13 +171,13 @@ function DonerFields() {
           <RHFDatePicker
             label="Iftar Date"
             name={`doners.${index}.iftarDate`}
-            placeholder="Enter Iftar Date"
+            placeholder="Select Iftar Date"
             rules={{ required: "Iftar Date required" }}
           />
           <RHFInput
             label="Day Name"
             name={`doners.${index}.dayName`}
-            placeholder="Enter Day Name"
+            placeholder="e.g., Monday"
             defaultValue={field.dayName}
             rules={{ required: "Day name is required!" }}
           />
@@ -164,19 +195,25 @@ function DonerFields() {
         </div>
       ))}
 
-      <div className="flex justify-end">
-        <button
-          type="button"
-          onClick={() =>
-            append({ serialNumber: "", iftarDate: "", name: "", dayName: "" })
-          }
-          className="text-teal-600 font-medium bg-teal-100 px-3 py-2 rounded-md hover:bg-teal-200 hover:text-teal-700 transition flex items-center gap-1"
-          title="Add Doner"
-        >
-          <IoMdAdd size={20} />
-          Add
-        </button>
-      </div>
+      {fields.length < 31 && (
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={handleAddDoner}
+            className="text-teal-600 font-medium bg-teal-100 px-3 py-2 rounded-md hover:bg-teal-200 hover:text-teal-700 transition flex items-center gap-1"
+            title="Add Doner"
+          >
+            <IoMdAdd size={20} />
+            Add Doner
+          </button>
+        </div>
+      )}
+
+      {fields.length >= 31 && (
+        <p className="text-sm text-red-500 text-right">
+          Maximum 31 doners allowed for this Ramadan year
+        </p>
+      )}
     </div>
   );
 }

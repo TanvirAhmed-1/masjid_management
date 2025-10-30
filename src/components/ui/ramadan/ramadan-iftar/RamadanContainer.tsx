@@ -1,6 +1,6 @@
 "use client";
 
-import AddOthersCollectionModal from "./AddRamadanModal";
+import AddRamadanModal from "./AddRamadanModal";
 import IftarListRow from "./IftarListRow";
 import SearchiftarList from "./SearchiftarList";
 
@@ -11,7 +11,7 @@ const RamadanContainer = () => {
         <h3 className="text-lg text-start text-black md:text-3xl">
           All Ramadan Iftar List
         </h3>
-        <AddOthersCollectionModal />
+        <AddRamadanModal />
       </div>
       <div>
         <SearchiftarList />

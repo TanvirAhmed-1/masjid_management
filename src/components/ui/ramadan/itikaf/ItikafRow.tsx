@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "../../button";
-import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
+import {  FaTrashAlt } from "react-icons/fa";
 import {
   useDeleteItikafMutation,
   useGetItikafQuery,

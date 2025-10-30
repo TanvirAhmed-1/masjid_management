@@ -16,6 +16,9 @@ import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "../../../shared/FormProviderWrapper";
 import { FcNumericalSorting21 } from "react-icons/fc";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
+import RHFSelect from "@/src/components/shared/RHFSelect";
+import { useCreateifterlistMutation } from "@/src/redux/features/ramadan/ifterlist";
 
 type Doner = {
   serialNumber: string;
@@ -29,9 +32,25 @@ type OthersCollectionForm = {
   doners: Doner[];
 };
 
-function AddOthersCollectionModal() {
-  const onSubmit = (data: OthersCollectionForm) => {
+function AddRamadanModal() {
+  const [createIftar, { isLoading }] = useCreateifterlistMutation();
+  const { data: ramadanYear } = useGetRamadanYearQuery(undefined);
+
+  const ramadanYearOptions =
+    ramadanYear?.result?.map((year: any) => ({
+      value: year.id,
+      label: year.ramadanYear,
+    })) || [];
+
+  const onSubmit = async (data: OthersCollectionForm) => {
     console.log("Form Submitted:", data);
+
+    try {
+      const result = await createIftar(data).unwrap();
+      console.log("date create succesfully", result);
+    } catch (error) {
+      console.log("date create Error", error);
+    }
   };
 
   return (
@@ -61,7 +80,8 @@ function AddOthersCollectionModal() {
         >
           <div className="p-6 max-h-[70vh] overflow-y-auto space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <RHFInput
+              <RHFSelect
+                options={ramadanYearOptions}
                 label="Ramadan Year"
                 name="ramadanYear"
                 placeholder="Enter Ramadan Year"
@@ -79,7 +99,7 @@ function AddOthersCollectionModal() {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Save</Button>
+            <Button type="submit">{isLoading ? "Saving..." : "Save"}</Button>
           </DialogFooter>
         </FormProviderWrapper>
       </DialogContent>
@@ -161,4 +181,4 @@ function DonerFields() {
   );
 }
 
-export default AddOthersCollectionModal;
+export default AddRamadanModal;

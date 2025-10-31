@@ -9,6 +9,14 @@ const ifterlistApi = baseApi.injectEndpoints({
       }),
       providesTags: ["ifterlist"],
     }),
+
+    getifterlistbyid: build.query({
+      query: (id: string) => ({
+        url: `/ifterlists/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["ifterlist"],
+    }),
     createifterlist: build.mutation({
       query: (body) => ({
         url: "/ifterlists",
@@ -41,4 +49,5 @@ export const {
   useCreateifterlistMutation,
   useDeleteifterlistMutation,
   useUpdateifterlistMutation,
+  useGetifterlistbyidQuery,
 } = ifterlistApi;

@@ -9,6 +9,8 @@ import {
   useGetRamadanYearQuery,
 } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import EditRamadanModal from "./EditRamadanModal";
+import Link from "next/link";
+import ShowItikafListModal from "./ShowItikafListModal";
 
 export interface RamadanData {
   id: string;
@@ -21,8 +23,7 @@ export interface RamadanData {
 
 const RamadanRow = () => {
   const { data: ramadanYear, isLoading } = useGetRamadanYearQuery(undefined);
-  const [removeYear, { isLoading: deleteLoding }] =
-    useDeleteRamadanYearMutation();
+  const [removeYear] = useDeleteRamadanYearMutation();
 
   if (isLoading) {
     return <p className="text-center py-6">Loading...</p>;
@@ -70,8 +71,10 @@ const RamadanRow = () => {
         <thead className="bg-gray-100 text-gray-900">
           <tr className="*:px-5 *:py-3 *:font-semibold *:text-center">
             <th>Serial No</th>
-            <th>Title</th>
             <th>Year</th>
+            <th>Title</th>
+            <th>Iftar List</th>
+            <th>Itikaf List</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -83,8 +86,24 @@ const RamadanRow = () => {
               className="hover:bg-gray-50 transition-colors *:px-5 *:py-3 *:text-center"
             >
               <td>{index + 1}</td>
-              <td>{item.titleName}</td>
+
               <td>{item.ramadanYear}</td>
+              <td>{item.titleName}</td>
+              <td>
+                <Link href={`/ramadan-datasetup/${item.id}`}>
+                  {" "}
+                  <Button
+                    size="sm"
+                    className="bg-teal-500 hover:bg-teal-600 text-white p-2 rounded"
+                  >
+                    <FaEye size={14} />
+                  </Button>
+                </Link>
+              </td>
+
+              <td>
+                <ShowItikafListModal id={item.id} />
+              </td>
               <td>
                 <div className="flex justify-center items-center gap-2">
                   {/* Edit Button */}

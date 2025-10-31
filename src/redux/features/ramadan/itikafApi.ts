@@ -9,6 +9,13 @@ const itikafApi = baseApi.injectEndpoints({
       }),
       providesTags: ["ifterlist"],
     }),
+    getRamadanIdBaseList: builder.query({
+      query: (id: string) => ({
+        url: `/itikafs/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["ifterlist"],
+    }),
     createItikaf: builder.mutation({
       query: (body) => ({
         url: "/itikafs",
@@ -30,7 +37,7 @@ const itikafApi = baseApi.injectEndpoints({
         url: `/ifterlists/doner/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["ifterlist"],  
+      invalidatesTags: ["ifterlist"],
     }),
     deleteItikaf: builder.mutation({
       query: (id: string) => ({
@@ -47,5 +54,6 @@ export const {
   useCreateItikafMutation,
   useUpdateItikafMutation,
   useDeleteItikafMutation,
-  useDeletedonernameMutation
+  useDeletedonernameMutation,
+  useGetRamadanIdBaseListQuery,
 } = itikafApi;

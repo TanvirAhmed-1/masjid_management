@@ -1,4 +1,3 @@
-
 // import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
 // import "./globals.css";
@@ -37,18 +36,16 @@
 //   );
 // }
 
-
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+//import { Poppins } from "next/font/google";
 import "./globals.css";
 import Providers from "../lib/Providers/Providers";
 
-
-const poppins = Poppins({
-  subsets: ["latin", "devanagari", "latin-ext"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-poppins",
-});
+// const poppins = Poppins({
+//   subsets: ["latin", "devanagari", "latin-ext"],
+//   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+//   // variable: "--font-poppins",
+// });
 
 export const metadata: Metadata = {
   title: "Masue  Management System",
@@ -61,7 +58,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={poppins.variable}>
+    // <html lang="en" className={poppins.variable}>
+    <html lang="en">
       <body>
         <Providers>{children}</Providers>
       </body>

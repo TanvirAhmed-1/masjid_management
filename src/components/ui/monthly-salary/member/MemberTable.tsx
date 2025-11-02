@@ -1,28 +1,53 @@
 "use client";
 
-import React from "react";
-
 import EditMemberModal from "./EditMemberModal";
 import { Button } from "@/src/components/ui/button";
 import {
   useDeleteMemberMutation,
   useGetMembersQuery,
 } from "@/src/redux/features/monthly-salary/memberApi";
+import { FaTrashAlt } from "react-icons/fa";
+import Swal from "sweetalert2";
+import MemberPaymentSummaryModal from "../monthly-payment/MemberPaymentSummaryModal";
 
 const MemberTable = () => {
   const { data: members, isLoading, isError } = useGetMembersQuery(undefined);
   const [deleteMember] = useDeleteMemberMutation();
 
-  const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this member?")) {
-      try {
-        await deleteMember(id).unwrap();
-        alert("Member deleted successfully");
-      } catch (error) {
-        console.error("Error deleting member:", error);
-      }
-    }
-  };
+
+   const handleDelete = async (id: string) => {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be Delete this Item!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const res = await deleteMember(id).unwrap();
+  
+            Swal.fire({
+              title: "Deleted!",
+              text: "Year has been deleted successfully.",
+              icon: "success",
+              timer: 1000,
+              showConfirmButton: false,
+            });
+  
+            console.log("Delete successfully", res);
+          } catch (error) {
+            Swal.fire({
+              title: "Failed!",
+              text: "Something went wrong!",
+              icon: "error",
+            });
+          }
+        }
+      });
+    };
 
   if (isLoading) return <div>Loading members...</div>;
   if (isError) return <div>Failed to load members</div>;
@@ -31,29 +56,34 @@ const MemberTable = () => {
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200 border">
         <thead className="bg-gray-50">
-          <tr>
-            <th className="px-4 py-2 text-left">Name</th>
-            <th className="px-4 py-2 text-left">Phone</th>
-            <th className="px-4 py-2 text-left">Address</th>
-            <th className="px-4 py-2 text-left">Monthly Amount</th>
-            <th className="px-4 py-2 text-center">Actions</th>
+          <tr className="text-center text-sm font-medium text-gray-900  *:py-2 *:px-3 ">
+            <th>Serial No</th>
+            <th >Name</th>
+            <th >Phone</th>
+            <th >Address</th>
+            <th >Monthly Amount</th>
+            <th >Actions</th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {members?.result.map((member: any) => (
-            <tr key={member.id}>
-              <td className="px-4 py-2">{member.name}</td>
-              <td className="px-4 py-2">{member.phone || "-"}</td>
-              <td className="px-4 py-2">{member.address || "-"}</td>
-              <td className="px-4 py-2">{member.monthlyAmount}</td>
-              <td className="px-4 py-2 flex justify-center gap-2">
+          {members?.result.map((member: any, index: number) => (
+            <tr key={member.id} className="text-base *:text-center *:py-2 *:px-3">
+              <td>{index + 1}</td>
+              <td>{member.name}</td>
+              <td>{member.phone || "-"}</td>
+              <td>{member.address || "-"}</td>
+              <td>{member.monthlyAmount}</td>
+              <td className=" flex justify-center gap-2">
+                <MemberPaymentSummaryModal memberId={member.id} memberName={member.name} />
                 <EditMemberModal member={member} />
                 <Button
-                  variant="destructive"
-                  size="sm"
+                  type="button"
                   onClick={() => handleDelete(member.id)}
+                  className="bg-red-500 hover:bg-red-600 text-white p-2  shadow-sm transition-all duration-200"
+                  size="sm"
+                  title="Delete"
                 >
-                  Delete
+                  <FaTrashAlt size={14} />
                 </Button>
               </td>
             </tr>

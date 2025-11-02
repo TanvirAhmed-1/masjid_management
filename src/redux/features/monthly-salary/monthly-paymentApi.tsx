@@ -8,6 +8,13 @@ const PaymentApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getMemberPaymentSummary: builder.query({
+      query: (memberId: string) => ({
+        url: `/payments/${memberId}`,
+        method: "GET",
+      }),
+      providesTags: ["payment"],
+    }),
     createPayment: builder.mutation({
       query: (body) => ({
         url: "/payments",
@@ -39,4 +46,5 @@ export const {
   useCreatePaymentMutation,
   useUpdatePaymentMutation,
   useDeletePaymentMutation,
+  useGetMemberPaymentSummaryQuery,
 } = PaymentApi;

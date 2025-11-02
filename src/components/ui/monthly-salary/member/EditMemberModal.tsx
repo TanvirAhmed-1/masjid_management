@@ -1,6 +1,5 @@
 "use client";
 
-import { IoMdAdd } from "react-icons/io";
 import { Button } from "@/src/components/ui/button";
 import {
   Dialog,
@@ -14,7 +13,7 @@ import {
 import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
 import { useUpdateMemberMutation } from "@/src/redux/features/monthly-salary/memberApi";
-
+import { FaEdit } from "react-icons/fa";
 
 type MemberFormData = {
   name: string;
@@ -42,9 +41,13 @@ function EditMemberModal({ member }: EditMemberModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-2 font-medium">
-          <IoMdAdd className="text-lg" />
-          Edit Member
+        <Button
+          type="button"
+          className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 shadow-sm transition-all duration-200"
+          size="sm"
+          title="Edit"
+        >
+          <FaEdit size={14} />
         </Button>
       </DialogTrigger>
 
@@ -53,12 +56,13 @@ function EditMemberModal({ member }: EditMemberModalProps) {
           <DialogTitle className="text-lg font-semibold text-gray-800">
             Edit Member
           </DialogTitle>
-          <p className="text-sm text-gray-500">
-            Update member information
-          </p>
+          <p className="text-sm text-gray-500">Update member information</p>
         </DialogHeader>
 
-        <FormProviderWrapper<MemberFormData> onSubmit={onSubmit} defaultValues={member}>
+        <FormProviderWrapper<MemberFormData>
+          onSubmit={onSubmit}
+          defaultValues={member}
+        >
           <div className="space-y-4 mt-4">
             <RHFInput
               label="Name"

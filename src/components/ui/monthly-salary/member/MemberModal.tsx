@@ -14,26 +14,44 @@ import {
 import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
 import { useCreateMemberMutation } from "@/src/redux/features/monthly-salary/memberApi";
+import { StringifyOptions } from "querystring";
+  import toast from "react-hot-toast";
 
 type MemberFormData = {
   name: string;
   phone?: string;
   address?: string;
-  monthlyAmount: number;
+  monthlyAmount: StringifyOptions;
 };
 
 function MemberModal() {
   const [createMember, { isLoading }] = useCreateMemberMutation();
 
-  const onSubmit = async (data: MemberFormData) => {
-    console.log("Form Submitted:", data);
-    try {
-      const result = await createMember(data).unwrap();
-      console.log("Member created successfully:", result);
-    } catch (error) {
-      console.log("Error creating member:", error);
-    }
-  };
+
+const onSubmit = async (data: MemberFormData) => {
+  try {
+    const payload = {
+      name: data.name,
+      phone: data.phone,
+      address: data.address || "",
+      monthlyAmount: Number(data.monthlyAmount),
+    };
+
+    console.log("Form Submitted:", payload);
+
+    const result = await createMember(payload).unwrap();
+    console.log("Member created successfully:", result);
+
+    toast.success("Member created successfully!");
+  } catch (error: any) {
+    console.error("Error creating member:", error);
+
+    const message =
+      error?.data?.message || "Something went wrong while creating member!";
+    toast.error(message);
+  }
+};
+
 
   return (
     <Dialog>

@@ -31,13 +31,13 @@ export const DashboardLinks = [
     ],
   },
   {
-    title: "Title3",
+    title: "Monthly Collection",
     route: null,
     hasChildren: true,
     icon: <IoDocumentsSharp className="text-teal-600" size={16} />,
     subRoutes: [
-      { title: "one", route: "#" },
-      { title: "Two", route: "#" },
+      { title: "Add Members", route: "/member" },
+      { title: "Payment", route: "/monthly-payment" },
       { title: "three", route: "#" },
     ],
   },

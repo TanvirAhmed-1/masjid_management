@@ -33,22 +33,24 @@ const MonthlyPaymentTable = () => {
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200 border">
         <thead className="bg-gray-50">
-          <tr>
-            <th className="px-4 py-2 text-left">Member Name</th>
-            <th className="px-4 py-2 text-left">Month</th>
-            <th className="px-4 py-2 text-left">Amount</th>
-            <th className="px-4 py-2 text-left">Paid Date</th>
-            <th className="px-4 py-2 text-center">Actions</th>
+          <tr className="*:px-4 *:py-2 *:text-center">
+             <th>#</th>
+            <th>Member Name</th>
+            <th>Month</th>
+            <th>Amount</th>
+            <th>Paid Date</th>
+            <th >Actions</th>
           </tr>
         </thead>
 
         <tbody className="bg-white divide-y divide-gray-200">
-          {payments?.result?.map((payment: any) => (
-            <tr key={payment.id}>
-              <td className="px-4 py-2">{payment.member?.name || "Unknown"}</td>
-              <td className="px-4 py-2">{payment.monthName}</td>
-              <td className="px-4 py-2">{payment.amount} ৳</td>
-              <td className="px-4 py-2">
+          {payments?.result?.map((payment: any,  index: number) => (
+            <tr key={payment.id} className="*:px-4 *:py-2 *:text-center">
+              <td>{index+1}</td>
+              <td>{payment.member?.name || "Unknown"}</td>
+              <td>{payment.monthName}</td>
+              <td>{payment.amount} ৳</td>
+              <td>
                 {payment.paidDate
                   ? new Date(payment.paidDate).toLocaleDateString("en-GB", {
                       day: "2-digit",

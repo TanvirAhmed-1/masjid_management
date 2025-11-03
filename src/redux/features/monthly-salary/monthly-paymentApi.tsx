@@ -4,9 +4,10 @@ const PaymentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getPayment: builder.query({
       query: () => ({
-        url: "/members",
+        url: "/payments",
         method: "GET",
       }),
+      providesTags: ["payment"],
     }),
     getMemberPaymentSummary: builder.query({
       query: (memberId: string) => ({
@@ -25,7 +26,7 @@ const PaymentApi = baseApi.injectEndpoints({
     }),
     updatePayment: builder.mutation({
       query: ({ id, data }) => ({
-        url: `/members/${id}`,
+        url: `/payments/${id}`,
         method: "PUT",
         body: data,
       }),
@@ -33,7 +34,7 @@ const PaymentApi = baseApi.injectEndpoints({
     }),
     deletePayment: builder.mutation({
       query: (id: string) => ({
-        url: `/members/${id}`,
+        url: `/payments/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["payment"],

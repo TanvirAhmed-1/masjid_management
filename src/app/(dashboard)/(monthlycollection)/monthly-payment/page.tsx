@@ -1,12 +1,12 @@
-import MonthlyPaymentContainer from '@/src/components/ui/monthly-salary/monthly-payment/MonthlyPaymentContainer';
-import React from 'react';
+import MonthlyPaymentContainer from "@/src/components/ui/monthly-payment/monthly-payment/MonthlyPaymentContainer";
+import React from "react";
 
 const page = () => {
-    return (
-        <div>
-            <MonthlyPaymentContainer />
-        </div>
-    );
+  return (
+    <div>
+      <MonthlyPaymentContainer />
+    </div>
+  );
 };
 
 export default page;

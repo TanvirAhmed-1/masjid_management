@@ -8,11 +8,13 @@ import {
 } from "@/src/redux/features/monthly-salary/memberApi";
 import { FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
-import MemberPaymentSummaryModal from "../monthly-payment/MemberPaymentSummaryModal";
+import MemberPaymentSummaryModal from "./MemberPaymentSummaryModal";
 
 const MemberTable = () => {
   const { data: members, isLoading, isError } = useGetMembersQuery(undefined);
   const [deleteMember] = useDeleteMemberMutation();
+
+  console.log("Members data:", members);
 
   const handleDelete = async (id: string) => {
     Swal.fire({

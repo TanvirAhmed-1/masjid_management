@@ -14,17 +14,18 @@ import {
 import RHFInput from "@/src/components/shared/RHFInput";
 import RHFSelect from "@/src/components/shared/RHFSelect";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
+import { useUpdatePaymentMutation } from "@/src/redux/features/monthly-salary/paymentApi";
 import { useGetMembersQuery } from "@/src/redux/features/monthly-salary/memberApi";
-import {
-  useCreatePaymentMutation,
-} from "@/src/redux/features/monthly-salary/monthly-paymentApi";
-import toast from "react-hot-toast";
-import { useState } from "react";
 
 type PaymentFormData = {
   memberId: string;
   monthKey: string;
+  monthName: string;
   amount: number;
+};
+
+type EditMonthlyPaymentModalProps = {
+  payment: PaymentFormData & { id: string };
 };
 
 const months = [
@@ -42,58 +43,49 @@ const months = [
   { key: "2025-12", name: "December 2025" },
 ];
 
-const MonthlyPaymentModal = () => {
-  const { data: members } = useGetMembersQuery(undefined);
-  const [createPayment, { isLoading }] = useCreatePaymentMutation();
-  const [open, setOpen] = useState(false);
+const EditMonthlyPaymentModal = ({ payment }: EditMonthlyPaymentModalProps) => {
+  const { data: members } = useGetMembersQuery(undefined, {
+    skip: !payment.memberId,
+  });
+  const [updatePayment, { isLoading }] = useUpdatePaymentMutation();
 
   const onSubmit = async (data: PaymentFormData) => {
     try {
       const selectedMonth = months.find((m) => m.key === data.monthKey);
+      if (!selectedMonth) return alert("Invalid month selected");
 
-      if (!selectedMonth) {
-        toast.error("Invalid month selection!");
-        return;
-      }
-
-      const payload = {
-        memberId: data.memberId,
-        monthKey: data.monthKey,
+      await updatePayment({
+        id: payment.id,
+        ...data,
         monthName: selectedMonth.name,
-        amount: Number(data.amount),
-      };
-      console.log(payload);
-
-      await createPayment(payload).unwrap();
-
-      toast.success("✅ Payment created successfully!");
-      setOpen(false);
+      }).unwrap();
+      alert("Payment updated successfully!");
     } catch (error: any) {
-      console.error("Error creating payment:", error);
-      toast.error(error?.data?.message || "❌ Payment failed");
+      alert(error?.data?.message || "Error updating payment");
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2 font-medium">
+        <Button className="bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-2 font-medium">
           <IoMdAdd className="text-lg" />
-          Add Payment
+          Edit Payment
         </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold text-gray-800">
-            Create Monthly Payment
+            Edit Monthly Payment
           </DialogTitle>
-          <p className="text-sm text-gray-500">
-            Select member, month & enter amount
-          </p>
+          <p className="text-sm text-gray-500">Update payment information</p>
         </DialogHeader>
 
-        <FormProviderWrapper onSubmit={onSubmit}>
+        <FormProviderWrapper<PaymentFormData>
+          onSubmit={onSubmit}
+          defaultValues={payment}
+        >
           <div className="space-y-4 mt-4">
             <RHFSelect
               label="Member"
@@ -110,35 +102,26 @@ const MonthlyPaymentModal = () => {
               label="Month"
               name="monthKey"
               rules={{ required: "Month is required" }}
-              options={months.map((m) => ({
-                value: m.key,
-                label: m.name,
-              }))}
+              options={months.map((m) => ({ value: m.key, label: m.name }))}
             />
             <RHFInput
               label="Amount"
               name="amount"
               placeholder="Enter amount"
               type="number"
-              rules={{
-                required: "Amount is required",
-                min: { value: 1, message: "Minimum 1 taka" },
-              }}
+              rules={{ required: "Amount is required", min: 1 }}
             />
           </div>
 
           <DialogFooter className="mt-6 flex justify-end gap-2">
             <DialogClose asChild>
-              <Button variant="outline" disabled={isLoading}>
-                Cancel
-              </Button>
+              <Button variant="outline">Cancel</Button>
             </DialogClose>
             <Button
               type="submit"
-              className="bg-teal-600 hover:bg-teal-700 text-white"
-              disabled={isLoading}
+              className="bg-yellow-500 hover:bg-yellow-600 text-white"
             >
-              {isLoading ? "Saving..." : "Save"}
+              {isLoading ? "Updating..." : "Update"}
             </Button>
           </DialogFooter>
         </FormProviderWrapper>
@@ -147,4 +130,4 @@ const MonthlyPaymentModal = () => {
   );
 };
 
-export default MonthlyPaymentModal;
+export default EditMonthlyPaymentModal;

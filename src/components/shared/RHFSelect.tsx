@@ -86,7 +86,7 @@ import { Label } from "../ui/label";
 
 type RHFSelectProps = {
   name: string;
-  label: string;
+  label?: string;
   placeholder?: string;
   options: { label: string; value: string }[];
   defaultValue?: string;

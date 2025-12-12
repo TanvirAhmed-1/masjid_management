@@ -1,6 +1,5 @@
 "use client";
 
-import { IoMdAdd } from "react-icons/io";
 import { Button } from "@/src/components/ui/button";
 import {
   Dialog,
@@ -13,48 +12,60 @@ import {
 } from "@/src/components/ui/dialog";
 import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "../../../shared/FormProviderWrapper";
-import { useCreateFridayCollectionMutation } from "@/src/redux/features/collection/fridayCollection";
+import { useUpdateFridayCollectionMutation } from "@/src/redux/features/collection/fridayCollection"; // changed to update
 import toast from "react-hot-toast";
 import LoadingButton from "@/src/components/shared/LoadingButton";
+import { FaEdit } from "react-icons/fa";
 import { useState } from "react";
+import { Collection } from "./FridayCollectionRow";
 
 type FridayCollectionForm = {
   amount: string;
 };
 
-export function AddFridayCollectionModal() {
+function EditFridayCollectionModal({ collection }: { collection: Collection }) {
   const [open, setOpen] = useState(false);
-  const [createFridayCollection, { isLoading }] =
-    useCreateFridayCollectionMutation();
+  const [updateFridayCollection, { isLoading }] =
+    useUpdateFridayCollectionMutation(); // use update mutation
+
   const onSubmit = async (data: FridayCollectionForm) => {
-    console.log("Form Submitted:", data);
     const payload = {
       amount: parseInt(data.amount),
-      collectionDate: new Date().toISOString(),
     };
     try {
-      await createFridayCollection(payload).unwrap();
-      toast.success("Friday Collection created successfully");
+      await updateFridayCollection({
+        id: collection.id,
+        data: payload,
+      }).unwrap();
+      toast.success("Friday Collection updated successfully");
       setOpen(false);
     } catch (error: any) {
-      toast.error(error?.data?.message || "Failed to create Friday Collection");
+      console.error("Error updating Friday Collection:", error);
+      toast.error(error?.data?.message || "Failed to update Friday Collection");
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-teal-500 hover:bg-teal-600 text-white flex justify-center items-center">
-          <IoMdAdd />
-          Add Friday-Collection
+        <Button
+          type="button"
+          className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 shadow-sm transition-all duration-200"
+          size="sm"
+          title="Edit"
+        >
+          <FaEdit size={14} />
         </Button>
       </DialogTrigger>
       <DialogContent className="w-3xl">
         <DialogHeader>
-          <DialogTitle>Add Friday Collection</DialogTitle>
+          <DialogTitle>Edit Friday Collection</DialogTitle>
         </DialogHeader>
 
-        <FormProviderWrapper<FridayCollectionForm> onSubmit={onSubmit}>
+        <FormProviderWrapper<FridayCollectionForm>
+          onSubmit={onSubmit}
+          defaultValues={{ amount: collection.amount.toString() }} // <-- set default value
+        >
           <div>
             <RHFInput
               label="Amount"
@@ -75,3 +86,5 @@ export function AddFridayCollectionModal() {
     </Dialog>
   );
 }
+
+export default EditFridayCollectionModal;

@@ -57,6 +57,14 @@ const dynamicBaseQuery = async (args: any, api: any, extraOptions: any) => {
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: dynamicBaseQuery,
-  tagTypes: ["user", "ramadanYear", "itikaf", "ifterlist", "member", "payment"],
+  tagTypes: [
+    "user",
+    "ramadanYear",
+    "itikaf",
+    "ifterlist",
+    "member",
+    "payment",
+    "fridayCollection",
+  ],
   endpoints: () => ({}),
 });

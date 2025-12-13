@@ -65,6 +65,8 @@ export const baseApi = createApi({
     "member",
     "payment",
     "fridayCollection",
+    "CollectionDataSetUp",
+    "othersCollection",
   ],
   endpoints: () => ({}),
 });

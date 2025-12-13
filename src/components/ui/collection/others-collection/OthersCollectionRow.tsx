@@ -1,60 +1,102 @@
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { Button } from "../../button";
+import { OtherCollectionType } from "./OthersCollectionContainer";
+import { useConfirm } from "@/src/components/shared/useConfirm";
+import { useDeleteCollectionMutation } from "@/src/redux/features/collection/collections";
+import EditCollectionModal from "./EditCollectionModal";
 
-const OthersCollectionRow = () => {
+type Props = {
+  data?: OtherCollectionType[];
+  isLoading: boolean;
+  isError: boolean;
+};
+
+const OthersCollectionRow = ({ data, isLoading, isError }: Props) => {
+  const [deleteCollection] = useDeleteCollectionMutation();
+  const { confirm, success, error } = useConfirm();
+
+  const handleDelete = async (id: string) => {
+    const isConfirmed = await confirm(
+      "Are you sure you want to delete this collection?"
+    );
+    if (!isConfirmed) return;
+
+    deleteCollection(id)
+      .unwrap()
+      .then(() => {
+        success("Collection deleted successfully");
+      })
+      .catch((err) => {
+        console.error("Error deleting Collection:", err);
+        error("Failed to delete Collection");
+      });
+  };
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading data.</div>;
+  if (!data || data.length === 0) return <div>No collections found.</div>;
+
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
       <table className="min-w-full border-collapse bg-white text-left text-sm text-gray-700">
-        <thead className="bg-gray-100 ">
-          <tr className="*:px-4 *:py-3 *:font-medium *:text-gray-900 *:text-center">
-            <th>Serial No</th>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Description</th>
-            <th>Action</th>
+        <thead className="bg-gray-100">
+          <tr className="text-center">
+            <th className="px-4 py-3">Serial No</th>
+            <th className="px-4 py-3">Collection Title</th>
+            <th className="px-4 py-3">Donors</th>
+            <th className="px-4 py-3">Total Amount</th>
+            <th className="px-4 py-3">Action</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          <tr className="hover:bg-gray-50 *:px-4 *:py-3 *:text-center">
-            <td>1</td>
-            <td>Tanvir</td>
-            <td>2000</td>
-            <td>Mosjid nirmaner junno</td>
-            <td>
-              {" "}
-              <div className=" flex flex-row gap-2 justify-center items-center">
-                {/* View Button */}
-                <Button
-                  type="button"
-                  className="bg-teal-500 hover:bg-teal-600 text-white rounded cursor-pointer"
-                  size="sm"
-                  title="View"
-                >
-                  <FaEye />
-                </Button>
+          {data.map((collection, idx) => {
+            const totalAmount = collection.donors.reduce(
+              (acc, donor) => acc + donor.amount,
+              0
+            );
 
-                {/* Edit */}
-                <Button
-                  type="button"
-                  className="bg-yellow-500 hover:bg-yellow-600 text-white rounded cursor-pointer"
-                  size="sm"
-                  title="Edit"
-                >
-                  <FaEdit />
-                </Button>
+            return (
+              <tr key={collection.id} className="hover:bg-gray-50 text-center">
+                <td className="px-4 py-3">{idx + 1}</td>
+                <td className="px-4 py-3">
+                  {collection.otherCollectionName.title}
+                </td>
+                <td className="px-4 py-3">
+                  {collection.donors.length > 0
+                    ? collection.donors.length
+                    : "-"}
+                </td>
+                <td className="px-4 py-3">{totalAmount}</td>
+                <td className="px-4 py-3">
+                  <div className="flex flex-row gap-2 justify-center items-center">
+                    {/* View Button */}
+                    <Button
+                      type="button"
+                      className="bg-teal-500 hover:bg-teal-600 text-white rounded cursor-pointer"
+                      size="sm"
+                      title="View"
+                    >
+                      <FaEye />
+                    </Button>
 
-                {/* Delete */}
-                <Button
-                  type="button"
-                  className="bg-red-500 hover:bg-red-700 text-white rounded cursor-pointer"
-                  size="sm"
-                  title="Delete"
-                >
-                  <FaTrashAlt />
-                </Button>
-              </div>
-            </td>
-          </tr>
+                    {/* Edit */}
+
+                    <EditCollectionModal data={collection} />
+
+                    {/* Delete */}
+                    <Button
+                      type="button"
+                      onClick={() => handleDelete(collection.id)}
+                      className="bg-red-500 hover:bg-red-700 text-white rounded cursor-pointer"
+                      size="sm"
+                      title="Delete"
+                    >
+                      <FaTrashAlt />
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

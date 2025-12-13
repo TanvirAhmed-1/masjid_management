@@ -17,9 +17,11 @@ import RHFInput from "@/src/components/shared/RHFInput";
 import RHFSelect from "@/src/components/shared/RHFSelect";
 import { FormProviderWrapper } from "../../../shared/FormProviderWrapper";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
-import { useCreateCollectionMutation } from "@/src/redux/features/collection/collections";
+import { useUpdateCollectionMutation } from "@/src/redux/features/collection/collections";
 import { useGetCollectionDataSetUpQuery } from "@/src/redux/features/collection/collectionDataSetUp";
 import toast from "react-hot-toast";
+import { FaEdit } from "react-icons/fa";
+import { OtherCollectionType } from "./OthersCollectionContainer";
 import LoadingButton from "@/src/components/shared/LoadingButton";
 
 type Doner = {
@@ -34,10 +36,14 @@ type OthersCollectionForm = {
   totalAmount: number;
 };
 
-function AddOthersCollectionModal() {
+function EditCollectionModal({
+  data: collection,
+}: {
+  data: OtherCollectionType;
+}) {
   const [open, setOpen] = useState(false);
-  const { data, isLoading } = useGetCollectionDataSetUpQuery(undefined);
-  const [createCollection] = useCreateCollectionMutation();
+  const { data } = useGetCollectionDataSetUpQuery(undefined);
+  const [updateCollection, { isLoading }] = useUpdateCollectionMutation();
 
   const onSubmit = async (data: OthersCollectionForm) => {
     const payload = {
@@ -50,11 +56,11 @@ function AddOthersCollectionModal() {
     };
     console.log("Payload:", payload);
     try {
-      await createCollection(payload).unwrap();
-      toast.success("Others Collection created successfully");
+      await updateCollection({ id: collection.id, data: payload }).unwrap();
+      toast.success("Others Collection updated successfully");
       setOpen(false);
     } catch (error: any) {
-      toast.error(error?.data?.message || "Failed to create Others Collection");
+      toast.error(error?.data?.message || "Failed to update Others Collection");
     }
   };
 
@@ -66,20 +72,33 @@ function AddOthersCollectionModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-teal-500 hover:bg-teal-600 text-white flex items-center">
-          <IoMdAdd className="mr-1" />
-          Add Others Collection
+        <Button
+          type="button"
+          className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 shadow-sm transition-all duration-200"
+          size="sm"
+          title="Edit"
+        >
+          <FaEdit size={14} />
         </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Add Others Collection</DialogTitle>
+          <DialogTitle>Edit Collection</DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper<OthersCollectionForm>
           onSubmit={onSubmit}
-          defaultValues={{ doners: [{ name: "", amount: 0 }] }} // ← start with 1 Doner
+          defaultValues={{
+            otherCollectionNameId: collection.otherCollectionName.id,
+            date: collection.date ?? new Date().toISOString(),
+            doners: collection.donors.length
+              ? collection.donors.map((d) => ({
+                  name: d.name,
+                  amount: d.amount,
+                }))
+              : [{ name: "", amount: 0 }],
+          }}
         >
           <div className="p-6 max-h-[70vh] overflow-y-auto">
             <div className="space-y-4">
@@ -179,4 +198,4 @@ function DonerFields() {
   );
 }
 
-export default AddOthersCollectionModal;
+export default EditCollectionModal;

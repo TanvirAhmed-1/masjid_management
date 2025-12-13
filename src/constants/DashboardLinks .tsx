@@ -16,7 +16,8 @@ export const DashboardLinks = [
     icon: <FaGear className="text-teal-600" />,
     subRoutes: [
       { title: "Friday Collection", route: "/friday-collection" },
-      { title: "Others  Collection", route: "others-collection" },
+      { title: "Collection Data SetUp", route: "/collection-data-setup" },
+      { title: "Collections", route: "/others-collection" },
     ],
   },
   {

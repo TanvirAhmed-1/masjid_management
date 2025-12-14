@@ -4,6 +4,7 @@ import { OtherCollectionType } from "./OthersCollectionContainer";
 import { useConfirm } from "@/src/components/shared/useConfirm";
 import { useDeleteCollectionMutation } from "@/src/redux/features/collection/collections";
 import EditCollectionModal from "./EditCollectionModal";
+import Link from "next/link";
 
 type Props = {
   data?: OtherCollectionType[];
@@ -69,14 +70,12 @@ const OthersCollectionRow = ({ data, isLoading, isError }: Props) => {
                 <td className="px-4 py-3">
                   <div className="flex flex-row gap-2 justify-center items-center">
                     {/* View Button */}
-                    <Button
-                      type="button"
-                      className="bg-teal-500 hover:bg-teal-600 text-white rounded cursor-pointer"
-                      size="sm"
-                      title="View"
+                    <Link
+                      href={`/others-collection/${collection.id}`}
+                      className="bg-teal-500 hover:bg-teal-600 text-white rounded cursor-pointer p-2"
                     >
                       <FaEye />
-                    </Button>
+                    </Link>
 
                     {/* Edit */}
 

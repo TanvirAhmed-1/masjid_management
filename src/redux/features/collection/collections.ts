@@ -13,6 +13,12 @@ export const collectionSetUpApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["othersCollection"],
     }),
+
+    getCollectionById: builder.query({
+      query: (id) => `/other-collection/${id}`,
+      providesTags: ["othersCollection"],
+    }),
+
     updateCollection: builder.mutation({
       query: ({ id, data }) => ({
         url: `/other-collection/${id}`,
@@ -36,4 +42,5 @@ export const {
   useCreateCollectionMutation,
   useUpdateCollectionMutation,
   useDeleteCollectionMutation,
+  useGetCollectionByIdQuery,
 } = collectionSetUpApi;

@@ -39,7 +39,7 @@ export const DashboardLinks = [
     subRoutes: [
       { title: "Add Members", route: "/member" },
       { title: "Payment", route: "/monthly-payment" },
-      { title: "three", route: "#" },
+      { title: "All Payment", route: "/payment-history" },
     ],
   },
   {

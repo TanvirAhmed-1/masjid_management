@@ -3,8 +3,10 @@
 import { useGetCollectionByIdQuery } from "@/src/redux/features/collection/collections";
 import ManageCollectionTable from "./ManageCollectionTable";
 import SearchManageCollection from "./SearchManageCollection";
+import CreateDonerModal from "./CreateDonerModal";
 
 export type Donor = {
+  id: string;
   name: string;
   amount: number;
   createdAt: string;
@@ -25,7 +27,6 @@ export type CollectionType = {
   otherCollectionName: OtherCollectionName;
 };
 
-
 const ManageCollectionContainer = ({ id }: { id: string }) => {
   const { data, isLoading, isError } = useGetCollectionByIdQuery(id);
 
@@ -37,6 +38,7 @@ const ManageCollectionContainer = ({ id }: { id: string }) => {
         <h3 className="text-lg font-semibold text-black">
           Manage Collection Donor
         </h3>
+        <CreateDonerModal id={id} />
       </div>
 
       <SearchManageCollection />

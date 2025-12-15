@@ -3,7 +3,7 @@ import { Button } from "../../button";
 import { OtherCollectionType } from "./OthersCollectionContainer";
 import { useConfirm } from "@/src/components/shared/useConfirm";
 import { useDeleteCollectionMutation } from "@/src/redux/features/collection/collections";
-import EditCollectionModal from "./EditCollectionModal";
+//import EditCollectionModal from "./EditCollectionModal";
 import Link from "next/link";
 
 type Props = {
@@ -71,15 +71,19 @@ const OthersCollectionRow = ({ data, isLoading, isError }: Props) => {
                   <div className="flex flex-row gap-2 justify-center items-center">
                     {/* View Button */}
                     <Link
-                      href={`/others-collection/${collection.id}`}
-                      className="bg-teal-500 hover:bg-teal-600 text-white rounded cursor-pointer p-2"
+                      href={`/collection/others-collection/${collection.id}`}
                     >
-                      <FaEye />
+                      <Button
+                        type="button"
+                        className="bg-teal-500 hover:bg-teal-700 text-white rounded cursor-pointer"
+                        size="sm"
+                        title="View"
+                      >
+                        <FaEye />
+                      </Button>
                     </Link>
 
-                    {/* Edit */}
-
-                    <EditCollectionModal data={collection} />
+                    {/* <EditCollectionModal data={collection} /> */}
 
                     {/* Delete */}
                     <Button

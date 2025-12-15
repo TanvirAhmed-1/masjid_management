@@ -37,7 +37,8 @@ type OthersCollectionForm = {
 function AddOthersCollectionModal() {
   const [open, setOpen] = useState(false);
   const { data, isLoading } = useGetCollectionDataSetUpQuery(undefined);
-  const [createCollection] = useCreateCollectionMutation();
+  const [createCollection, { isLoading: isCreating }] =
+    useCreateCollectionMutation();
 
   const onSubmit = async (data: OthersCollectionForm) => {
     const payload = {
@@ -48,7 +49,6 @@ function AddOthersCollectionModal() {
         amount: Number(d.amount),
       })),
     };
-    console.log("Payload:", payload);
     try {
       await createCollection(payload).unwrap();
       toast.success("Others Collection created successfully");
@@ -106,7 +106,7 @@ function AddOthersCollectionModal() {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <LoadingButton isLoading={isLoading}>Save</LoadingButton>
+            <LoadingButton isLoading={isCreating}>Save</LoadingButton>
           </DialogFooter>
         </FormProviderWrapper>
       </DialogContent>

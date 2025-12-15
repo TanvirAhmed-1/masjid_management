@@ -34,6 +34,32 @@ export const collectionSetUpApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["othersCollection"],
     }),
+
+    createDoner: builder.mutation({
+      query: (body) => ({
+        url: "/other-collection/donor",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["othersCollection"],
+    }),
+
+    UpdateDonerCollection: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/other-collection/donor/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["othersCollection"],
+    }),
+
+    deleteDonerCollection: builder.mutation({
+      query: (id: string) => ({
+        url: `/other-collection/donor/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["othersCollection"],
+    }),
   }),
 });
 
@@ -43,4 +69,7 @@ export const {
   useUpdateCollectionMutation,
   useDeleteCollectionMutation,
   useGetCollectionByIdQuery,
+  useUpdateDonerCollectionMutation,
+  useDeleteDonerCollectionMutation,
+  useCreateDonerMutation,
 } = collectionSetUpApi;

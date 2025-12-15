@@ -3,8 +3,9 @@
 import { FaTrashAlt } from "react-icons/fa";
 import { Button } from "../../button";
 import { useConfirm } from "@/src/components/shared/useConfirm";
-import { useDeleteCollectionMutation } from "@/src/redux/features/collection/collections";
-import { CollectionType } from "./ManageCollectionContainer";
+import { useDeleteDonerCollectionMutation } from "@/src/redux/features/collection/collections";
+import { CollectionType, Donor } from "./ManageCollectionContainer";
+import EditDonerCollection from "./EditDonerCollection";
 
 type Props = {
   data?: CollectionType[];
@@ -13,7 +14,7 @@ type Props = {
 };
 
 const ManageCollectionTable = ({ data = [], isLoading, isError }: Props) => {
-  const [deleteCollection] = useDeleteCollectionMutation();
+  const [deleteCollection] = useDeleteDonerCollectionMutation();
   const { confirm, success, error } = useConfirm();
 
   if (isLoading) return <div>Loading...</div>;
@@ -35,10 +36,10 @@ const ManageCollectionTable = ({ data = [], isLoading, isError }: Props) => {
 
     try {
       await deleteCollection(collectionId).unwrap();
-      success("Collection deleted successfully");
+      success("Doner deleted successfully");
     } catch (err) {
-      console.error("Error deleting Collection:", err);
-      error("Failed to delete Collection");
+      console.error("Error deleting Doner:", err);
+      error("Failed to delete Doner");
     }
   };
 
@@ -55,16 +56,17 @@ const ManageCollectionTable = ({ data = [], isLoading, isError }: Props) => {
         </thead>
 
         <tbody className="divide-y divide-gray-200">
-          {donors.map((donor, idx) => (
-            <tr key={`${donor.name}-${idx}`} className="text-center">
-              <td className="px-4 py-3">{idx + 1}</td>
+          {donors.map((donor: Donor, index: number) => (
+            <tr key={index} className="text-center">
+              <td className="px-4 py-3">{index + 1}</td>
               <td className="px-4 py-3">{donor.name}</td>
               <td className="px-4 py-3 font-medium">{donor.amount}</td>
-              <td className="px-4 py-3">
+              <td className="px-4 py-3 flex justify-center items-center gap-2">
+                <EditDonerCollection data={donor} />
                 <Button
                   size="sm"
                   className="bg-red-500 hover:bg-red-700 text-white"
-                  onClick={() => handleDelete(donor.collectionId)}
+                  onClick={() => handleDelete(donor.id)}
                 >
                   <FaTrashAlt />
                 </Button>

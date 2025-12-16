@@ -5,11 +5,13 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const { pathname } = req.nextUrl;
 
-  if (!token && pathname !== "/login") {
+  const isPubliceRoute= pathname === "/login" || pathname === "/register";
+
+  if (!token && !isPubliceRoute) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  if (token && pathname === "/login") {
+  if (token && isPubliceRoute) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 

@@ -7,35 +7,34 @@ import { Button } from "@/src/components/ui/button";
 
 type FormValue = {
   name: string;
-  phone?: string;
-  address?: string;
+  phone: string;
+  email: string;
 };
 
-const SearchMember = () => {
+const SearchMosque = () => {
   const onSearchForm = (data: FormValue) => {
     console.log("Search Submitted:", data);
   };
 
   const onResetForm = () => {
     console.log("Reset Search");
-    // এখানে form reset করতে পারো
   };
 
   return (
     <div className="my-4">
       <FormProviderWrapper<FormValue> onSubmit={onSearchForm}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <RHFInput label="Name" name="name" placeholder="Enter member name" />
+          <RHFInput
+            label="Mosque Name"
+            name="name"
+            placeholder="Enter mosque name"
+          />
           <RHFInput
             label="Phone"
             name="phone"
             placeholder="Enter phone number"
           />
-          <RHFInput
-            label="Address"
-            name="address"
-            placeholder="Enter address"
-          />
+          <RHFInput label="Email" name="email" placeholder="Enter email" />
           <div className="flex items-end gap-2">
             <Button
               type="submit"
@@ -57,4 +56,7 @@ const SearchMember = () => {
   );
 };
 
-export default SearchMember;
+
+
+
+export default SearchMosque;

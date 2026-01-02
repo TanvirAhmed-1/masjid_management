@@ -43,14 +43,14 @@ export const DashboardLinks = [
     ],
   },
   {
-    title: "Title4",
+    title: "Mosques Management",
     route: null,
     hasChildren: true,
     icon: <FaUsers className="text-teal-600" size={16} />,
     subRoutes: [
-      { title: "one", route: "#" },
-      { title: "Two", route: "#" },
-      { title: "three", route: "#" },
+      { title: "Create Mosques", route: "/mosques-create" },
+      // { title: "Two", route: "#" },
+      // { title: "three", route: "#" },
     ],
   },
 ];

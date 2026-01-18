@@ -28,7 +28,17 @@ const FridayCollectionContainer = () => {
 
   const handleSearch = (data?: SearchFormValues) => {
     const cleaned = clearqueryObject(data);
-    setFilters(cleaned);
+
+    const converted = {
+      fromDate: cleaned?.fromDate
+        ? new Date(cleaned.fromDate).toISOString()
+        : undefined,
+      toDate: cleaned?.toDate
+        ? new Date(cleaned.toDate).toISOString()
+        : undefined,
+    };
+
+    setFilters(converted);
     setPage(1);
   };
 
@@ -51,7 +61,9 @@ const FridayCollectionContainer = () => {
       </div>
       <SearchFridayCollection onSearch={handleSearch} />
       <div className="flex flex-row-reverse justify-end items-center ml-1 gap-2 mb-2">
-        <label className="text-sm font-medium text-gray-600">Items per page</label>
+        <label className="text-sm font-medium text-gray-600">
+          Items per page
+        </label>
         <select
           className="border rounded p-1 text-sm shadow-sm"
           value={limit}

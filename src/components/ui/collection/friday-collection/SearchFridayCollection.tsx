@@ -16,33 +16,39 @@ const SearchFridayCollection = ({ onSearch }: Props) => {
   return (
     <div className="my-4">
       <FormProviderWrapper<FormValue> onSubmit={onSearch}>
-        <div className="grid grid-cols-3 gap-4">
-          {" "}
-          <RHFDatePicker
-            label="From Date"
-            name="fromDate"
-            placeholder="Enter From Date "
-          />
-          <RHFDatePicker
-            label="To Date"
-            name="toDate"
-            placeholder="Enter To Date "
-          />
-          <div className="flex items-end gap-2">
-            <Button
-              type="submit"
-              className="bg-green-700 text-white cursor-pointer"
-            >
-              <IoSearch />
-            </Button>
-            <Button
-              type="reset"
-              className=" bg-gray-700 text-white cursor-pointer"
-            >
-              <IoReload />
-            </Button>
+        {({ reset }) => (
+          <div className="grid grid-cols-3 gap-4">
+            {" "}
+            <RHFDatePicker
+              label="From Date"
+              name="fromDate"
+              placeholder="Enter From Date "
+            />
+            <RHFDatePicker
+              label="To Date"
+              name="toDate"
+              placeholder="Enter To Date "
+            />
+            <div className="flex items-end gap-2">
+              <Button
+                type="submit"
+                className="bg-green-700 text-white cursor-pointer"
+              >
+                <IoSearch />
+              </Button>
+              <Button
+                type="reset"
+                className=" bg-gray-700 text-white cursor-pointer"
+                onClick={() => {
+                  reset();
+                  onSearch();
+                }}
+              >
+                <IoReload />
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </FormProviderWrapper>
     </div>
   );

@@ -23,9 +23,17 @@ type Props = {
   data?: Collection[];
   isLoading: boolean;
   isError: boolean;
+  page: number;
+  limit: number;
 };
 
-const FridayCollectionRow: React.FC<Props> = ({ data, isLoading, isError }) => {
+const FridayCollectionRow: React.FC<Props> = ({
+  data,
+  isLoading,
+  isError,
+  page,
+  limit,
+}) => {
   const { confirm, success, error } = useConfirm();
   const [deleteFridayCollection] = useDeleteFridayCollectionMutation();
   const handleDelete = async (id: string) => {
@@ -72,7 +80,7 @@ const FridayCollectionRow: React.FC<Props> = ({ data, isLoading, isError }) => {
                 key={index}
                 className="hover:bg-gray-50 *:text-center *:px-4 *:py-3"
               >
-                <td>{index + 1}</td>
+                <td>{(page - 1) * limit + index + 1}</td>
                 <td>{item.user.name}</td>
                 <td>{new Date(item.collectionDate).toLocaleDateString()}</td>
                 <td>{item.amount}</td>

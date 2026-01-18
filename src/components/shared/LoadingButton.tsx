@@ -18,7 +18,7 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
     <Button
       {...rest}
       disabled={isLoading || rest.disabled}
-      className={`flex items-center justify-center space-x-2 px-4 py-2 rounded ${
+      className={`flex items-center justify-center space-x-1 px-4 py-2 rounded ${
         isLoading
           ? "bg-blue-600 text-white cursor-not-allowed"
           : "bg-blue-500 text-white hover:bg-blue-600"

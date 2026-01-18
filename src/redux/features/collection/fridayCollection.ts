@@ -1,10 +1,12 @@
 import { baseApi } from "../../api/baseApi";
 
-
 const fridayCollectionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getFridayCollections: builder.query({
-      query: () => "/friday-collections",
+      query: (params) => ({
+        url: "/friday-collections",
+        params,
+      }),
       providesTags: ["fridayCollection"],
     }),
     createFridayCollection: builder.mutation({

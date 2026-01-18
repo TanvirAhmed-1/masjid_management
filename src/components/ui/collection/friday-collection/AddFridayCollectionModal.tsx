@@ -17,9 +17,11 @@ import { useCreateFridayCollectionMutation } from "@/src/redux/features/collecti
 import toast from "react-hot-toast";
 import LoadingButton from "@/src/components/shared/LoadingButton";
 import { useState } from "react";
+import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
 
 type FridayCollectionForm = {
   amount: string;
+  collectionDate: string;
 };
 
 export function AddFridayCollectionModal() {
@@ -27,14 +29,13 @@ export function AddFridayCollectionModal() {
   const [createFridayCollection, { isLoading }] =
     useCreateFridayCollectionMutation();
   const onSubmit = async (data: FridayCollectionForm) => {
-    console.log("Form Submitted:", data);
     const payload = {
       amount: parseInt(data.amount),
-      collectionDate: new Date().toISOString(),
+      collectionDate: data.collectionDate,
     };
     try {
-      await createFridayCollection(payload).unwrap();
-      toast.success("Friday Collection created successfully");
+      const result = await createFridayCollection(payload).unwrap();
+      toast.success(`${result.message}`);
       setOpen(false);
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to create Friday Collection");
@@ -49,13 +50,18 @@ export function AddFridayCollectionModal() {
           Add Friday-Collection
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-3xl">
+      <DialogContent className="min-w-sm max-w-lg mx-auto">
         <DialogHeader>
           <DialogTitle>Add Friday Collection</DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper<FridayCollectionForm> onSubmit={onSubmit}>
-          <div>
+          <div className="space-y-3">
+            <RHFDatePicker
+              label="Collection Date"
+              name="collectionDate"
+              placeholder="Select Friday Date"
+            />
             <RHFInput
               label="Amount"
               name="amount"
@@ -68,7 +74,9 @@ export function AddFridayCollectionModal() {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <LoadingButton isLoading={isLoading}>Save</LoadingButton>
+            <LoadingButton loadingText="Saving" isLoading={isLoading}>
+              Save
+            </LoadingButton>
           </DialogFooter>
         </FormProviderWrapper>
       </DialogContent>

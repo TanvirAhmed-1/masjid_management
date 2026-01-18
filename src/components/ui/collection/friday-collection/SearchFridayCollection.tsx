@@ -6,22 +6,22 @@ import RHFDatePicker from "../../../shared/RHFDatePicker";
 import { Button } from "../../button";
 
 type FormValue = {
-  formDate: string;
-  toDate: string;
+  fromDate?: string;
+  toDate?: string;
 };
-const SearchFridayCollection = () => {
-  const onSaveForm = (data: FormValue) => {
-    console.log(data);
-  };
+type Props = {
+  onSearch: (data?: FormValue) => void;
+};
+const SearchFridayCollection = ({ onSearch }: Props) => {
   return (
     <div className="my-4">
-      <FormProviderWrapper<FormValue> onSubmit={onSaveForm}>
+      <FormProviderWrapper<FormValue> onSubmit={onSearch}>
         <div className="grid grid-cols-3 gap-4">
           {" "}
           <RHFDatePicker
-            label="Form Date"
-            name="formDate"
-            placeholder="Enter Form Date "
+            label="From Date"
+            name="fromDate"
+            placeholder="Enter From Date "
           />
           <RHFDatePicker
             label="To Date"

@@ -17,7 +17,7 @@ const SearchFridayCollection = ({ onSearch }: Props) => {
     <div className="my-4">
       <FormProviderWrapper<FormValue> onSubmit={onSearch}>
         {({ reset }) => (
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
             {" "}
             <RHFDatePicker
               label="From Date"

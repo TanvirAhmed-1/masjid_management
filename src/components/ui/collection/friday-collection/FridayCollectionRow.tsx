@@ -4,6 +4,7 @@ import { Button } from "../../button";
 import { useDeleteFridayCollectionMutation } from "@/src/redux/features/collection/fridayCollection";
 import { useConfirm } from "@/src/components/shared/useConfirm";
 import { FaTrashAlt } from "react-icons/fa";
+import LoaderScreen from "@/src/components/shared/LoaderScreen";
 
 type User = {
   name: string;
@@ -54,7 +55,7 @@ const FridayCollectionRow: React.FC<Props> = ({
   };
 
   if (isLoading) {
-    return <p className="p-4 text-gray-500">Loading...</p>;
+     return <LoaderScreen />;
   }
 
   if (isError) {
@@ -65,8 +66,8 @@ const FridayCollectionRow: React.FC<Props> = ({
     <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
       <table className="min-w-full border-collapse bg-white text-left text-sm text-gray-700">
         <thead className="bg-gray-100">
-          <tr className="*:text-center *:px-4 *:py-3">
-            <th>Serial No</th>
+          <tr className="*:text-center *:px-4 *:py-3 *:whitespace-nowrap">
+            <th>SN</th>
             <th>Name</th>
             <th>Date</th>
             <th>Amount</th>
@@ -78,7 +79,7 @@ const FridayCollectionRow: React.FC<Props> = ({
             data?.map((item: Collection, index: number) => (
               <tr
                 key={index}
-                className="hover:bg-gray-50 *:text-center *:px-4 *:py-3"
+                className="hover:bg-gray-50 *:text-center *:px-4 *:py-3 *:whitespace-nowrap "
               >
                 <td>{(page - 1) * limit + index + 1}</td>
                 <td>{item.user.name}</td>

@@ -29,10 +29,9 @@ function CreateCollectionName() {
   const [createCollection, { isLoading }] =
     useCreateCollectionDataSetUpMutation();
   const onSubmit = async (data: FridayCollectionForm) => {
-    console.log("Form Submitted:", data);
     try {
-      await createCollection(data).unwrap();
-      toast.success(" Collection Name created successfully");
+      const result = await createCollection(data).unwrap();
+      toast.success(`${result.message}`);
       setOpen(false);
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to create  Collection Name");
@@ -53,7 +52,7 @@ function CreateCollectionName() {
         </DialogHeader>
 
         <FormProviderWrapper<FridayCollectionForm> onSubmit={onSubmit}>
-          <div>
+          <div className="grid grid-cols-1 gap-4 mt-4">
             <RHFInput
               label=" Collection title"
               name="title"

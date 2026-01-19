@@ -39,7 +39,7 @@ const FridayCollectionRow: React.FC<Props> = ({
   const [deleteFridayCollection] = useDeleteFridayCollectionMutation();
   const handleDelete = async (id: string) => {
     const isConfirmed = await confirm(
-      "Are you sure you want to delete this collection?"
+      "Are you sure you want to delete this collection?",
     );
     if (!isConfirmed) return;
 
@@ -55,7 +55,7 @@ const FridayCollectionRow: React.FC<Props> = ({
   };
 
   if (isLoading) {
-     return <LoaderScreen />;
+    return <LoaderScreen />;
   }
 
   if (isError) {

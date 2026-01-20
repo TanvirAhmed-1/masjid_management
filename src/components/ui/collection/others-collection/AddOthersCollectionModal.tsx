@@ -58,7 +58,7 @@ function AddOthersCollectionModal() {
     }
   };
 
-  const options = data?.data?.map((item: any) => ({
+  const options = data?.data?.data?.map((item: any) => ({
     value: item.id,
     label: item.title,
   }));

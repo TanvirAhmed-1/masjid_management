@@ -1,24 +1,35 @@
-import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
+import { FaEye, FaTrashAlt } from "react-icons/fa";
 import { Button } from "../../button";
-import { OtherCollectionType } from "./OthersCollectionContainer";
 import { useConfirm } from "@/src/components/shared/useConfirm";
 import { useDeleteCollectionMutation } from "@/src/redux/features/collection/collections";
-//import EditCollectionModal from "./EditCollectionModal";
 import Link from "next/link";
+import { OtherCollectionType } from "@/src/types/collectionType";
+import LoaderScreen from "@/src/components/shared/LoaderScreen";
+import FetchingLoader from "@/src/components/shared/FetchingLoader";
 
 type Props = {
-  data?: OtherCollectionType[];
+  data: OtherCollectionType[];
   isLoading: boolean;
   isError: boolean;
+  page: number;
+  limit: number;
+  isFetching: boolean;
 };
 
-const OthersCollectionRow = ({ data, isLoading, isError }: Props) => {
+const OthersCollectionRow = ({
+  data,
+  isLoading,
+  isError,
+  page,
+  limit,
+  isFetching,
+}: Props) => {
   const [deleteCollection] = useDeleteCollectionMutation();
   const { confirm, success, error } = useConfirm();
 
   const handleDelete = async (id: string) => {
     const isConfirmed = await confirm(
-      "Are you sure you want to delete this collection?"
+      "Are you sure you want to delete this collection?",
     );
     if (!isConfirmed) return;
 
@@ -32,7 +43,12 @@ const OthersCollectionRow = ({ data, isLoading, isError }: Props) => {
         error("Failed to delete Collection");
       });
   };
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return <LoaderScreen />;
+  }
+  if (isFetching) {
+    return <FetchingLoader />;
+  }
   if (isError) return <div>Error loading data.</div>;
   if (!data || data.length === 0) return <div>No collections found.</div>;
 
@@ -40,24 +56,27 @@ const OthersCollectionRow = ({ data, isLoading, isError }: Props) => {
     <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
       <table className="min-w-full border-collapse bg-white text-left text-sm text-gray-700">
         <thead className="bg-gray-100">
-          <tr className="text-center">
-            <th className="px-4 py-3">Serial No</th>
-            <th className="px-4 py-3">Collection Title</th>
-            <th className="px-4 py-3">Donors</th>
-            <th className="px-4 py-3">Total Amount</th>
-            <th className="px-4 py-3">Action</th>
+          <tr className="text-center *:px-4 *:py-3 *:whitespace-nowrap">
+            <th>Serial No</th>
+            <th>Collection Title</th>
+            <th>Donors</th>
+            <th>Total Amount</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {data.map((collection, idx) => {
+          {data.map((collection, index) => {
             const totalAmount = collection.donors.reduce(
               (acc, donor) => acc + donor.amount,
-              0
+              0,
             );
 
             return (
-              <tr key={collection.id} className="hover:bg-gray-50 text-center">
-                <td className="px-4 py-3">{idx + 1}</td>
+              <tr
+                key={collection.id}
+                className="hover:bg-gray-50 text-center *:whitespace-nowrap"
+              >
+                <td>{(page - 1) * limit + index + 1}</td>
                 <td className="px-4 py-3">
                   {collection.otherCollectionName.title}
                 </td>
@@ -70,9 +89,7 @@ const OthersCollectionRow = ({ data, isLoading, isError }: Props) => {
                 <td className="px-4 py-3">
                   <div className="flex flex-row gap-2 justify-center items-center">
                     {/* View Button */}
-                    <Link
-                      href={`/collection/others-collection/${collection.id}`}
-                    >
+                    <Link href={`/others-collection/${collection.id}`}>
                       <Button
                         type="button"
                         className="bg-teal-500 hover:bg-teal-700 text-white rounded cursor-pointer"

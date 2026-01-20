@@ -2,7 +2,10 @@ import { baseApi } from "../../api/baseApi";
 export const collectionSetUpApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getCollection: builder.query({
-      query: () => "/other-collection",
+      query: (params) => ({
+        url: "/other-collection",
+        params,
+      }),
       providesTags: ["othersCollection"],
     }),
     createCollection: builder.mutation({
@@ -15,7 +18,10 @@ export const collectionSetUpApi = baseApi.injectEndpoints({
     }),
 
     getCollectionById: builder.query({
-      query: (id) => `/other-collection/${id}`,
+      query: ({ id, params }) => ({
+        url: `/other-collection/${id}`,
+        params,
+      }),
       providesTags: ["othersCollection"],
     }),
 

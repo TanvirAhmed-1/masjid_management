@@ -9,20 +9,27 @@ import RHFInput from "@/src/components/shared/RHFInput";
 type FormValue = {
   formDate: string;
   toDate: string;
-  name: string;
+  donorName: string;
+  amount: number;
 };
-const SearchManageCollection = () => {
-  const onSaveForm = (data: FormValue) => {
-    console.log(data);
-  };
+type Props = {
+  onSearch: (data?: FormValue) => void;
+};
+const SearchManageCollection = ({ onSearch }: Props) => {
+
   return (
     <div className="my-4">
-      <FormProviderWrapper<FormValue> onSubmit={onSaveForm}>
-        <div className="grid grid-cols-4 gap-4">
+      <FormProviderWrapper<FormValue> onSubmit={onSearch}>
+        {({ reset }) => (        <div className="grid grid-cols-4 gap-4">
           <RHFInput
             label="Doner Name"
-            name="name"
+            name="donorName"
             placeholder="Enter Doner Name"
+          />
+          <RHFInput
+            label="Amount"
+            name="amount"
+            placeholder="Enter Amount"
           />
           <RHFDatePicker
             label="Form Date"
@@ -43,12 +50,16 @@ const SearchManageCollection = () => {
             </Button>
             <Button
               type="reset"
+              onClick={() => {
+                reset();
+                onSearch();
+              }}
               className=" bg-gray-700 text-white cursor-pointer"
             >
               <IoReload />
             </Button>
           </div>
-        </div>
+        </div>)}
       </FormProviderWrapper>
     </div>
   );

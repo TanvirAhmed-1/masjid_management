@@ -63,7 +63,7 @@ const FridayCollectionContainer = () => {
         <AddFridayCollectionModal />
       </div>
       <SearchFridayCollection onSearch={handleSearch} />
-      // Page size selector
+      {/* // Page size selector */}
       <div>
         <PageSizeSelect
           value={limit}

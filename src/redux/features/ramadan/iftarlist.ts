@@ -3,9 +3,10 @@ import { baseApi } from "../../api/baseApi";
 const ifterlistApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     itferlist: build.query({
-      query: () => ({
+      query: (params) => ({
         url: "/ifterlists",
         method: "GET",
+        params,
       }),
       providesTags: ["ifterlist"],
     }),

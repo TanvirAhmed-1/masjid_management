@@ -31,7 +31,7 @@ function AddItikafModal() {
   const { data: ramadanYear } = useGetRamadanYearQuery(undefined);
 
   const ramadanYearOptions =
-    ramadanYear?.result?.map((year: any) => ({
+    ramadanYear?.result?.data?.map((year: any) => ({
       value: year.id,
       label: year.ramadanYear,
     })) || [];

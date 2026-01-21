@@ -77,7 +77,7 @@ const ManageCollectionTable = ({
         <tbody className="divide-y divide-gray-200">
           {donors.map((donor: Donor, index: number) => (
             <tr key={index} className="text-center *:whitespace-nowrap">
-              <td className="px-4 py-3">{index + 1}</td>
+              <td className="px-4 py-3">{(page - 1) * limit + index + 1}</td>
               <td className="px-4 py-3">{donor.name}</td>
               <td className="px-4 py-3 font-medium">{donor.amount}</td>
               <td className="px-4 py-3">

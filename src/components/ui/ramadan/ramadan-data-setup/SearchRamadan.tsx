@@ -6,39 +6,43 @@ import RHFInput from "@/src/components/shared/RHFInput";
 import { Button } from "../../button";
 
 type FormValue = {
-  ramadanYear: string;
-
+  year: string;
+};
+type Props = {
+  onSearch: (data?: any) => void;
 };
 
-const SearchRamadan = () => {
-  const onSaveForm = (data: FormValue) => {
-    console.log("Form Submitted:", data);
-  };
-
+const SearchRamadan = ({ onSearch }: Props) => {
   return (
     <div className="my-4">
-      <FormProviderWrapper<FormValue> onSubmit={onSaveForm}>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <RHFInput
-            label="Ramadan Year"
-            name="ramadanYear"
-            placeholder="Enter Ramadan year"
-          />
-          <div className="flex items-end gap-2">
-            <Button
-              type="submit"
-              className="flex items-center gap-1 bg-green-700 text-white hover:bg-green-800 transition"
-            >
-              <IoSearch /> Search
-            </Button>
-            <Button
-              type="button"
-              className="flex items-center gap-1 bg-gray-700 text-white hover:bg-gray-800 transition"
-            >
-              <IoReload /> Reset
-            </Button>
+      <FormProviderWrapper<FormValue> onSubmit={onSearch}>
+        {({ reset }) => (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <RHFInput
+              label="Ramadan Year"
+              name="year"
+              placeholder="Enter Ramadan year"
+            />
+            <div className="flex items-end gap-2">
+              <Button
+                type="submit"
+                className="flex items-center gap-1 bg-green-700 text-white hover:bg-green-800 transition"
+              >
+                <IoSearch /> Search
+              </Button>
+              <Button
+                type="reset"
+                onClick={() => {
+                  reset();
+                  onSearch();
+                }}
+                className="flex items-center gap-1 bg-gray-700 text-white hover:bg-gray-800 transition"
+              >
+                <IoReload /> Reset
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </FormProviderWrapper>
     </div>
   );

@@ -11,6 +11,7 @@ import {
 import EditRamadanModal from "./EditRamadanModal";
 import Link from "next/link";
 import ShowItikafListModal from "./ShowItikafListModal";
+import FetchingLoader from "@/src/components/shared/FetchingLoader";
 
 export interface RamadanData {
   id: string;
@@ -20,14 +21,26 @@ export interface RamadanData {
   updatedAt: string;
   userId: string;
 }
+type Props = {
+  data?: RamadanData[];
+  isLoading: boolean;
+  isFetching: boolean;
+  page: number;
+  limit: number;
+};
 
-const RamadanRow = () => {
-  const { data: ramadanYear, isLoading } = useGetRamadanYearQuery(undefined);
+const RamadanRow = ({ data, isLoading, isFetching, page, limit }: Props) => {
   const [removeYear] = useDeleteRamadanYearMutation();
 
   if (isLoading) {
     return <p className="text-center py-6">Loading...</p>;
   }
+
+  if (!data || data.length === 0) {
+    return <p className="text-center py-6">No data available</p>;
+  }
+
+  if (isFetching) return <FetchingLoader />;
 
   // delete the item
 
@@ -69,8 +82,8 @@ const RamadanRow = () => {
     <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md bg-white">
       <table className="min-w-full border-collapse text-sm text-gray-700">
         <thead className="bg-gray-100 text-gray-900">
-          <tr className="*:px-5 *:py-3 *:font-semibold *:text-center">
-            <th>Serial No</th>
+          <tr className="*:px-5 *:py-3 *:font-semibold *:text-center  *:whitespace-nowrap">
+            <th>SN</th>
             <th>Year</th>
             <th>Title</th>
             <th>Iftar List</th>
@@ -80,13 +93,12 @@ const RamadanRow = () => {
         </thead>
 
         <tbody className="divide-y divide-gray-200">
-          {ramadanYear?.result?.map((item: RamadanData, index: number) => (
+          {data?.map((item: RamadanData, index: number) => (
             <tr
               key={item.id}
-              className="hover:bg-gray-50 transition-colors *:px-5 *:py-3 *:text-center"
+              className="hover:bg-gray-50 transition-colors *:px-5 *:py-3 *:text-center *:whitespace-nowrap"
             >
-              <td>{index + 1}</td>
-
+              <td>{(page - 1) * limit + index + 1}</td>
               <td>{item.ramadanYear}</td>
               <td>{item.titleName}</td>
               <td>

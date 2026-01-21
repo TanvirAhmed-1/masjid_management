@@ -14,6 +14,7 @@ import {
 import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
 import { useCreateRamadanYearMutation } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
+import toast from "react-hot-toast";
 
 type FormData = {
   titleName: string;
@@ -24,12 +25,11 @@ function RamadanModal() {
   const [createYear, { isLoading }] = useCreateRamadanYearMutation();
 
   const onSubmit = async (data: FormData) => {
-    console.log("Form Submitted:", data);
     try {
       const result = await createYear(data).unwrap();
-      console.log("date create succesfully", result);
+      toast.success(`${result.message}`);
     } catch (error) {
-      console.log("date create Error", error);
+      toast.error("Failed to create Ramadan Year");
     }
   };
 
@@ -75,7 +75,7 @@ function RamadanModal() {
               type="submit"
               className="bg-teal-600 hover:bg-teal-700 text-white"
             >
-              {isLoading?"Saving..":"Save"}
+              {isLoading ? "Saving.." : "Save"}
             </Button>
           </DialogFooter>
         </FormProviderWrapper>

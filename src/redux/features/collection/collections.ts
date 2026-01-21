@@ -18,7 +18,7 @@ export const collectionSetUpApi = baseApi.injectEndpoints({
     }),
 
     getCollectionById: builder.query({
-      query: ({ id, params }) => ({
+      query: ({ id, ...params }) => ({
         url: `/other-collection/${id}`,
         params,
       }),

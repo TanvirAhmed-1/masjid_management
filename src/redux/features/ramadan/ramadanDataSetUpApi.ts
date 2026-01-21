@@ -3,9 +3,9 @@ import { baseApi } from "../../api/baseApi";
 const ramadanDataSetUpApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getRamadanYear: builder.query({
-      query: () => ({
+      query: (params) => ({
         url: "/ramadan-data-setups",
-        method: "GET",
+        params,
       }),
       providesTags: ["ramadanYear"],
     }),
@@ -24,7 +24,7 @@ const ramadanDataSetUpApi = baseApi.injectEndpoints({
       query: ({ id, data }) => ({
         url: `/ramadan-data-setups/${id}`,
         method: "PUT",
-        body:data,
+        body: data,
       }),
       invalidatesTags: ["ramadanYear"],
     }),

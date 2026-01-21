@@ -28,7 +28,6 @@ function CreateDonerModal({ id }: { id: string }) {
   const [createDoner, { isLoading }] = useCreateDonerMutation();
 
   const onSubmit = async (data: OthersCollectionForm) => {
-    console.log("Payload:", data);
     const payload = {
       name: data.name,
       amount: Number(data.amount),

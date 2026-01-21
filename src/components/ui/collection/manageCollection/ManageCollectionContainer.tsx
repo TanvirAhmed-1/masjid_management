@@ -29,11 +29,9 @@ const ManageCollectionContainer = ({ id }: { id: string }) => {
   }, [initialLoaded]);
 
   const handleSearch = (data?: SearchFormValues) => {
-    console.log(data);
     const cleaned = clearqueryObject(data);
-
     const converted = {
-      name: cleaned?.donorName,
+      donorName: cleaned?.donorName,
       amount: cleaned?.amount,
       fromDate: cleaned?.fromDate
         ? new Date(cleaned.fromDate).toISOString()
@@ -42,7 +40,7 @@ const ManageCollectionContainer = ({ id }: { id: string }) => {
         ? new Date(cleaned.toDate).toISOString()
         : undefined,
     };
-
+    console.log(converted);
     setFilters(converted);
     setPage(1);
   };
@@ -64,8 +62,8 @@ const ManageCollectionContainer = ({ id }: { id: string }) => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-black">
+      <div className="flex flex-wrap gap-4 justify-between items-center mb-4">
+        <h3 className="text-lg md:text-3xl font-semibold text-black">
           Manage Collection Donor
         </h3>
         <CreateDonerModal id={id} />

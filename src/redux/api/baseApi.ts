@@ -28,7 +28,7 @@ const dynamicBaseQuery = async (args: any, api: any, extraOptions: any) => {
         const refreshResult = await rawBaseQuery(
           { url: "/refresh-token", method: "POST" },
           api,
-          extraOptions
+          extraOptions,
         );
 
         if (refreshResult.data) {
@@ -68,6 +68,7 @@ export const baseApi = createApi({
     "CollectionDataSetUp",
     "othersCollection",
     "mosque",
+    "staff",
   ],
   endpoints: () => ({}),
 });

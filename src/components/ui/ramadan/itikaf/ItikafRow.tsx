@@ -2,36 +2,31 @@
 
 import React from "react";
 import { Button } from "../../button";
-import {  FaTrashAlt } from "react-icons/fa";
-import {
-  useDeleteItikafMutation,
-  useGetItikafQuery,
-} from "@/src/redux/features/ramadan/itikafApi";
+import { FaTrashAlt } from "react-icons/fa";
+import { useDeleteItikafMutation } from "@/src/redux/features/ramadan/itikafApi";
 import { format } from "date-fns";
 import Swal from "sweetalert2";
 import EditItikafModal from "./EditItikafModal";
-
-interface RamadanData {
-  ramadanYear: string;
-  titleName: string;
-}
-
-export interface ItikafData {
-  id: string;
-  name: string;
-  fromDate: Date;
-  toDate: Date;
-  ramadanId: string;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
-  ramadanYear: RamadanData;
-}
-
-const ItikafRow = () => {
-  const { data: itikafs, isLoading } = useGetItikafQuery(undefined);
+import { ItikafData } from "./ItikafContainer";
+import FetchingLoader from "@/src/components/shared/FetchingLoader";
+import LoaderScreen from "@/src/components/shared/LoaderScreen";
+type ItikafRowProps = {
+  data?: ItikafData[];
+  isLoading: boolean;
+  isFetching: boolean;
+  page: number;
+  limit: number;
+};
+const ItikafRow = ({
+  data,
+  isLoading,
+  isFetching,
+  page,
+  limit,
+}: ItikafRowProps) => {
   const [removeItikaf] = useDeleteItikafMutation();
 
+  console.log("Itikaf Data:", data);
   const handleDelete = async (id: string) => {
     Swal.fire({
       title: "Are you sure?",
@@ -53,8 +48,6 @@ const ItikafRow = () => {
             timer: 1800,
             showConfirmButton: false,
           });
-
-          console.log("Delete successfully", res);
         } catch (error) {
           Swal.fire({
             title: "Failed!",
@@ -67,7 +60,14 @@ const ItikafRow = () => {
   };
 
   if (isLoading) {
-    return <p className="text-center py-6">Loading...</p>;
+    return <LoaderScreen />;
+  }
+
+  if (data?.length === 0) {
+    return <p className="text-center py-6">No Itikaf Found</p>;
+  }
+  if (isFetching) {
+    return <FetchingLoader />;
   }
 
   return (
@@ -84,12 +84,12 @@ const ItikafRow = () => {
         </thead>
 
         <tbody className="divide-y divide-gray-200">
-          {itikafs?.result?.map((itikaf: ItikafData, index: number) => (
+          {data?.map((itikaf: ItikafData, index: number) => (
             <tr
               key={itikaf.id}
               className="hover:bg-gray-50 transition-colors *:px-5 *:py-3 *:text-center"
             >
-              <td>{index + 1}</td>
+              <td>{(page - 1) * limit + index + 1}</td>
               <td>{itikaf.name}</td>
               <td>{itikaf.ramadanYear.ramadanYear}</td>
               <td className="space-x-3">
@@ -100,12 +100,9 @@ const ItikafRow = () => {
 
               <td>
                 <div className="flex justify-center items-center gap-2">
-
-
                   {/* Edit Button */}
 
                   <EditItikafModal item={itikaf} />
-
 
                   {/* Delete Button */}
                   <Button

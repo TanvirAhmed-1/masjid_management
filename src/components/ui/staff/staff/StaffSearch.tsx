@@ -2,30 +2,32 @@
 
 import { IoReload, IoSearch } from "react-icons/io5";
 import { FormProviderWrapper } from "../../../shared/FormProviderWrapper";
+import RHFDatePicker from "../../../shared/RHFDatePicker";
 import RHFInput from "@/src/components/shared/RHFInput";
 import { Button } from "../../button";
 
 type FormValue = {
-  year: string;
+  ramadanYear: string;
+  date: string;
   name: string;
 };
-
 type Props = {
-  onSearch: () => void;
+  onSearch: (data?: FormValue) => void;
 };
-const SearchItikaf = ({ onSearch }: Props) => {
+
+const StaffSearch = ({ onSearch }: Props) => {
   return (
     <div className="my-4">
       <FormProviderWrapper<FormValue> onSubmit={onSearch}>
         {({ reset }) => (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <RHFInput
-              label="Ramadan Year"
-              name="year"
-              placeholder="Enter Ramadan year"
-            />
+          <div className="grid grid-cols-1  gap-4">
+            <RHFInput label="name" name="name" placeholder="Enter name" />
 
-            <RHFInput label="Name" name="name" placeholder="Enter name" />
+            <RHFInput
+              label="phone Number"
+              name="phone"
+              placeholder="Enter phone"
+            />
 
             <div className="flex items-end gap-2">
               <Button
@@ -52,4 +54,4 @@ const SearchItikaf = ({ onSearch }: Props) => {
   );
 };
 
-export default SearchItikaf;
+export default StaffSearch;

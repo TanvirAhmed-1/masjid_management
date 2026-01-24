@@ -17,9 +17,9 @@ import { useUpdateItikafMutation } from "@/src/redux/features/ramadan/itikafApi"
 import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import RHFSelect from "@/src/components/shared/RHFSelect";
 import toast from "react-hot-toast";
-import { ItikafData } from "./ItikafRow";
 import { format } from "date-fns";
 import { FaEdit } from "react-icons/fa";
+import { ItikafData } from "./ItikafContainer";
 
 type ItikafFormData = {
   name: string;
@@ -37,11 +37,11 @@ function EditItikafModal({ item }: props) {
   const { data: ramadanYear } = useGetRamadanYearQuery(undefined);
 
   const ramadanYearOptions =
-    ramadanYear?.result?.map((year: any) => ({
+    ramadanYear?.result?.data?.map((year: any) => ({
       value: year.id,
       label: year.ramadanYear,
     })) || [];
-  
+
   const onSubmit = async (data: ItikafFormData) => {
     try {
       // Convert date strings to ISO-8601 DateTime format with time set to start of day
@@ -52,11 +52,14 @@ function EditItikafModal({ item }: props) {
         toDate: new Date(data.toDate + "T00:00:00.000Z").toISOString(),
       };
 
-      await toast.promise(updateItikaf({ id: item.id, data: formattedData }).unwrap(), {
-        loading: "Updating Itikaf Participant...",
-        success: "Itikaf Participant Updated Successfully!",
-        error: "Update failed. Please try again.",
-      });
+      await toast.promise(
+        updateItikaf({ id: item.id, data: formattedData }).unwrap(),
+        {
+          loading: "Updating Itikaf Participant...",
+          success: "Itikaf Participant Updated Successfully!",
+          error: "Update failed. Please try again.",
+        },
+      );
     } catch (error) {
       console.error("Update error:", error);
     }

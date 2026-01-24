@@ -3,9 +3,10 @@ import { baseApi } from "../../api/baseApi";
 const itikafApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getItikaf: builder.query({
-      query: () => ({
+      query: (query: any) => ({
         url: "/itikafs",
         method: "GET",
+        params: query,
       }),
       providesTags: ["ifterlist"],
     }),

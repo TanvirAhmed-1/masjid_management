@@ -35,14 +35,20 @@ function AddItikafModal() {
       value: year.id,
       label: year.ramadanYear,
     })) || [];
+
   const onSubmit = async (data: ItikafFormData) => {
+    const payload = {
+      ...data,
+      fromDate: new Date(data.fromDate),
+      toDate: new Date(data.toDate),
+    };
+    console.log("Payload:", payload);
     try {
-      await toast.promise(createItikaf(data).unwrap(), {
-        loading: "Creating Itikaf Participant...",
-        success: "Itikaf Participant Created Successful!",
-        error: "Itikaf Participant failed. Please check your credentials.",
-      });
-    } catch {}
+      const res = await createItikaf(payload).unwrap();
+      toast.success(res?.message || "Itikaf created successfully");
+    } catch (error) {
+      toast.error("Failed to create Itikaf");
+    }
   };
 
   return (

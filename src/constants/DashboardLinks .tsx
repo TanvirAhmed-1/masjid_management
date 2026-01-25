@@ -42,6 +42,19 @@ export const DashboardLinks = [
       { title: "All Payment", route: "/payment-history" },
     ],
   },
+
+  {
+    title: "Staff Management",
+    route: null,
+    hasChildren: true,
+    icon: <IoDocumentsSharp className="text-teal-600" size={16} />,
+    subRoutes: [
+      { title: "Staff", route: "/staff" },
+      { title: "Payment", route: "/staff-monthly-payment" },
+      { title: "All Payment", route: "/staff-payment-history" },
+    ],
+  },
+
   {
     title: "Mosques Management",
     route: null,

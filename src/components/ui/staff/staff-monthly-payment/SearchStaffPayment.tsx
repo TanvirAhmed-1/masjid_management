@@ -14,16 +14,16 @@ type Props = {
   onSearch: (data?: FormValue) => void;
 };
 
-const StaffSearch = ({ onSearch }: Props) => {
+const SearchStaffPayment = ({ onSearch }: Props) => {
   return (
     <div className="my-4">
       <FormProviderWrapper<FormValue> onSubmit={onSearch}>
         {({ reset }) => (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <RHFInput label="Name" name="name" placeholder="Enter name" />
+          <div className="grid grid-cols-1  gap-4">
+            <RHFInput label="name" name="name" placeholder="Enter name" />
 
             <RHFInput
-              label="Phone Number"
+              label="phone Number"
               name="phone"
               placeholder="Enter phone"
             />
@@ -53,4 +53,4 @@ const StaffSearch = ({ onSearch }: Props) => {
   );
 };
 
-export default StaffSearch;
+export default SearchStaffPayment;

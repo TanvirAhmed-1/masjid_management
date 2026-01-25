@@ -7,33 +7,16 @@ import { format } from "date-fns";
 import { useDeleteStaffMutation } from "@/src/redux/features/staff/staffApi";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
 import FetchingLoader from "@/src/components/shared/FetchingLoader";
-import EditStaffModal from "./EditStaffModal";
-
-export interface IStaff {
-  id: string;
-  name: string;
-  image: string | null;
-  address: string;
-  phone: string | null;
-  role: string;
-  baseSalary: number;
-  joinDate: string;
-  createdAt: string;
-  updatedAt: string;
-  active: boolean;
-  mosqueId: string;
-  userId: string;
-}
 
 type Props = {
-  data: IStaff[];
+  data: any[];
   isLoading: boolean;
   isFetching: boolean;
   page: number;
   limit: number;
 };
 
-const StaffRow: React.FC<Props> = ({
+const StaffPaymentRow: React.FC<Props> = ({
   data,
   isLoading,
   isFetching,
@@ -106,7 +89,7 @@ const StaffRow: React.FC<Props> = ({
               <td>{row.baseSalary}</td>
               <td>
                 <div className="flex justify-center gap-2">
-                  <EditStaffModal staff={row} />
+                  {/* <EditStaffPaymentModal staff={row} /> */}
                   <Button
                     size="sm"
                     onClick={() => handleDelete(row.id)}
@@ -124,4 +107,4 @@ const StaffRow: React.FC<Props> = ({
   );
 };
 
-export default StaffRow;
+export default StaffPaymentRow;

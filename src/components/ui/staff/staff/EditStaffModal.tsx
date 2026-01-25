@@ -1,6 +1,6 @@
 "use client";
 
-import { IoMdAdd } from "react-icons/io";
+import { useState } from "react";
 import { Button } from "@/src/components/ui/button";
 import {
   Dialog,
@@ -13,54 +13,104 @@ import {
 } from "@/src/components/ui/dialog";
 import RHFInput from "@/src/components/shared/RHFInput";
 import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
+import RHFTextarea from "@/src/components/shared/RHFTextarea";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
 import toast from "react-hot-toast";
-import RHFTextarea from "@/src/components/shared/RHFTextarea";
-import { useCreateStaffMutation } from "@/src/redux/features/staff/staffApi";
+import { useUpdateStaffMutation } from "@/src/redux/features/staff/staffApi";
+import { IStaff } from "./StaffRow";
 
-function EditStaffModal() {
-  const [createStaff, { isLoading }] = useCreateStaffMutation();
+type FormData = {
+  name: string;
+  phone: string;
+  role: string;
+  status?: string;
+  baseSalary: number;
+  joinDate: Date | null;
+  address: string;
+  image?: FileList;
+};
 
-  const onSubmit = async (data: any) => {
+type Props = {
+  staff: IStaff;
+};
+
+function EditStaffModal({ staff }: Props) {
+  const [updateStaff, { isLoading }] = useUpdateStaffMutation();
+  const [preview, setPreview] = useState<string | null>(staff.image ?? null);
+
+  const defaultValues = {
+    name: staff.name,
+    phone: staff.phone ?? "",
+    role: staff.role,
+    baseSalary: staff.baseSalary,
+    joinDate: staff.joinDate ? new Date(staff.joinDate) : undefined,
+    address: staff.address,
+  };
+
+  const onSubmit = async (formData: FormData) => {
     const payload = {
-      ...data,
-      joinDate: data.joinDate
-        ? new Date(data.joinDate).toISOString()
+      ...formData,
+      joinDate: formData.joinDate
+        ? new Date(formData.joinDate).toISOString()
         : undefined,
-      baseSalary: Number(data.baseSalary),
+      baseSalary: Number(formData.baseSalary),
     };
 
-    console.log("Sending to backend:", payload);
-
     try {
-      const res = await createStaff(payload).unwrap();
-      toast.success(res?.message || "Staff created successfully");
+      const res = await updateStaff({ id: staff.id, data: payload }).unwrap();
+      toast.success(res?.message || "Staff updated successfully");
     } catch (err: any) {
-      toast.error(err?.data?.message || "Failed to create staff");
+      toast.error(err?.data?.message || "Failed to update staff");
     }
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2">
-          <IoMdAdd className="text-lg" />
-          Add New Staff
+        <Button
+          size="sm"
+          className="bg-yellow-500 hover:bg-yellow-600 text-white"
+        >
+          Edit
         </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-xl">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">
-            Add New Staff Member
+            Edit Staff Member
           </DialogTitle>
           <p className="text-sm text-gray-500 mt-1">
-            Enter the staff details below to add them to the system.
+            Update staff information and save changes.
           </p>
         </DialogHeader>
 
-        <FormProviderWrapper<any> onSubmit={onSubmit}>
+        <FormProviderWrapper<FormData>
+          onSubmit={onSubmit}
+          defaultValues={defaultValues}
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
+            {/* Image */}
+            <div className="flex flex-col">
+              <label className="text-sm font-medium mb-1">Staff Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files?.[0]) {
+                    setPreview(URL.createObjectURL(e.target.files[0]));
+                  }
+                }}
+              />
+              {preview && (
+                <img
+                  src={preview}
+                  alt="preview"
+                  className="mt-2 w-32 h-32 object-cover rounded-md border"
+                />
+              )}
+            </div>
+
             <RHFInput
               name="name"
               label="Full Name"
@@ -111,7 +161,7 @@ function EditStaffModal() {
               disabled={isLoading}
               className="min-w-[140px] bg-blue-600 hover:bg-blue-700"
             >
-              {isLoading ? "Creating..." : "Create Staff"}
+              {isLoading ? "Updating..." : "Update Staff"}
             </Button>
           </DialogFooter>
         </FormProviderWrapper>

@@ -2,19 +2,19 @@
 
 import { useState } from "react";
 import { clearqueryObject } from "@/src/utils/clearqueryObject";
-import { useGetStaffListQuery } from "@/src/redux/features/staff/staffApi";
 import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
 import Pagination from "@/src/components/shared/Pagination";
-import StaffSearch from "./StaffSearch";
-import StaffRow from "./StaffRow";
-import CreateStaffModal from "./CreateStaffModal";
+import AddStaffPaymentModal from "./AddStaffPaymentModal";
+import StaffPaymentRow from "./StaffPaymentRow";
+import SearchStaffPayment from "./SearchStaffPayment";
+import { useGetStaffPaymentsQuery } from "@/src/redux/features/staff/StaffPayments";
 
 type SearchFormValues = {
   name?: string;
   phone?: string;
 };
 
-const StaffContainer = () => {
+const StaffPaymentContainer = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [filters, setFilters] = useState<SearchFormValues>();
@@ -24,7 +24,7 @@ const StaffContainer = () => {
     setPage(1);
   };
 
-  const { data, isLoading, isFetching } = useGetStaffListQuery({
+  const { data, isLoading, isFetching } = useGetStaffPaymentsQuery({
     page,
     limit,
     ...filters,
@@ -33,11 +33,11 @@ const StaffContainer = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg md:text-3xl font-medium">All Staff List</h3>
-        <CreateStaffModal />
+        <h3 className="text-lg md:text-3xl">All Staff Payment List</h3>
+        <AddStaffPaymentModal />
       </div>
 
-      <StaffSearch onSearch={handleSearch} />
+      <SearchStaffPayment onSearch={handleSearch} />
 
       <PageSizeSelect
         value={limit}
@@ -47,7 +47,7 @@ const StaffContainer = () => {
         }}
       />
 
-      <StaffRow
+      <StaffPaymentRow
         data={data?.result?.data ?? []}
         page={page}
         limit={limit}
@@ -57,7 +57,7 @@ const StaffContainer = () => {
 
       <Pagination
         page={page}
-        totalPage={data?.result?.meta?.totalPage ?? 0} // ✅ FIXED
+        totalPage={data?.result?.meta?.totalPage ?? 0}
         totalRecords={data?.result?.meta?.total ?? 0}
         limit={limit}
         onPageChange={setPage}
@@ -70,4 +70,4 @@ const StaffContainer = () => {
   );
 };
 
-export default StaffContainer;
+export default StaffPaymentContainer;

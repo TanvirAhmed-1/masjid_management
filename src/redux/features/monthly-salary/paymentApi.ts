@@ -1,4 +1,3 @@
-
 import { baseApi } from "../../api/baseApi";
 
 const paymentApi = baseApi.injectEndpoints({
@@ -14,7 +13,11 @@ const paymentApi = baseApi.injectEndpoints({
     }),
 
     getAllMembersPaymentStatus: builder.query({
-      query: () => "/members",
+      query: (params) => ({
+        url: "/payments/status",
+        method: "GET",
+        params,
+      }),
       providesTags: ["payment"],
     }),
 

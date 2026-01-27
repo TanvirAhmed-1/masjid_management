@@ -98,7 +98,7 @@ const MonthlyPaymentModal = () => {
               name="memberId"
               rules={{ required: "Member is required" }}
               options={
-                members?.result?.map((m: any) => ({
+                members?.result?.data?.map((m: any) => ({
                   value: m.id,
                   label: m.name,
                 })) || []

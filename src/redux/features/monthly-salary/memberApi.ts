@@ -3,9 +3,10 @@ import { baseApi } from "../../api/baseApi";
 const memberApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getMembers: builder.query({
-      query: () => ({
+      query: (params) => ({
         url: "/members",
         method: "GET",
+        params,
       }),
       providesTags: ["member"],
     }),

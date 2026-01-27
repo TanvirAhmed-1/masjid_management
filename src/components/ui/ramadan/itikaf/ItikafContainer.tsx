@@ -7,7 +7,7 @@ import { clearqueryObject } from "@/src/utils/clearqueryObject";
 import { useEffect, useState } from "react";
 import Pagination from "@/src/components/shared/Pagination";
 import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
-import { useGetStaffListQuery } from "@/src/redux/features/staff/staffApi";
+import { useGetItikafQuery } from "@/src/redux/features/ramadan/itikafApi";
 
 interface RamadanData {
   ramadanYear: string;
@@ -46,7 +46,6 @@ const ItikafContainer = () => {
 
   const handleSearch = (data?: SearchFormValues) => {
     const cleaned = clearqueryObject(data);
-    console.log("Cleaned Filters:", cleaned);
     setFilters(cleaned);
     setPage(1);
   };
@@ -61,8 +60,8 @@ const ItikafContainer = () => {
     data: itikafs,
     isLoading,
     isFetching,
-  } = useGetStaffListQuery(queryParams);
-
+  } = useGetItikafQuery(queryParams);
+ console.log("Itikaf Query Params:", itikafs);
   return (
     <div>
       <div className="flex justify-between items-center">

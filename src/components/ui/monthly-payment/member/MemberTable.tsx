@@ -2,16 +2,28 @@
 
 import EditMemberModal from "./EditMemberModal";
 import { Button } from "@/src/components/ui/button";
-import {
-  useDeleteMemberMutation,
-  useGetMembersQuery,
-} from "@/src/redux/features/monthly-salary/memberApi";
+import { useDeleteMemberMutation } from "@/src/redux/features/monthly-salary/memberApi";
 import { FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 import MemberPaymentSummaryModal from "./MemberPaymentSummaryModal";
+import LoaderScreen from "@/src/components/shared/LoaderScreen";
+import FetchingLoader from "@/src/components/shared/FetchingLoader";
+import { MemberType } from "./MemberContainer";
+type Props = {
+  members: MemberType[];
+  isLoading: boolean;
+  isFetching: boolean;
+  page: number;
+  limit: number;
+};
 
-const MemberTable = () => {
-  const { data: members, isLoading, isError } = useGetMembersQuery(undefined);
+const MemberTable = ({
+  members,
+  isLoading,
+  isFetching,
+  page,
+  limit,
+}: Props) => {
   const [deleteMember] = useDeleteMemberMutation();
 
   console.log("Members data:", members);
@@ -50,15 +62,15 @@ const MemberTable = () => {
     });
   };
 
-  if (isLoading) return <div>Loading members...</div>;
-  if (isError) return <div>Failed to load members</div>;
+  if (isLoading) return <LoaderScreen />;
+  if (isFetching) return <FetchingLoader />;
 
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md bg-white">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr className="text-center text-sm font-medium text-gray-900 *:py-2 *:px-3">
-            <th>Serial No</th>
+            <th>SN</th>
             <th>Name</th>
             <th>Phone</th>
             <th>Address</th>
@@ -68,12 +80,12 @@ const MemberTable = () => {
         </thead>
 
         <tbody className="bg-white divide-y divide-gray-200">
-          {members?.result.map((member: any, index: number) => (
+          {members?.map((member: MemberType, index: number) => (
             <tr
               key={member.id}
               className="text-base *:text-center *:py-2 *:px-3 hover:bg-gray-50"
             >
-              <td>{index + 1}</td>
+              <td>{(page - 1) * limit + index + 1}</td>
               <td>{member.name}</td>
               <td>{member.phone || "-"}</td>
               <td>{member.address || "-"}</td>

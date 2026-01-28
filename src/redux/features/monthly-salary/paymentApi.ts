@@ -20,7 +20,7 @@ const paymentApi = baseApi.injectEndpoints({
       }),
       providesTags: ["payment"],
     }),
-
+    // Create, Update, Delete Mutations
     createPayment: builder.mutation({
       query: (payload) => ({
         url: "/payments",
@@ -29,7 +29,10 @@ const paymentApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["payment"],
     }),
-
+    getpayment: builder.query({
+      query: () => `/payments`,
+      providesTags: ["payment"],
+    }),
     updatePayment: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/payments/${id}`,
@@ -56,4 +59,5 @@ export const {
   useCreatePaymentMutation,
   useUpdatePaymentMutation,
   useDeletePaymentMutation,
+  useGetpaymentQuery,
 } = paymentApi;

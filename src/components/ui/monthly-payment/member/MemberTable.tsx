@@ -74,7 +74,7 @@ const MemberTable = ({
             <th>Name</th>
             <th>Phone</th>
             <th>Address</th>
-            <th>Monthly Amount</th>
+            <th>Amount</th>
             <th>Actions</th>
           </tr>
         </thead>

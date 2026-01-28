@@ -20,6 +20,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { useGetMemberPaymentSummaryQuery } from "@/src/redux/features/monthly-salary/paymentApi";
+import { FaEye } from "react-icons/fa";
 
 type Payment = {
   id: string;
@@ -58,15 +59,19 @@ export default function MemberPaymentSummaryModal({
   const [open, setOpen] = useState(false);
 
   // ডাটা শুধু মডাল ওপেন হলে ফেচ হবে
-  const { data, isLoading, isError } = useGetMemberPaymentSummaryQuery(memberId, {
-    skip: !open,
-  });
+  const { data, isLoading, isError } = useGetMemberPaymentSummaryQuery(
+    memberId,
+    {
+      skip: !open,
+    },
+  );
 
   const summary = data?.data as ApiResponse | undefined;
 
   // সব ক্যালকুলেশন মেমো করে রাখা
   const { totalPaid, dueMonthsList, monthlyBreakdown } = useMemo(() => {
-    if (!summary) return { totalPaid: 0, dueMonthsList: [], monthlyBreakdown: [] };
+    if (!summary)
+      return { totalPaid: 0, dueMonthsList: [], monthlyBreakdown: [] };
 
     const monthlyRate = summary.member.monthlyAmount;
 
@@ -84,7 +89,10 @@ export default function MemberPaymentSummaryModal({
       const currentMonth = today.getMonth() + 1;
       const paidSet = new Set(summary.paidMonthKeys);
 
-      while (year < currentYear || (year === currentYear && month <= currentMonth)) {
+      while (
+        year < currentYear ||
+        (year === currentYear && month <= currentMonth)
+      ) {
         const monthKey = `${year}-${String(month).padStart(2, "0")}`;
         if (!paidSet.has(monthKey)) {
           dueMonthsList.push(monthKey);
@@ -124,16 +132,19 @@ export default function MemberPaymentSummaryModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {trigger || (
-          <Button size="sm" variant="outline">
-            View Summary
-          </Button>
-        )}
+        <Button
+          type="button"
+          className="bg-teal-500 hover:bg-teal-700 text-white rounded cursor-pointer"
+          size="sm"
+          title="View"
+        >
+          <FaEye />
+        </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="md:min-w-2xl max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold flex items-center gap-3">
+          <DialogTitle className="text-xl font-bold flex items-center gap-3">
             <User className="w-8 h-8 text-teal-600" />
             {memberName} - Payment Summary
           </DialogTitle>
@@ -156,35 +167,64 @@ export default function MemberPaymentSummaryModal({
         {/* Main Content */}
         {summary && !isLoading && (
           <div className="space-y-6 mt-6">
-
             {/* Member Info */}
             <div className="bg-gradient-to-r from-teal-50 to-blue-50 p-6 rounded-xl border">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm font-medium">
-                <div>Monthly: <strong className="text-teal-700">{monthlyRate}৳</strong></div>
-                <div>Join: <strong>{summary.member.joinDate ? format(new Date(summary.member.joinDate), "dd MMM yyyy") : "N/A"}</strong></div>
-                <div>Total Should Pay: <strong>{summary.totalMonthsShouldPay} months</strong></div>
-                <div>Paid Months: <strong className="text-green-600">{summary.paidMonthKeys.length}</strong></div>
+              <div className="flex flex-wrap items-center gap-4 text-sm font-medium ">
+                <div>
+                  Monthly:{" "}
+                  <strong className="text-teal-700 space-x-2">{monthlyRate}<span className="text-xl">৳</span></strong>
+                </div>
+                <div>
+                  Join:{" "}
+                  <strong>
+                    {summary.member.joinDate
+                      ? format(new Date(summary.member.joinDate), "dd MMM yyyy")
+                      : "N/A"}
+                  </strong>
+                </div>
+                <div>
+                  Total Should Pay:{" "}
+                  <strong>{summary.totalMonthsShouldPay} months</strong>
+                </div>
+                <div>
+                  Paid Months:{" "}
+                  <strong className="text-green-600">
+                    {summary.paidMonthKeys.length}
+                  </strong>
+                </div>
               </div>
             </div>
 
             {/* Total Summary Cards */}
             <div className="grid grid-cols-3 gap-6">
               <div className="text-center p-6 bg-green-50 rounded-xl border-2 border-green-200">
-                <DollarSign className="w-12 h-12 text-green-600 mx-auto mb-2" />
+                <DollarSign className="text-3xl text-green-600 mx-auto mb-2" />
                 <p className="text-gray-600">Total Paid</p>
-                <p className="text-3xl font-bold text-green-700">{totalPaid}৳</p>
+                <p className="text-xl font-bold text-green-700">
+                  {totalPaid}৳
+                </p>
               </div>
 
               <div className="text-center p-6 bg-blue-50 rounded-xl border-2 border-blue-200">
-                <Calendar className="w-12 h-12 text-blue-600 mx-auto mb-2" />
+                <Calendar className="text-3xl text-blue-600 mx-auto mb-2" />
                 <p className="text-gray-600">Expected Amount</p>
-                <p className="text-3xl font-bold text-blue-700">{totalExpected}৳</p>
+                <p className="text-xl font-bold text-blue-700">
+                  {totalExpected}৳
+                </p>
               </div>
 
-              <div className={`text-center p-6 rounded-xl border-2 ${finalDue <= 0 ? "bg-emerald-50 border-emerald-300" : "bg-red-50 border-red-300"}`}>
-                {finalDue <= 0 ? <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto mb-2" /> : <XCircle className="w-12 h-12 text-red-600 mx-auto mb-2" />}
+              <div
+                className={`text-center p-6 rounded-xl border-2 ${finalDue <= 0 ? "bg-emerald-50 border-emerald-300" : "bg-red-50 border-red-300"}`}
+              >
+                {finalDue <= 0 ? (
+                  <CheckCircle2 className="text-3xl text-emerald-600 mx-auto mb-2" />
+                ) : (
+                  <XCircle className="text-xl text-red-600 mx-auto mb-2" />
+                )}
                 <p className="text-gray-600">Final Status</p>
-                <p className={`text-3xl font-bold ${finalDue <= 0 ? "text-emerald-700" : "text-red-700"}`}>
+                <p
+                  className={`text-xl font-bold ${finalDue <= 0 ? "text-emerald-700" : "text-red-700"}`}
+                >
                   {finalDue <= 0 ? "All Clear" : `${finalDue}৳ Due`}
                 </p>
               </div>
@@ -198,23 +238,47 @@ export default function MemberPaymentSummaryModal({
               <div className="p-4 space-y-3 max-h-96 overflow-y-auto">
                 {monthlyBreakdown.length > 0 ? (
                   monthlyBreakdown.map((item) => (
-                    <div key={item.monthKey} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                    <div
+                      key={item.monthKey}
+                      className="flex justify-between items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
+                    >
                       <div className="font-semibold text-lg">
                         {format(new Date(item.monthKey + "-01"), "MMMM yyyy")}
                       </div>
                       <div className="text-right">
-                        <div className="text-sm">Paid: <strong className="text-green-600">{item.paid}৳</strong></div>
-                        <div className="text-xs text-gray-500">Expected: {item.expected}৳</div>
+                        <div className="text-sm">
+                          Paid:{" "}
+                          <strong className="text-green-600">
+                            {item.paid}৳
+                          </strong>
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Expected: {item.expected}৳
+                        </div>
                       </div>
                       <div className="ml-6">
-                        {item.diff > 0 && <Badge className="bg-emerald-100 text-emerald-800">+{item.diff}৳ Extra</Badge>}
-                        {item.diff < 0 && <Badge variant="destructive">-{Math.abs(item.diff)}৳ Short</Badge>}
-                        {item.diff === 0 && <Badge className="bg-blue-100 text-blue-800">Exact</Badge>}
+                        {item.diff > 0 && (
+                          <Badge className="bg-emerald-100 text-emerald-800">
+                            +{item.diff}৳ Extra
+                          </Badge>
+                        )}
+                        {item.diff < 0 && (
+                          <Badge variant="destructive">
+                            -{Math.abs(item.diff)}৳ Short
+                          </Badge>
+                        )}
+                        {item.diff === 0 && (
+                          <Badge className="bg-blue-100 text-blue-800">
+                            Exact
+                          </Badge>
+                        )}
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p className="text-center text-gray-500 py-10">No payments recorded yet</p>
+                  <p className="text-center text-gray-500 py-10">
+                    No payments recorded yet
+                  </p>
                 )}
               </div>
             </div>
@@ -223,12 +287,18 @@ export default function MemberPaymentSummaryModal({
             {dueMonthsList.length > 0 && (
               <div className="bg-red-50 border border-red-200 rounded-xl p-5">
                 <h4 className="font-bold text-red-800 mb-3 flex items-center gap-2">
-                  <XCircle className="w-6 h-6" /> Due Months ({dueMonthsList.length})
+                  <XCircle className="w-6 h-6" /> Due Months (
+                  {dueMonthsList.length})
                 </h4>
                 <div className="flex flex-wrap gap-3">
                   {dueMonthsList.map((month) => (
-                    <Badge key={month} variant="destructive" className="text-base py-2 px-4">
-                      {format(new Date(month + "-01"), "MMM yyyy")} → {monthlyRate}৳
+                    <Badge
+                      key={month}
+                      variant="destructive"
+                      className="text-base py-2 px-4"
+                    >
+                      {format(new Date(month + "-01"), "MMM yyyy")} →{" "}
+                      {monthlyRate}৳
                     </Badge>
                   ))}
                 </div>

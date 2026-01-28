@@ -60,15 +60,14 @@ const MonthlyPaymentModal = () => {
         monthName: selectedMonth.name,
         amount: Number(data.amount),
       };
-      console.log(payload);
+
 
       await createPayment(payload).unwrap();
 
-      toast.success("✅ Payment created successfully!");
+      toast.success(" Payment created successfully!");
       setOpen(false);
     } catch (error: any) {
-      console.error("Error creating payment:", error);
-      toast.error(error?.data?.message || "❌ Payment failed");
+      toast.error(error?.data?.message || " Payment failed");
     }
   };
 

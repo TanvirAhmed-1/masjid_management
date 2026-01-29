@@ -18,6 +18,7 @@ import { useGetMembersQuery } from "@/src/redux/features/monthly-salary/memberAp
 import { useCreatePaymentMutation } from "@/src/redux/features/monthly-salary/paymentApi";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
 
 type PaymentFormData = {
   memberId: string;
@@ -61,7 +62,6 @@ const MonthlyPaymentModal = () => {
         amount: Number(data.amount),
       };
 
-
       await createPayment(payload).unwrap();
 
       toast.success(" Payment created successfully!");
@@ -103,14 +103,11 @@ const MonthlyPaymentModal = () => {
                 })) || []
               }
             />
-            <RHFSelect
+            <RHFDatePicker
               label="Month"
               name="monthKey"
+              placeholder="Select month"
               rules={{ required: "Month is required" }}
-              options={months.map((m) => ({
-                value: m.key,
-                label: m.name,
-              }))}
             />
             <RHFInput
               label="Amount"

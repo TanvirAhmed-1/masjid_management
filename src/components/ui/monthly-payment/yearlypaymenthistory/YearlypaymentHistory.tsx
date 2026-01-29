@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { format } from "date-fns";
-import { Loader2, CheckCircle2, XCircle, User } from "lucide-react";
+import { Loader2, User } from "lucide-react";
 import { Card } from "@/src/components/ui/card";
 import { useGetAllMembersPaymentStatusQuery } from "@/src/redux/features/monthly-salary/paymentApi";
 
@@ -35,7 +35,7 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
         const monthName = format(new Date(Number(year), i), "MMM");
         return { monthKey, monthName };
       }),
-    [year]
+    [year],
   );
 
   if (isLoading) {
@@ -63,7 +63,7 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
             <tr>
               <th className="px-5 py-3 text-left">Member</th>
               <th className="px-5 py-3 text-center">Phone</th>
-              {months.map((m) => (
+              {months?.map((m) => (
                 <th key={m.monthKey} className="px-4 py-3 text-center">
                   {m.monthName}
                 </th>
@@ -102,7 +102,7 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
 
                   {months.map((m) => {
                     const payment = payments.find(
-                      (p) => p.monthKey === m.monthKey
+                      (p) => p.monthKey === m.monthKey,
                     );
 
                     if (payment) {
@@ -166,7 +166,7 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
               {members.reduce(
                 (sum, m) =>
                   sum + (m.payments?.reduce((s, p) => s + p.amount, 0) || 0),
-                0
+                0,
               )}
               ৳
             </p>

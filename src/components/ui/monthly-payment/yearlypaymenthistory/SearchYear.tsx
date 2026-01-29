@@ -55,9 +55,9 @@ export default function SearchYear() {
                 </Button>
 
                 <Button
-                  type="button"
+                  type="reset"
                   onClick={() => {
-                    reset({ year: currentYear });
+                    reset();
                     setSelectedYear(currentYear);
                   }}
                   className="flex items-center gap-1 bg-gray-700 text-white hover:bg-gray-800"

@@ -1,27 +1,69 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetpaymentQuery } from "@/src/redux/features/monthly-salary/paymentApi";
 import SearchMonthlyPayment from "./SearchMonthlyPayment";
 import MonthlyPaymentModal from "./MonthlyPaymentModal";
 import MonthlyPaymentTable from "./MonthlyPaymentTable";
+import { clearqueryObject } from "@/src/utils/clearqueryObject";
+import Pagination from "@/src/components/shared/Pagination";
+
+export interface PaymentType {
+  id: string;
+  memberId: string;
+  monthKey: string;
+  amount: number;
+  paidDate: string;
+  userId: string;
+  mosqueId: string;
+  createdAt: string;
+  updatedAt: string;
+  member: Member;
+  user: User;
+}
+
+export interface Member {
+  name: string;
+  phone: string;
+}
+
+export interface User {
+  name: string;
+}
+
+type SearchFormValues = {
+  year?: string;
+  monthKey?: string;
+  monthName?: string;
+};
 
 const MonthlyPaymentContainer = () => {
-  const currentYear = new Date().getFullYear();
-  const currentMonth = `${currentYear}-${String(
-    new Date().getMonth() + 1,
-  ).padStart(2, "0")}`;
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [filters, setFilters] = useState<SearchFormValues | undefined>();
+  const [initialLoaded, setInitialLoaded] = useState(false);
 
-  const [selectedYear, setSelectedYear] = useState(currentYear);
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+  useEffect(() => {
+    if (!initialLoaded) {
+      setInitialLoaded(true);
+      setFilters(undefined);
+    }
+  }, [initialLoaded]);
 
-  const { data, isLoading, isError } = useGetpaymentQuery(selectedMonth);
-  console.log("Monthly Payments Data:", data?.data?.data);
-  const handleSearch = (form: any) => {
-    if (form.monthKey) setSelectedMonth(form.monthKey);
-    if (form.year) setSelectedYear(Number(form.year));
+  const handleSearch = (data?: SearchFormValues) => {
+    const cleaned = clearqueryObject(data);
+    setFilters(cleaned);
+    setPage(1);
+  };
+  const queryParams = {
+    page,
+    limit,
+    ...filters,
   };
 
+  const { data, isLoading, isFetching } = useGetpaymentQuery(queryParams);
+  const totalPage = data?.data?.meta?.totalPage ?? 1;
+  
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -31,19 +73,27 @@ const MonthlyPaymentContainer = () => {
         <MonthlyPaymentModal />
       </div>
 
-      <SearchMonthlyPayment
-        selectedYear={selectedYear}
-        selectedMonth={selectedMonth}
-        onChangeYear={setSelectedYear}
-        onChangeMonth={setSelectedMonth}
-        onSearch={handleSearch}
-      />
+      <SearchMonthlyPayment onSearch={handleSearch} />
 
       <MonthlyPaymentTable
         data={data?.data?.data || []}
         isLoading={isLoading}
-        isError={isError}
-        selectedMonth={selectedMonth}
+        isFetching={isFetching}
+        page={page}
+        limit={limit}
+      />
+
+      {/* Pagination buttons */}
+      <Pagination
+        page={page}
+        totalPage={totalPage}
+        totalRecords={data?.data?.meta?.total ?? 0}
+        limit={limit}
+        onPageChange={(newPage) => setPage(newPage)}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setPage(1);
+        }}
       />
     </div>
   );

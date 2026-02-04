@@ -57,7 +57,7 @@ const StaffContainer = () => {
 
       <Pagination
         page={page}
-        totalPage={data?.result?.meta?.totalPage ?? 0} // ✅ FIXED
+        totalPage={data?.result?.meta?.totalPage ?? 0}
         totalRecords={data?.result?.meta?.total ?? 0}
         limit={limit}
         onPageChange={setPage}

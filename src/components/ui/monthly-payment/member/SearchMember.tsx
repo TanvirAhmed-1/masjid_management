@@ -42,7 +42,7 @@ const SearchMember = ({ onSearch }: Props) => {
                 <IoSearch /> Search
               </Button>
               <Button
-                type="button"
+                type="reset"
                 onClick={() => {
                   reset();
                   onSearch();

@@ -9,7 +9,6 @@ import YearlyPaymentHistory from "./YearlypaymentHistory";
 
 type FormValue = { year: string };
 
-// 🔹 Generate year options once (memoized)
 const useYearOptions = () =>
   useMemo(() => {
     const current = new Date().getFullYear();
@@ -31,47 +30,49 @@ export default function SearchYear() {
 
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap gap-3 items-center justify-between w-full ">
         <div>
-          <h1 className="md:text-2xl  font-bold text-gray-800 mb-6">
+          <h1 className="md:text-2xl  font-bold text-gray-800">
             Yearly Payment History — {selectedYear}
           </h1>
         </div>
         {/* FORM */}
-        <FormProviderWrapper<FormValue>
-          onSubmit={onSearch}
-          defaultValues={{ year: currentYear }}
-        >
-          {(reset) => (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-              <RHFSelect label="Year" name="year" options={yearOptions} />
+        <div>
+          <FormProviderWrapper<FormValue>
+            onSubmit={onSearch}
+            defaultValues={{ year: currentYear }}
+          >
+            {({ reset }) => (
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <RHFSelect label="Year" name="year" options={yearOptions} />
 
-              <div className="flex gap-2">
-                <Button
-                  type="submit"
-                  className="flex items-center gap-1 bg-green-700 text-white hover:bg-green-800"
-                >
-                  <IoSearch /> Search
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    type="submit"
+                    className="flex items-center gap-1 bg-green-700 text-white hover:bg-green-800"
+                  >
+                    <IoSearch /> Search
+                  </Button>
 
-                <Button
-                  type="reset"
-                  onClick={() => {
-                    reset();
-                    setSelectedYear(currentYear);
-                  }}
-                  className="flex items-center gap-1 bg-gray-700 text-white hover:bg-gray-800"
-                >
-                  <IoReload /> Reset
-                </Button>
+                  <Button
+                    type="reset"
+                    onClick={() => {
+                      reset();
+                      setSelectedYear(currentYear);
+                    }}
+                    className="flex items-center gap-1 bg-gray-700 text-white hover:bg-gray-800"
+                  >
+                    <IoReload /> Reset
+                  </Button>
+                </div>
               </div>
-            </div>
-          )}
-        </FormProviderWrapper>
+            )}
+          </FormProviderWrapper>
+        </div>
       </div>
 
       {/* RESULTS */}
-      <div className="mt-8">
+      <div className="mt-3">
         <YearlyPaymentHistory year={selectedYear} />
       </div>
     </div>

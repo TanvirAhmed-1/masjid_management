@@ -1,5 +1,5 @@
 "use client";
-
+import { format } from "date-fns";
 import { IoMdAdd } from "react-icons/io";
 import { Button } from "@/src/components/ui/button";
 import {
@@ -26,45 +26,20 @@ type PaymentFormData = {
   amount: number;
 };
 
-const months = [
-  { key: "2025-01", name: "January 2025" },
-  { key: "2025-02", name: "February 2025" },
-  { key: "2025-03", name: "March 2025" },
-  { key: "2025-04", name: "April 2025" },
-  { key: "2025-05", name: "May 2025" },
-  { key: "2025-06", name: "June 2025" },
-  { key: "2025-07", name: "July 2025" },
-  { key: "2025-08", name: "August 2025" },
-  { key: "2025-09", name: "September 2025" },
-  { key: "2025-10", name: "October 2025" },
-  { key: "2025-11", name: "November 2025" },
-  { key: "2025-12", name: "December 2025" },
-];
-
 const MonthlyPaymentModal = () => {
   const { data: members } = useGetMembersQuery(undefined);
   const [createPayment, { isLoading }] = useCreatePaymentMutation();
   const [open, setOpen] = useState(false);
 
   const onSubmit = async (data: PaymentFormData) => {
+    const payload = {
+      memberId: data.memberId,
+      monthKey: format(new Date(data.monthKey), "yyyy-MM"),
+      amount: Number(data.amount),
+    };
     try {
-      const selectedMonth = months.find((m) => m.key === data.monthKey);
-
-      if (!selectedMonth) {
-        toast.error("Invalid month selection!");
-        return;
-      }
-
-      const payload = {
-        memberId: data.memberId,
-        monthKey: data.monthKey,
-        monthName: selectedMonth.name,
-        amount: Number(data.amount),
-      };
-
-      await createPayment(payload).unwrap();
-
-      toast.success(" Payment created successfully!");
+      const res = await createPayment(payload).unwrap();
+      toast.success(`${res.message}`);
       setOpen(false);
     } catch (error: any) {
       toast.error(error?.data?.message || " Payment failed");

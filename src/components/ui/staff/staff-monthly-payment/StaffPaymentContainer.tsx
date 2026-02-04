@@ -8,6 +8,7 @@ import AddStaffPaymentModal from "./AddStaffPaymentModal";
 import StaffPaymentRow from "./StaffPaymentRow";
 import SearchStaffPayment from "./SearchStaffPayment";
 import { useGetStaffPaymentsQuery } from "@/src/redux/features/staff/StaffPayments";
+import { useGetStaffMonthlyPaymentQuery } from "@/src/redux/features/staff/staffMonthlyPayment";
 
 type SearchFormValues = {
   name?: string;
@@ -24,12 +25,12 @@ const StaffPaymentContainer = () => {
     setPage(1);
   };
 
-  const { data, isLoading, isFetching } = useGetStaffPaymentsQuery({
+  const { data, isLoading, isFetching } = useGetStaffMonthlyPaymentQuery({
     page,
     limit,
     ...filters,
   });
-
+  console.log(data);
   return (
     <div>
       <div className="flex justify-between items-center mb-4">

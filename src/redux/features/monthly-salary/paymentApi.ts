@@ -13,10 +13,9 @@ const paymentApi = baseApi.injectEndpoints({
     }),
 
     getAllMembersPaymentStatus: builder.query({
-      query: (params) => ({
-        url: "/payments/status",
-        method: "GET",
-        params,
+      query: ({ year, page, limit }) => ({
+        url: `/payments/summary/${year}`,
+        params: { page, limit },
       }),
       providesTags: ["payment"],
     }),
@@ -30,7 +29,10 @@ const paymentApi = baseApi.injectEndpoints({
       invalidatesTags: ["payment"],
     }),
     getpayment: builder.query({
-      query: () => `/payments`,
+      query: (params) => ({
+        url: `/payments`,
+        params,
+      }),
       providesTags: ["payment"],
     }),
     updatePayment: builder.mutation({

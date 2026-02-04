@@ -18,6 +18,7 @@ import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper
 import toast from "react-hot-toast";
 import { useUpdateStaffMutation } from "@/src/redux/features/staff/staffApi";
 import { IStaff } from "./StaffRow";
+import { Edit } from "lucide-react";
 
 type FormData = {
   name: string;
@@ -68,10 +69,12 @@ function EditStaffModal({ staff }: Props) {
     <Dialog>
       <DialogTrigger asChild>
         <Button
+          type="button"
+          className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 shadow-sm transition-all duration-200"
           size="sm"
-          className="bg-yellow-500 hover:bg-yellow-600 text-white"
+          title="Edit"
         >
-          Edit
+          <Edit size={14} />
         </Button>
       </DialogTrigger>
 

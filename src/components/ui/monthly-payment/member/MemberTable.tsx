@@ -26,7 +26,6 @@ const MemberTable = ({
 }: Props) => {
   const [deleteMember] = useDeleteMemberMutation();
 
-  console.log("Members data:", members);
 
   const handleDelete = async (id: string) => {
     Swal.fire({
@@ -40,7 +39,7 @@ const MemberTable = ({
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await deleteMember(id).unwrap();
+          await deleteMember(id).unwrap();
 
           Swal.fire({
             title: "Deleted!",
@@ -49,8 +48,6 @@ const MemberTable = ({
             timer: 1200,
             showConfirmButton: false,
           });
-
-          console.log("Delete successfully", res);
         } catch (error) {
           Swal.fire({
             title: "Failed!",

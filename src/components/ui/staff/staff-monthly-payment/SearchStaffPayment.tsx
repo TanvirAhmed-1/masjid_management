@@ -19,7 +19,7 @@ const SearchStaffPayment = ({ onSearch }: Props) => {
     <div className="my-4">
       <FormProviderWrapper<FormValue> onSubmit={onSearch}>
         {({ reset }) => (
-          <div className="grid grid-cols-1  gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3  gap-4">
             <RHFInput label="name" name="name" placeholder="Enter name" />
 
             <RHFInput

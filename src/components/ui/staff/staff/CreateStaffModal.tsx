@@ -54,7 +54,7 @@ function CreateStaffModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2">
+        <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2">
           <IoMdAdd className="text-lg" />
           Add New Staff
         </Button>

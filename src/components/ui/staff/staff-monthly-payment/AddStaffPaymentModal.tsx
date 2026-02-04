@@ -16,25 +16,28 @@ import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
 import toast from "react-hot-toast";
 import RHFSelect from "@/src/components/shared/RHFSelect";
-import { useCreateStaffPaymentMutation } from "@/src/redux/features/staff/StaffPayments";
 import { useGetStaffListQuery } from "@/src/redux/features/staff/staffApi";
+import { useCreateStaffMonthlyPaymentMutation } from "@/src/redux/features/staff/staffMonthlyPayment";
 
 type FormData = {
-  name: string;
-  phone: string;
-  role: string;
-  baseSalary: number;
-  joinDate: string;
-  address: string;
-  image?: FileList;
+  staffId: string;
+  totalSalary: number;
+  month: Date;
 };
 
 function AddStaffPaymentModal() {
-  const [createStaff, { isLoading }] = useCreateStaffPaymentMutation();
+  const [monthlyPaymenttaff, { isLoading }] =
+    useCreateStaffMonthlyPaymentMutation();
   const { data } = useGetStaffListQuery(undefined);
   const onSubmit = async (data: FormData) => {
+    const payload = {
+      staffId: data.staffId,
+      totalSalary: Number(data.totalSalary),
+      month: data.month,
+    };
+    console.log("Payload to send:", payload);
     try {
-      const res = await createStaff(data).unwrap();
+      const res = await monthlyPaymenttaff(payload).unwrap();
       toast.success(res?.message || "Staff payment created successfully");
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to create staff payment");
@@ -48,7 +51,7 @@ function AddStaffPaymentModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2">
+        <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2">
           <IoMdAdd className="text-lg" />
           Add New Staff
         </Button>
@@ -66,21 +69,21 @@ function AddStaffPaymentModal() {
 
         <FormProviderWrapper<FormData> onSubmit={onSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
-            <RHFInput
-              name="amount"
-              label="Payment Amount (BDT)"
-              placeholder="Enter payment amount"
-            />
-
-            <RHFDatePicker
-              name="payDate"
-              label="Payment Date"
-              placeholder="Select payment date"
-            />
             <RHFSelect
               name="staffId"
               label="Select Staff"
               options={staffOptions || []}
+            />
+            <RHFInput
+              name="totalSalary"
+              type="number"
+              label="Payment Amount (BDT)"
+              placeholder="Enter payment amount"
+            />
+            <RHFDatePicker
+              name="month"
+              label="Monthly Payment"
+              placeholder="Select payment date"
             />
           </div>
 

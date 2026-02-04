@@ -8,6 +8,7 @@ import { useDeleteStaffMutation } from "@/src/redux/features/staff/staffApi";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
 import FetchingLoader from "@/src/components/shared/FetchingLoader";
 import EditStaffModal from "./EditStaffModal";
+import { StatusToggle } from "./StatusToggle";
 
 export interface IStaff {
   id: string;
@@ -48,7 +49,6 @@ const StaffRow: React.FC<Props> = ({
   if (!data.length) {
     return <p className="text-center py-6 text-gray-600">No Data Available</p>;
   }
-
   const handleDelete = async (id: string) => {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -69,7 +69,7 @@ const StaffRow: React.FC<Props> = ({
   };
 
   return (
-    <div className="p-4 overflow-x-auto">
+    <div className=" overflow-x-auto">
       <table className="min-w-full text-sm text-gray-700 shadow-lg rounded-lg overflow-hidden">
         <thead className="bg-teal-600 text-white">
           <tr className="*:text-center *:px-4 *:py-3">
@@ -85,23 +85,15 @@ const StaffRow: React.FC<Props> = ({
         </thead>
 
         <tbody className="divide-y bg-white">
-          {data.map((row, index) => (
-            <tr key={row.id} className="hover:bg-gray-50 text-center">
+          {data?.map((row, index) => (
+            <tr key={row.id} className="hover:bg-gray-50 text-center *:py-3 *:px-2">
               <td>{(page - 1) * limit + index + 1}</td>
               <td>{row.name}</td>
               <td>{row.phone ?? "—"}</td>
-              <td>{format(new Date(row.joinDate), "dd/MM/yyyy")}</td>
+              <td>{format(new Date(row?.joinDate), "dd/MM/yyyy")}</td>
               <td>{row.role}</td>
               <td>
-                <span
-                  className={`px-2 py-1 rounded text-xs ${
-                    row.active
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {row.active ? "Active" : "Inactive"}
-                </span>
+                <StatusToggle staffId={row.id} currentStatus={row.active} />
               </td>
               <td>{row.baseSalary}</td>
               <td>

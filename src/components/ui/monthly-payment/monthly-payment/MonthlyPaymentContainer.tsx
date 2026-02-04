@@ -7,6 +7,7 @@ import MonthlyPaymentModal from "./MonthlyPaymentModal";
 import MonthlyPaymentTable from "./MonthlyPaymentTable";
 import { clearqueryObject } from "@/src/utils/clearqueryObject";
 import Pagination from "@/src/components/shared/Pagination";
+import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
 
 export interface PaymentType {
   id: string;
@@ -23,8 +24,10 @@ export interface PaymentType {
 }
 
 export interface Member {
+  id: string;
   name: string;
   phone: string;
+  monthlyAmount: string;
 }
 
 export interface User {
@@ -32,9 +35,11 @@ export interface User {
 }
 
 type SearchFormValues = {
-  year?: string;
+  name?: string;
   monthKey?: string;
-  monthName?: string;
+  phone?: string;
+  form?: string;
+  to?: string;
 };
 
 const MonthlyPaymentContainer = () => {
@@ -60,10 +65,11 @@ const MonthlyPaymentContainer = () => {
     limit,
     ...filters,
   };
-
   const { data, isLoading, isFetching } = useGetpaymentQuery(queryParams);
   const totalPage = data?.data?.meta?.totalPage ?? 1;
-  
+
+ 
+
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -75,6 +81,13 @@ const MonthlyPaymentContainer = () => {
 
       <SearchMonthlyPayment onSearch={handleSearch} />
 
+      <PageSizeSelect
+        value={limit}
+        onChange={(val) => {
+          setLimit(val);
+          setPage(1);
+        }}
+      />
       <MonthlyPaymentTable
         data={data?.data?.data || []}
         isLoading={isLoading}

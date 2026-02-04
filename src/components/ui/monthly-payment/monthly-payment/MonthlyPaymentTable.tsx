@@ -1,13 +1,13 @@
 "use client";
 import { format } from "date-fns";
-import { Edit } from "lucide-react";
 import { useDeletePaymentMutation } from "@/src/redux/features/monthly-salary/paymentApi";
 import { Button } from "@/src/components/ui/button";
-import toast from "react-hot-toast";
 import { FaTrashAlt } from "react-icons/fa";
 import EditMonthlyPaymentModal from "./EditMonthlyPaymentModal";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
 import { PaymentType } from "./MonthlyPaymentContainer";
+import Swal from "sweetalert2";
+import FetchingLoader from "@/src/components/shared/FetchingLoader";
 
 type MonthlyPaymentTableProps = {
   data: PaymentType[];
@@ -26,20 +26,42 @@ export default function MonthlyPaymentsTable({
   const [deletePayment, { isLoading: deleting }] = useDeletePaymentMutation();
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this payment?")) return;
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This member will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deletePayment(id).unwrap();
 
-    try {
-      await deletePayment(id).unwrap();
-      toast.success("Payment deleted successfully");
-    } catch (error) {
-      toast.error("Failed to delete payment");
-    }
+          Swal.fire({
+            title: "Deleted!",
+            text: "Member has been deleted successfully.",
+            icon: "success",
+            timer: 1200,
+            showConfirmButton: false,
+          });
+        } catch (error) {
+          Swal.fire({
+            title: "Failed!",
+            text: "Something went wrong!",
+            icon: "error",
+          });
+        }
+      }
+    });
   };
+
   if (isLoading) {
     return <LoaderScreen />;
   }
   if (isFetching) {
-    return <LoaderScreen />;
+    return <FetchingLoader />;
   }
 
   return (
@@ -53,6 +75,8 @@ export default function MonthlyPaymentsTable({
                 <th>Member Name</th>
                 <th>Phone</th>
                 <th>Amount</th>
+                <th>Paid Amount</th>
+                <th>Paid Month</th>
                 <th>Paid Date</th>
                 <th>Actions</th>
               </tr>
@@ -66,20 +90,13 @@ export default function MonthlyPaymentsTable({
                   <td>{(page - 1) * limit + index + 1}</td>
                   <td>{member.member?.name || "-"}</td>
                   <td>{member.member?.phone || "-"}</td>
+                  <td>{member.member?.monthlyAmount || "-"}</td>
                   <td>{member.amount}</td>
+                  <td>{member.monthKey}</td>
                   <td>{format(new Date(member.paidDate), "dd-MM-yyyy")}</td>
                   <td>
                     <div className="flex justify-center items-center gap-2">
-                      <Button
-                        type="button"
-                        className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 shadow-sm transition-all duration-200"
-                        size="sm"
-                        title="Edit"
-                      >
-                        <Edit size={14} />
-                      </Button>
-
-                      {/* <EditMonthlyPaymentModal member={member} /> */}
+                      <EditMonthlyPaymentModal member={member} />
 
                       <Button
                         type="button"

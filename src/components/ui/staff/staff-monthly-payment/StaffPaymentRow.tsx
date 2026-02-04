@@ -8,8 +8,48 @@ import { useDeleteStaffMutation } from "@/src/redux/features/staff/staffApi";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
 import FetchingLoader from "@/src/components/shared/FetchingLoader";
 
+export interface IMonthlySalary {
+  id: string;
+  month: string; // ISO Date string
+  staffId: string;
+  totalSalary: number;
+  createdAt: string;
+  updatedAt: string;
+  mosqueId: string;
+  userId: string;
+
+  staff: IStaff;
+  payments: ISalaryPayment[];
+}
+
+export interface IStaff {
+  id: string;
+  name: string;
+  image: string | null;
+  address: string;
+  phone: string | null;
+  role: string;
+  baseSalary: number;
+  joinDate: string;
+  createdAt: string;
+  updatedAt: string;
+  active: boolean;
+  mosqueId: string;
+  userId: string;
+}
+
+export interface ISalaryPayment {
+  id: string;
+  amount: number;
+  payDate: string;
+  createdAt: string;
+  salaryId: string;
+  mosqueId: string;
+  userId: string;
+}
+
 type Props = {
-  data: any[];
+  data: IMonthlySalary[];
   isLoading: boolean;
   isFetching: boolean;
   page: number;
@@ -52,14 +92,15 @@ const StaffPaymentRow: React.FC<Props> = ({
   };
 
   return (
-    <div className="p-4 overflow-x-auto">
+    <div className="w-full mx-auto overflow-x-auto">
       <table className="min-w-full text-sm text-gray-700 shadow-lg rounded-lg overflow-hidden">
         <thead className="bg-teal-600 text-white">
-          <tr className="*:text-center *:px-4 *:py-3">
+          <tr className="*:text-center *:px-2 *:py-3 *:whitespace-nowrap">
             <th>SN</th>
             <th>Name</th>
             <th>Phone</th>
-            <th>Join Date</th>
+            <th>Amount</th>
+            <th>Month</th>
             <th>Role</th>
             <th>Status</th>
             <th>Salary</th>
@@ -68,25 +109,26 @@ const StaffPaymentRow: React.FC<Props> = ({
         </thead>
 
         <tbody className="divide-y bg-white">
-          {data.map((row, index) => (
-            <tr key={row.id} className="hover:bg-gray-50 text-center">
+          {data?.map((row: IMonthlySalary, index) => (
+            <tr key={row.id} className="hover:bg-gray-50 text-center *:p-2 *:whitespace-nowrap  ">
               <td>{(page - 1) * limit + index + 1}</td>
-              <td>{row.name}</td>
-              <td>{row.phone ?? "—"}</td>
-              <td>{format(new Date(row.joinDate), "dd/MM/yyyy")}</td>
-              <td>{row.role}</td>
+              <td>{row.staff.name}</td>
+              <td>{row.staff.phone}</td>
+              <td>{row.totalSalary}</td>
+              <td>{format(new Date(row?.month), "dd/MM/yyyy")}</td>
+              <td>{row.staff.role}</td>
               <td>
                 <span
                   className={`px-2 py-1 rounded text-xs ${
-                    row.active
+                    row.staff.active
                       ? "bg-green-100 text-green-700"
                       : "bg-red-100 text-red-700"
                   }`}
                 >
-                  {row.active ? "Active" : "Inactive"}
+                  {row.staff.active ? "Active" : "Inactive"}
                 </span>
               </td>
-              <td>{row.baseSalary}</td>
+              <td>{row.staff.baseSalary}</td>
               <td>
                 <div className="flex justify-center gap-2">
                   {/* <EditStaffPaymentModal staff={row} /> */}

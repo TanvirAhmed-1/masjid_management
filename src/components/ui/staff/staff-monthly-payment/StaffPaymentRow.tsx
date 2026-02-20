@@ -10,7 +10,7 @@ import FetchingLoader from "@/src/components/shared/FetchingLoader";
 
 export interface IMonthlySalary {
   id: string;
-  month: string; // ISO Date string
+  month: string; 
   staffId: string;
   totalSalary: number;
   createdAt: string;
@@ -102,7 +102,7 @@ const StaffPaymentRow: React.FC<Props> = ({
             <th>Amount</th>
             <th>Month</th>
             <th>Role</th>
-            <th>Status</th>
+            <th>Status</th> 
             <th>Salary</th>
             <th>Actions</th>
           </tr>

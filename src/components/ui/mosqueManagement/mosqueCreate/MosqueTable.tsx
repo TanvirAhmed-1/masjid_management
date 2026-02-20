@@ -6,13 +6,12 @@ import Swal from "sweetalert2";
 import {
   useDeleteMosqueMutation,
   useGetMosquesQuery,
-} from "@/src/redux/features/mosque/mosqueApi";
+} from "@/src/redux/features/mosqueManagement/mosqueApi";
 import EditMosquemodal from "./EditMosquemodal";
 import { MosqueType } from "./MosqueContainer";
 
-
 const MosqueTable = () => {
-  const { data, isLoading, isError } = useGetMosquesQuery( undefined);
+  const { data, isLoading, isError } = useGetMosquesQuery(undefined);
   const [deleteMosque] = useDeleteMosqueMutation();
 
   const mosques = data?.data ?? [];

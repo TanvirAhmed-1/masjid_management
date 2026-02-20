@@ -1,4 +1,4 @@
-import MosqueContainer from "@/src/components/ui/mosque/MosqueContainer";
+import MosqueContainer from "@/src/components/ui/mosqueManagement/mosqueCreate/MosqueContainer";
 import React from "react";
 
 const page = () => {

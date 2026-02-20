@@ -12,10 +12,10 @@ import {
 } from "@/src/components/ui/dialog";
 import toast from "react-hot-toast";
 import RHFInput from "@/src/components/shared/RHFInput";
-import RHFSelect from "../../shared/RHFSelect";
-import LoadingButton from "../../shared/LoadingButton";
-import { useCreateMosqueMutation } from "@/src/redux/features/mosque/mosqueApi";
-import { FormProviderWrapper } from "../../shared/FormProviderWrapper";
+import RHFSelect from "../../../shared/RHFSelect";
+import LoadingButton from "../../../shared/LoadingButton";
+import { useCreateMosqueMutation } from "@/src/redux/features/mosqueManagement/mosqueApi";
+import { FormProviderWrapper } from "../../../shared/FormProviderWrapper";
 import { FaEdit, FaMosque, FaUserShield } from "react-icons/fa";
 
 type MosqueCreateFormData = {

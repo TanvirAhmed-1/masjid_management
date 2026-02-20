@@ -14,9 +14,9 @@ import {
 import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
 import toast from "react-hot-toast";
-import RHFSelect from "../../shared/RHFSelect";
-import LoadingButton from "../../shared/LoadingButton";
-import { useCreateMosqueMutation } from "@/src/redux/features/mosque/mosqueApi";
+import RHFSelect from "../../../shared/RHFSelect";
+import LoadingButton from "../../../shared/LoadingButton";
+import { useCreateMosqueMutation } from "@/src/redux/features/mosqueManagement/mosqueApi";
 import { FaMosque, FaUserShield } from "react-icons/fa";
 
 type MosqueCreateFormData = {

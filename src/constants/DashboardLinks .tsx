@@ -51,7 +51,6 @@ export const DashboardLinks = [
     subRoutes: [
       { title: "Staff", route: "/staff" },
       { title: "Payment", route: "/staff-monthly-payment" },
-      { title: "All Payment", route: "/staff-payment-history" },
     ],
   },
 

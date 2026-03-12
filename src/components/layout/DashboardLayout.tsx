@@ -68,7 +68,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="flex h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Mobile Overlay */}
       {sidebarOpen && (
         <div

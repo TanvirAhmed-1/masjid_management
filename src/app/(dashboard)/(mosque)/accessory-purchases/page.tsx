@@ -3,7 +3,7 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="constainer mx-auto">
+    <div className="constainer mx-auto ">
       <AccessoryPurchasesContainer />
     </div>
   );

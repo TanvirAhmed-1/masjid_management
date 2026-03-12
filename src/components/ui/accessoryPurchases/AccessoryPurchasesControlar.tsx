@@ -45,7 +45,7 @@ const AccessoryPurchasesContainer = () => {
   const totalPage = data?.result?.meta?.totalPage ?? 1;
 
   return (
-    <div className="p-4 md:p-6 bg-white rounded-lg shadow-sm">
+    <div className=" bg-white rounded-lg ">
       <div className="flex flex-wrap gap-3 justify-between items-center mb-6">
         <h3 className="text-xl md:text-3xl font-bold text-slate-800">
           Accessory Purchase Records

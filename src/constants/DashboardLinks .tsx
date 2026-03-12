@@ -44,13 +44,14 @@ export const DashboardLinks = [
   },
 
   {
-    title: "Staff Management",
+    title: "Management Cost",
     route: null,
     hasChildren: true,
     icon: <IoDocumentsSharp className="text-teal-600" size={16} />,
     subRoutes: [
-      { title: "Staff", route: "/staff" },
-      { title: "Payment", route: "/staff-monthly-payment" },
+      { title: "Create Staff", route: "/staff" },
+      { title: "Staff Payment", route: "/staff-monthly-payment" },
+      { title: "Purchases Accessory", route: "/accessory-purchases" },
     ],
   },
 

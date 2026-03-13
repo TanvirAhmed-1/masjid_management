@@ -1,24 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useGetTarabiPaymentQuery } from "@/src/redux/features/ramadan/tarabiPaymentApi";
 import { clearqueryObject } from "@/src/utils/clearqueryObject";
 import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
 import Pagination from "@/src/components/shared/Pagination";
-import AccessoryTable from "./AccessoryTable";
-import CreateAccessoryModal from "./CreateAccessoryModal";
-import { useGetAccessoryPurchasesQuery } from "@/src/redux/features/monthly-salary/accessoryPurchase/accessoryPurchaseApi";
-import SearchAccessory from "./SharchAccessory";
+import SearchTarabi from "./SearchTarabi";
+import TarabiTable from "./TarabiTable";
+import CreateTarabiModal from "./CreateTarabiModal";
 
-type SearchFormValues = {
-  from?: string;
-  to?: string;
-  itemName?: string;
-};
-
-const AccessoryPurchasesContainer = () => {
+const TarabiContainer = () => {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [filters, setFilters] = useState<SearchFormValues | undefined>();
+  const [limit, setLimit] = useState(20);
+  const [filters, setFilters] = useState<any>(undefined);
   const [initialLoaded, setInitialLoaded] = useState(false);
 
   useEffect(() => {
@@ -28,7 +22,7 @@ const AccessoryPurchasesContainer = () => {
     }
   }, [initialLoaded]);
 
-  const handleSearch = (data?: SearchFormValues) => {
+  const handleSearch = (data?: any) => {
     const cleaned = clearqueryObject(data);
     setFilters(cleaned);
     setPage(1);
@@ -40,22 +34,21 @@ const AccessoryPurchasesContainer = () => {
     ...filters,
   };
 
-  const { data, isLoading, isError } =
-    useGetAccessoryPurchasesQuery(queryParams);
+  const { data, isLoading, isError } = useGetTarabiPaymentQuery(queryParams);
   const totalPage = data?.result?.meta?.totalPage ?? 1;
 
   return (
-    <div className="rounded-lg ">
-      <div className="flex flex-wrap gap-3 justify-between items-center">
-        <h3 className="text-xl md:text-3xl font-semibold text-slate-800">
-          Accessory Purchase Records
+    <div className="p-4 bg-white rounded-lg shadow-sm">
+      <div className="flex flex-wrap gap-3 justify-between items-center mb-6">
+        <h3 className="text-xl md:text-3xl font-bold text-slate-800">
+          Tarabi Salary Payments
         </h3>
-        <CreateAccessoryModal />
+        <CreateTarabiModal />
       </div>
 
-      <SearchAccessory onSearch={handleSearch} />
+      <SearchTarabi onSearch={handleSearch} />
 
-      <div>
+      <div className="my-4">
         <PageSizeSelect
           value={limit}
           onChange={(val) => {
@@ -65,8 +58,8 @@ const AccessoryPurchasesContainer = () => {
         />
       </div>
 
-      <AccessoryTable
-        data={data?.result?.data ?? []}
+      <TarabiTable
+        data={data?.result ?? []}
         isLoading={isLoading}
         isError={isError}
         page={page}
@@ -88,4 +81,4 @@ const AccessoryPurchasesContainer = () => {
   );
 };
 
-export default AccessoryPurchasesContainer;
+export default TarabiContainer;

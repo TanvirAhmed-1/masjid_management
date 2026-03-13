@@ -81,7 +81,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       <div
         className={`
         fixed lg:static inset-y-0 left-0 z-50
-        w-72 sm:w-80 lg:w-72 xl:w-80
+        w-72 sm:w-72 lg:w-72
         bg-gradient-to-b from-emerald-800 via-emerald-700 to-emerald-900 
         shadow-2xl transform transition-transform duration-300 ease-in-out
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
@@ -100,10 +100,10 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center justify-center mb-6 sm:mb-8 p-3 sm:p-4 bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/20">
             <FaMosque className="text-2xl sm:text-3xl text-amber-300 mr-2 sm:mr-3 flex-shrink-0" />
             <div className="min-w-0">
-              <h1 className="text-lg sm:text-lg font-semibold text-white truncate">
+              <h1 className="text-base font-semibold text-white truncate">
                 Mosque Management
               </h1>
-              <p className="text-emerald-200 text-xs sm:text-sm truncate">
+              <p className="text-emerald-200 text-xs  truncate">
                 Admin Dashboard
               </p>
             </div>
@@ -135,7 +135,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                     </button>
 
                     {openSections[data.title] && (
-                      <div className="ml-4 sm:ml-6 mt-2 space-y-1 border-l-2 border-emerald-600/30 pl-3 sm:pl-4">
+                      <div className="ml-3  mt-2 space-y-1 border-l-2 border-emerald-600/30 pl-3 sm:pl-4">
                         {data.subRoutes?.map((sub) => (
                           <Link
                             href={sub.route}

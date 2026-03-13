@@ -59,19 +59,24 @@ function CreateAccessoryModal() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle className="text-teal-700">Record Accessory Purchase</DialogTitle>
+          <DialogTitle className="text-teal-700">
+            Record Accessory Purchase
+          </DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper<AccessoryForm> onSubmit={onSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <div className="md:col-span-2">
-              <RHFInput
-                label="Item Name"
-                name="itemName"
-                placeholder="e.g., Mosque Ceiling Fan"
-                rules={{ required: "Item name is required" }}
-              />
-            </div>
+            <RHFInput
+              label="Item Name"
+              name="itemName"
+              placeholder="e.g., Mosque Ceiling Fan"
+              rules={{ required: "Item name is required" }}
+            />
+            <RHFInput
+              label="Buyer Name (Optional)"
+              name="memberName"
+              placeholder="Name of member"
+            />
             <RHFInput
               label="Quantity"
               name="quantity"
@@ -85,11 +90,6 @@ function CreateAccessoryModal() {
               type="number"
               placeholder="0.00"
               rules={{ required: "Required" }}
-            />
-            <RHFInput
-              label="Buyer Name (Optional)"
-              name="memberName"
-              placeholder="Name of member"
             />
             <div className="md:col-span-2">
               <RHFTextarea

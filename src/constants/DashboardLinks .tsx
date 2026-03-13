@@ -1,19 +1,24 @@
-import { FaFile, FaTachometerAlt, FaUsers } from "react-icons/fa";
-import { FaGear } from "react-icons/fa6";
-import { IoDocumentsSharp } from "react-icons/io5";
+import {
+  FaTachometerAlt,
+  FaMoon,
+  FaMosque,
+  FaMoneyBillWave,
+} from "react-icons/fa";
+import { FaCartShopping } from "react-icons/fa6";
+import { MdOutlineCollectionsBookmark } from "react-icons/md";
 
 export const DashboardLinks = [
   {
     title: "Dashboard",
     route: "/",
     hasChildren: false,
-    icon: <FaTachometerAlt className="text-teal-600" />,
+    icon: <FaTachometerAlt />,
   },
   {
     title: "Collection",
     route: null,
     hasChildren: true,
-    icon: <FaGear className="text-teal-600" />,
+    icon: <MdOutlineCollectionsBookmark size={18} />,
     subRoutes: [
       { title: "Friday Collection", route: "/friday-collection" },
       { title: "Collection Data SetUp", route: "/collection-data-setup" },
@@ -24,9 +29,9 @@ export const DashboardLinks = [
     title: "Ramadan",
     route: null,
     hasChildren: true,
-    icon: <FaFile className="text-teal-600" />,
+    icon: <FaMoon />,
     subRoutes: [
-      { title: "Ramadan Data SetUp", route: "/ramadan-datasetup" },
+      { title: "Create Ramadan", route: "/ramadan-datasetup" },
       { title: "Iftar", route: "/ramadan-iftar" },
       { title: "Itikaf", route: "itikaf" },
     ],
@@ -35,35 +40,29 @@ export const DashboardLinks = [
     title: "Monthly Collection",
     route: null,
     hasChildren: true,
-    icon: <IoDocumentsSharp className="text-teal-600" size={16} />,
+    icon: <FaMoneyBillWave />,
     subRoutes: [
       { title: "Add Members", route: "/member" },
-      { title: "Payment", route: "/monthly-payment" },
+      { title: "Members Payment", route: "/monthly-payment" },
       { title: "All Payment", route: "/payment-history" },
     ],
   },
-
   {
     title: "Management Cost",
     route: null,
     hasChildren: true,
-    icon: <IoDocumentsSharp className="text-teal-600" size={16} />,
+    icon: <FaCartShopping />,
     subRoutes: [
       { title: "Create Staff", route: "/staff" },
       { title: "Staff Payment", route: "/staff-monthly-payment" },
       { title: "Purchases Accessory", route: "/accessory-purchases" },
     ],
   },
-
   {
     title: "Mosques Management",
     route: null,
     hasChildren: true,
-    icon: <FaUsers className="text-teal-600" size={16} />,
-    subRoutes: [
-      { title: "Create Mosques", route: "/mosques-create" },
-      // { title: "Two", route: "#" },
-      // { title: "three", route: "#" },
-    ],
+    icon: <FaMosque />,
+    subRoutes: [{ title: "Create Mosques", route: "/mosques-create" }],
   },
 ];

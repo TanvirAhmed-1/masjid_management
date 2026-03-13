@@ -18,7 +18,7 @@ type Props = {
 
 const SearchAccessory = ({ onSearch }: Props) => {
   return (
-    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 my-6">
+    <div className=" p-2 rounded-xl   my-2">
       <FormProviderWrapper<FormValue> onSubmit={onSearch}>
         {({ reset }) => (
           <div className="grid md:grid-cols-4 grid-cols-1 gap-4 items-end">

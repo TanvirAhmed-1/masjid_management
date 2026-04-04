@@ -25,8 +25,11 @@ import { useGetMembersQuery } from "@/src/redux/features/monthly-salary/memberAp
 function CreateTarabiModal() {
   const [open, setOpen] = useState(false);
   const [createPayment, { isLoading }] = useCreateTarabiPaymentMutation();
+  
+  // Fetching data
   const { data: membersData } = useGetMembersQuery(undefined);
   const { data: yearsData } = useGetRamadanYearQuery(undefined);
+
 
   const onSubmit = async (data: any) => {
     try {
@@ -69,34 +72,30 @@ function CreateTarabiModal() {
               }
               rules={{ required: "Member is required" }}
             />
+
             <RHFSelect
               label="Ramadan Year"
               name="ramadanYearId"
               options={
-                yearsData?.result?.map((y: any) => ({
-                  label: y.ramadanYear,
+                yearsData?.result?.data?.map((y: any) => ({
+                  label: `${y.titleName} (${y.ramadanYear})`,
                   value: y.id,
                 })) || []
               }
               rules={{ required: "Year is required" }}
             />
+
             <RHFInput
               label="Amount (৳)"
               name="amount"
               type="number"
               rules={{ required: "Amount is required" }}
             />
-            <RHFTextarea
-              label="Description (Optional)"
-              name="description"
-              placeholder="e.g. Tarabi honorarium first installment"
-              rows={3}
-            />
           </div>
 
           <DialogFooter className="mt-6">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" type="button">Cancel</Button>
             </DialogClose>
             <LoadingButton isLoading={isLoading} className="bg-teal-600">
               Save

@@ -11,7 +11,7 @@ import {
   CommandGroup,
   CommandItem,
   CommandEmpty,
-} from "@/components/ui/command";
+} from "@/src/components/ui/command";
 import { Button } from "@/components/ui/button";
 import { useFormContext, Controller } from "react-hook-form";
 import { Label } from "@/components/ui/label";

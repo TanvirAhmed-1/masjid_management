@@ -21,7 +21,7 @@ export const DashboardLinks = [
     icon: <MdOutlineCollectionsBookmark size={18} />,
     subRoutes: [
       { title: "Friday Collection", route: "/friday-collection" },
-      { title: "Collection Data SetUp", route: "/collection-data-setup" },
+      { title: "Create Collection", route: "/collection-data-setup" },
       { title: "Collections", route: "/others-collection" },
     ],
   },
@@ -33,7 +33,8 @@ export const DashboardLinks = [
     subRoutes: [
       { title: "Create Ramadan", route: "/ramadan-datasetup" },
       { title: "Iftar", route: "/ramadan-iftar" },
-      { title: "Itikaf", route: "itikaf" },
+      { title: "Itikaf", route: "/itikaf" },
+      { title: "Tarabi Payment", route: "/tarabi-payment" },
     ],
   },
   {

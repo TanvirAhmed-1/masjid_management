@@ -9,7 +9,6 @@ import LoaderScreen from "@/src/components/shared/LoaderScreen";
 import EditTarabiModal from "./EditTarabiModal";
 import { useDeleteTarabiPaymentMutation } from "@/src/redux/features/ramadan/tarabiPaymentApi";
 
-
 type Props = {
   data?: any[];
   isLoading: boolean;
@@ -69,13 +68,17 @@ const TarabiTable: React.FC<Props> = ({
                 <td className="text-center">
                   {(page - 1) * limit + index + 1}
                 </td>
-                <td className="font-medium">{item.member?.name}</td>
-                <td>{item.ramadanYear?.ramadanYear}</td>
+                <td className="font-medium">
+                  {item.member?.name || "Unknown"}
+                </td>
+                <td>
+                  {item.ramadanYear?.titleName || item.ramadanYear?.ramadanYear}
+                </td>
                 <td className="text-right font-bold text-teal-700">
-                  ৳{item.amount.toLocaleString()}
+                  ৳{item.amount?.toLocaleString() ?? 0}
                 </td>
                 <td className="text-center">
-                  {format(new Date(item.payDate), "PPP")}
+                  {item.payDate ? format(new Date(item.payDate), "PP") : "N/A"}
                 </td>
                 <td className="max-w-[200px] truncate">
                   {item.description || "N/A"}
@@ -107,5 +110,4 @@ const TarabiTable: React.FC<Props> = ({
     </div>
   );
 };
-
 export default TarabiTable;

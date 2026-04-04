@@ -1,8 +1,11 @@
 "use client";
 
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
-import RHFInput from "@/src/components/shared/RHFInput";
+import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
+import RHFSearchSelect from "@/src/components/shared/RHFSearchSelect";
 import { Button } from "@/src/components/ui/button";
+import { useGetMembersQuery } from "@/src/redux/features/monthly-salary/memberApi";
+import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import { IoReload, IoSearch } from "react-icons/io5";
 
 type Props = {
@@ -10,28 +13,63 @@ type Props = {
 };
 
 const SearchTarabi = ({ onSearch }: Props) => {
+  // Fetching data
+  const { data: membersData } = useGetMembersQuery(undefined);
+  const { data: yearsData } = useGetRamadanYearQuery(undefined);
+
   return (
-    <div className="my-6 p-4 bg-slate-50 rounded-xl border border-slate-100">
+    <div className=" p-4  ">
       <FormProviderWrapper onSubmit={onSearch}>
         {({ reset }) => (
-          <div className="grid md:grid-cols-3 grid-cols-1 gap-4 items-end">
-            <RHFInput
-              label="Search by Description"
-              name="description"
-              placeholder="Enter search term..."
+          <div className="grid md:grid-cols-5 grid-cols-1 gap-4 items-end">
+            {/* Member Search Select */}
+            <RHFSearchSelect
+              label="Member Name"
+              name="memberId"
+              options={
+                membersData?.result?.data?.map((m: any) => ({
+                  label: m.name,
+                  value: m.id,
+                })) || []
+              }
+              placeholder="Search member..."
             />
-            {/* আপনি চাইলে এখানে মেম্বার বা ইয়ার ফিল্টারও যোগ করতে পারেন */}
+
+            {/* Ramadan Year Search Select */}
+            <RHFSearchSelect
+              label="Ramadan Year"
+              name="ramadanYearId"
+              options={
+                yearsData?.result?.data?.map((y: any) => ({
+                  label: `${y.titleName} (${y.ramadanYear})`,
+                  value: y.id,
+                })) || []
+              }
+              placeholder="Search year..."
+            />
+
+            <RHFDatePicker
+              label="From Date"
+              name="from"
+              placeholder="Start Date"
+            />
+
+            <RHFDatePicker label="To Date" name="to" placeholder="End Date" />
+
             <div className="flex gap-2">
-              <Button type="submit" className="bg-green-700 text-white flex-1">
+              <Button
+                type="submit"
+                className="bg-green-700 hover:bg-green-800 text-white"
+              >
                 <IoSearch className="mr-2" /> Search
               </Button>
               <Button
-                type="reset"
+                type="button" // Changed to button to prevent accidental native form reset behavior
                 onClick={() => {
                   reset();
-                  onSearch();
+                  onSearch({}); // Passing empty object to clear filters on the server side
                 }}
-                className="bg-slate-700 text-white"
+                className="bg-slate-700 hover:bg-slate-800 text-white"
               >
                 <IoReload />
               </Button>

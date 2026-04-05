@@ -48,14 +48,14 @@ const TarabiTable: React.FC<Props> = ({
     <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mt-4">
       <table className="min-w-full border-collapse bg-white text-left text-sm text-gray-700">
         <thead className="bg-teal-50">
-          <tr className="*:px-4 *:py-3 *:whitespace-nowrap font-bold text-teal-900 border-b">
-            <th className="text-center">SL</th>
+          <tr className="*:px-4 *:py-3 *:whitespace-nowrap *:text-center font-bold text-teal-900 border-b">
+            <th>SL</th>
             <th>Member Name</th>
             <th>Year</th>
-            <th className="text-right">Amount</th>
-            <th className="text-center">Date</th>
+            <th>Amount</th>
+            <th>Date</th>
             <th>Description</th>
-            <th className="text-center">Action</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -63,7 +63,7 @@ const TarabiTable: React.FC<Props> = ({
             data.map((item, index) => (
               <tr
                 key={item.id}
-                className="hover:bg-green-50/40 transition-colors"
+                className="hover:bg-green-50/40 transition-colors *:text-center"
               >
                 <td className="text-center">
                   {(page - 1) * limit + index + 1}

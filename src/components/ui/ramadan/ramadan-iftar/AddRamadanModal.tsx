@@ -17,9 +17,9 @@ import { FormProviderWrapper } from "../../../shared/FormProviderWrapper";
 import { FcNumericalSorting21 } from "react-icons/fc";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
-import RHFSelect from "@/src/components/shared/RHFSelect";
 import { useCreateifterlistMutation } from "@/src/redux/features/ramadan/iftarlist";
 import toast from "react-hot-toast";
+import RHFSearchSelect from "@/src/components/shared/RHFSearchSelect";
 
 
 type Doner = {
@@ -96,7 +96,7 @@ function AddRamadanModal() {
         >
           <div className="p-6 max-h-[70vh] overflow-y-auto space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <RHFSelect
+              <RHFSearchSelect
                 options={ramadanYearOptions}
                 label="Ramadan Year"
                 name="ramadanYear"

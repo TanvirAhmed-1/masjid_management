@@ -66,7 +66,7 @@ const IftarListTable: React.FC<Props> = ({
   };
 
   return (
-    <div className="p-4 overflow-x-auto">
+    <div className=" overflow-x-auto">
       <table className="min-w-full text-sm text-gray-700 border-collapse shadow-lg rounded-lg overflow-hidden">
         <thead className="bg-teal-600 text-white">
           <tr className="*:text-center *:px-4 *:py-3 *:whitespace-nowrap">

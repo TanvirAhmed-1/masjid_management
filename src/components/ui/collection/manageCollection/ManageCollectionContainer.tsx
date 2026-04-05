@@ -9,6 +9,9 @@ import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
 import { useEffect, useState } from "react";
 import { clearqueryObject } from "@/src/utils/clearqueryObject";
 import Pagination from "@/src/components/shared/Pagination";
+import PrintButton from "@/src/components/shared/PrintButton";
+import CollectionPDF from "./form/CollectionPDF";
+import toast from "react-hot-toast";
 type SearchFormValues = {
   fromDate?: string;
   toDate?: string;
@@ -40,7 +43,6 @@ const ManageCollectionContainer = ({ id }: { id: string }) => {
         ? new Date(cleaned.toDate).toISOString()
         : undefined,
     };
-    console.log(converted);
     setFilters(converted);
     setPage(1);
   };
@@ -72,13 +74,23 @@ const ManageCollectionContainer = ({ id }: { id: string }) => {
       <SearchManageCollection onSearch={handleSearch} />
 
       {/* // Page size selector */}
-      <div>
+      <div className="my-1 pr-2 flex items-center justify-between gap-4">
         <PageSizeSelect
           value={limit}
           onChange={(val) => {
             setLimit(val);
             setPage(1);
           }}
+        />
+        <PrintButton
+          data={data?.result?.data}
+          FormComponent={CollectionPDF}
+          onBeforePrint={async () => {
+            toast.loading("Preparing document for printing...");
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            toast.dismiss();
+          }}
+          documentTitle={`Collection_Report_${id}`}
         />
       </div>
 

@@ -16,8 +16,8 @@ import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
 import { useCreateItikafMutation } from "@/src/redux/features/ramadan/itikafApi";
 import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
-import RHFSelect from "@/src/components/shared/RHFSelect";
 import toast from "react-hot-toast";
+import RHFSearchSelect from "@/src/components/shared/RHFSearchSelect";
 
 type ItikafFormData = {
   name: string;
@@ -42,7 +42,6 @@ function AddItikafModal() {
       fromDate: new Date(data.fromDate),
       toDate: new Date(data.toDate),
     };
-    console.log("Payload:", payload);
     try {
       const res = await createItikaf(payload).unwrap();
       toast.success(res?.message || "Itikaf created successfully");
@@ -72,7 +71,7 @@ function AddItikafModal() {
 
         <FormProviderWrapper<ItikafFormData> onSubmit={onSubmit}>
           <div className="space-y-4 mt-4">
-            <RHFSelect
+            <RHFSearchSelect
               label="Ramadan Year"
               name="ramadanId"
               placeholder="Enter Ramadan year"

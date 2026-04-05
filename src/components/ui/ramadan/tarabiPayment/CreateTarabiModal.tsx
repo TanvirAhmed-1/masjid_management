@@ -21,6 +21,7 @@ import { useCreateTarabiPaymentMutation } from "@/src/redux/features/ramadan/tar
 import RHFSelect from "@/src/components/shared/RHFSelect";
 import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import { useGetMembersQuery } from "@/src/redux/features/monthly-salary/memberApi";
+import RHFSearchSelect from "@/src/components/shared/RHFSearchSelect";
 
 function CreateTarabiModal() {
   const [open, setOpen] = useState(false);
@@ -61,7 +62,7 @@ function CreateTarabiModal() {
 
         <FormProviderWrapper onSubmit={onSubmit}>
           <div className="grid grid-cols-1 gap-4 mt-4">
-            <RHFSelect
+            <RHFSearchSelect
               label="Select Member (Hafez/Imam)"
               name="memberId"
               options={
@@ -73,7 +74,7 @@ function CreateTarabiModal() {
               rules={{ required: "Member is required" }}
             />
 
-            <RHFSelect
+            <RHFSearchSelect
               label="Ramadan Year"
               name="ramadanYearId"
               options={

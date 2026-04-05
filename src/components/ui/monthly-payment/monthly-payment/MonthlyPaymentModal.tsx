@@ -19,6 +19,7 @@ import { useCreatePaymentMutation } from "@/src/redux/features/monthly-salary/pa
 import toast from "react-hot-toast";
 import { useState } from "react";
 import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
+import RHFSearchSelect from "@/src/components/shared/RHFSearchSelect";
 
 type PaymentFormData = {
   memberId: string;
@@ -67,7 +68,7 @@ const MonthlyPaymentModal = () => {
 
         <FormProviderWrapper onSubmit={onSubmit}>
           <div className="space-y-4 mt-4">
-            <RHFSelect
+            <RHFSearchSelect
               label="Member"
               name="memberId"
               rules={{ required: "Member is required" }}

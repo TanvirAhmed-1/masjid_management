@@ -31,8 +31,8 @@ export default function LoginPage() {
         login({
           username: res?.result.name,
           token: res?.result.accessToken,
-          role:res?.result.role
-        })
+          role: res?.result.role,
+        }),
       );
 
       if (res?.result.accessToken) {

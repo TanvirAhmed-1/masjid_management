@@ -8,6 +8,10 @@ import SearchFridayCollection from "./SearchFridayCollection";
 import { clearqueryObject } from "@/src/utils/clearqueryObject";
 import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
 import Pagination from "@/src/components/shared/Pagination";
+import PrintButton from "@/src/components/shared/PrintButton";
+import { format } from "date-fns";
+import FridayCollectionPDF from "./form/FridayCollectionPDF";
+import toast from "react-hot-toast";
 
 type SearchFormValues = {
   fromDate?: string;
@@ -64,13 +68,24 @@ const FridayCollectionContainer = () => {
       </div>
       <SearchFridayCollection onSearch={handleSearch} />
       {/* // Page size selector */}
-      <div>
+      <div className="my-1 flex items-center justify-between gap-4">
         <PageSizeSelect
           value={limit}
           onChange={(val) => {
             setLimit(val);
             setPage(1);
           }}
+        />
+
+        <PrintButton
+          data={data?.data}
+          FormComponent={FridayCollectionPDF}
+          onBeforePrint={async () => {
+            toast.loading("Preparing document for printing...");
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            toast.dismiss();
+          }}
+          documentTitle={`Friday_Collection_${format(new Date(), "dd-MM-yyyy")}`}
         />
       </div>
       <FridayCollectionRow

@@ -26,7 +26,6 @@ export default function LoginPage() {
         success: "Login Successful!",
         error: "Login failed. Please check your credentials.",
       });
-      console.log("login data", res);
       dispatch(
         login({
           username: res?.result.name,
@@ -35,11 +34,10 @@ export default function LoginPage() {
         }),
       );
 
+      router.push("/");
       if (res?.result.accessToken) {
         await setTokenCookie(res?.result.accessToken);
       }
-
-      router.push("/");
     } catch (error) {
       console.log("Login Fail", error);
     }

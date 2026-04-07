@@ -1,13 +1,16 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 import { User } from "lucide-react";
 import { Card } from "@/src/components/ui/card";
 import Pagination from "@/src/components/shared/Pagination";
 import { useGetAllMembersPaymentStatusQuery } from "@/src/redux/features/monthly-salary/paymentApi";
 import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
+import PrintButton from "@/src/components/shared/PrintButton";
+import YearlyPaymentPDF from "./form/YearlyPaymentPDF";
+import toast from "react-hot-toast";
 
 export default function YearlyPaymentHistory({ year }: { year: string }) {
   const [page, setPage] = useState(1);
@@ -22,14 +25,18 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
   const members = data?.data?.result || [];
   const meta = data?.data?.meta;
 
-  const months = useMemo(
-    () =>
-      Array.from({ length: 12 }, (_, i) => ({
+  const months = useMemo(() => {
+    const yearNum = Number(year);
+    if (!year || isNaN(yearNum)) return [];
+
+    return Array.from({ length: 12 }, (_, i) => {
+      const date = new Date(yearNum, i, 1);
+      return {
         monthKey: `${year}-${String(i + 1).padStart(2, "0")}`,
-        monthName: format(new Date(Number(year), i), "MMM"),
-      })),
-    [year],
-  );
+        monthName: isValid(date) ? format(date, "MMM") : "N/A",
+      };
+    });
+  }, [year]);
 
   if (isLoading) return <LoaderScreen />;
 
@@ -43,13 +50,26 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
 
   return (
     <div className="space-y-6">
-      <PageSizeSelect
-        value={limit}
-        onChange={(val) => {
-          setLimit(val);
-          setPage(1);
-        }}
-      />
+      <div className="flex justify-between items-center">
+        <PageSizeSelect
+          value={limit}
+          onChange={(val) => {
+            setLimit(val);
+            setPage(1);
+          }}
+        />
+
+        <PrintButton
+          data={{ result: members, year: year }}
+          FormComponent={YearlyPaymentPDF}
+          onBeforePrint={async () => {
+            toast.loading("Preparing document for printing...");
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            toast.dismiss();
+          }}
+          documentTitle={`Yearly_Payment_History_${year}`}
+        />
+      </div>
       {/* TABLE */}
       <div className="overflow-x-auto rounded-lg border shadow-lg">
         <table className="w-full min-w-max">

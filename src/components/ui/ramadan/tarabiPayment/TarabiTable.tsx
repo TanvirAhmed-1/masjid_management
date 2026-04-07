@@ -8,11 +8,13 @@ import { format } from "date-fns";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
 import EditTarabiModal from "./EditTarabiModal";
 import { useDeleteTarabiPaymentMutation } from "@/src/redux/features/ramadan/tarabiPaymentApi";
+import FetchingLoader from "@/src/components/shared/FetchingLoader";
 
 type Props = {
   data?: any[];
   isLoading: boolean;
   isError: boolean;
+  isFetching: boolean;
   page: number;
   limit: number;
 };
@@ -20,6 +22,7 @@ type Props = {
 const TarabiTable: React.FC<Props> = ({
   data,
   isLoading,
+  isFetching,
   isError,
   page,
   limit,
@@ -40,7 +43,7 @@ const TarabiTable: React.FC<Props> = ({
       error("Failed to delete payment");
     }
   };
-
+  if (isFetching) return <FetchingLoader />;
   if (isLoading) return <LoaderScreen />;
   if (isError) return <p className="p-4 text-red-500">Error fetching data.</p>;
 
@@ -51,10 +54,12 @@ const TarabiTable: React.FC<Props> = ({
           <tr className="*:px-4 *:py-3 *:whitespace-nowrap *:text-center font-bold text-teal-900 border-b">
             <th>SL</th>
             <th>Member Name</th>
+            <th>Phone</th>
             <th>Year</th>
             <th>Amount</th>
-            <th>Date</th>
-            <th>Description</th>
+            <th>Payment Amount</th>
+            <th>Due Amount</th>
+            <th>Dete</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -71,17 +76,23 @@ const TarabiTable: React.FC<Props> = ({
                 <td className="font-medium">
                   {item.member?.name || "Unknown"}
                 </td>
+                <td className="font-medium">
+                  {item.member?.phone || "Unknown"}
+                </td>
                 <td>
                   {item.ramadanYear?.titleName || item.ramadanYear?.ramadanYear}
                 </td>
                 <td className="text-right font-bold text-teal-700">
                   ৳{item.amount?.toLocaleString() ?? 0}
                 </td>
+                <td className="text-right font-bold text-teal-700">
+                  ৳{item.paidAmount?.toLocaleString() ?? 0}
+                </td>
+                <td className=" text-red-400 truncate">
+                  ৳{item.dueAmount?.toLocaleString() ?? 0}
+                </td>
                 <td className="text-center">
                   {item.payDate ? format(new Date(item.payDate), "PP") : "N/A"}
-                </td>
-                <td className="max-w-[200px] truncate">
-                  {item.description || "N/A"}
                 </td>
                 <td className="flex justify-center gap-2 py-3">
                   <EditTarabiModal payment={item} />

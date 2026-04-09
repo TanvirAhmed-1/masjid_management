@@ -56,9 +56,21 @@ const ManageCollectionTable = ({
     }
   };
 
-  if (isLoading) return <LoaderScreen />;
-  if (isError) return <div>Error loading data.</div>;
-  if (donors.length === 0) return <div>No donors found.</div>;
+  if (isLoading) {
+    return <LoaderScreen />;
+  }
+  if (isError)
+    return (
+      <div className="text-red-500 flex justify-center items-center h-svh">
+        Error loading data.
+      </div>
+    );
+  if (donors.length === 0)
+    return (
+      <div className="text-red-500 flex justify-center items-center h-svh">
+        No donors found.
+      </div>
+    );
   if (isFetching) return <FetchingLoader />;
 
   return (

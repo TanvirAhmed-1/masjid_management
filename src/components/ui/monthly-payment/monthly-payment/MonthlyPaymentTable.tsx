@@ -70,7 +70,7 @@ export default function MonthlyPaymentsTable({
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-100 border-b-2 border-gray-200">
-              <tr className="*:text-center *:p-2 *:font-bold *:text-gray-700">
+              <tr className="*:text-center text-base *:p-2 *:font-semibold *:text-gray-900 *:whitespace-nowrap">
                 <th>#</th>
                 <th>Member Name</th>
                 <th>Phone</th>
@@ -85,7 +85,7 @@ export default function MonthlyPaymentsTable({
               {data?.map((member: PaymentType, index: number) => (
                 <tr
                   key={member.id}
-                  className="text-base *:text-center *:py-2 *:px-3 hover:bg-gray-50"
+                  className="text-sm *:text-center *:py-2 *:px-3 hover:bg-gray-50 *:whitespace-nowrap"
                 >
                   <td>{(page - 1) * limit + index + 1}</td>
                   <td>{member.member?.name || "-"}</td>

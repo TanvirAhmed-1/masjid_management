@@ -16,27 +16,30 @@ import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
 import toast from "react-hot-toast";
 import LoadingButton from "@/src/components/shared/LoadingButton";
-import RHFTextarea from "@/src/components/shared/RHFTextarea";
 import { useCreateTarabiPaymentMutation } from "@/src/redux/features/ramadan/tarabiPaymentApi";
-import RHFSelect from "@/src/components/shared/RHFSelect";
 import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import { useGetMembersQuery } from "@/src/redux/features/monthly-salary/memberApi";
 import RHFSearchSelect from "@/src/components/shared/RHFSearchSelect";
-
+type FormData = {
+  memberId: string;
+  ramadanYearId: string;
+  amount: number;
+  paidAmount: number;
+};
 function CreateTarabiModal() {
   const [open, setOpen] = useState(false);
   const [createPayment, { isLoading }] = useCreateTarabiPaymentMutation();
-  
+
   // Fetching data
   const { data: membersData } = useGetMembersQuery(undefined);
   const { data: yearsData } = useGetRamadanYearQuery(undefined);
 
-
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: FormData) => {
     try {
       const payload = {
         ...data,
         amount: Number(data.amount),
+        paidAmount: Number(data.paidAmount),
       };
       const result = await createPayment(payload).unwrap();
       toast.success(result.message || "Payment created successfully");
@@ -60,7 +63,7 @@ function CreateTarabiModal() {
           </DialogTitle>
         </DialogHeader>
 
-        <FormProviderWrapper onSubmit={onSubmit}>
+        <FormProviderWrapper<FormData> onSubmit={onSubmit}>
           <div className="grid grid-cols-1 gap-4 mt-4">
             <RHFSearchSelect
               label="Select Member (Hafez/Imam)"
@@ -73,7 +76,6 @@ function CreateTarabiModal() {
               }
               rules={{ required: "Member is required" }}
             />
-
             <RHFSearchSelect
               label="Ramadan Year"
               name="ramadanYearId"
@@ -87,8 +89,14 @@ function CreateTarabiModal() {
             />
 
             <RHFInput
-              label="Amount (৳)"
+              label="Tarabi Fee (৳)"
               name="amount"
+              type="number"
+              rules={{ required: "Amount is required" }}
+            />
+            <RHFInput
+              label="Paid Amount (৳)"
+              name="paidAmount"
               type="number"
               rules={{ required: "Amount is required" }}
             />
@@ -96,7 +104,9 @@ function CreateTarabiModal() {
 
           <DialogFooter className="mt-6">
             <DialogClose asChild>
-              <Button variant="outline" type="button">Cancel</Button>
+              <Button variant="outline" type="button">
+                Cancel
+              </Button>
             </DialogClose>
             <LoadingButton isLoading={isLoading} className="bg-teal-600">
               Save

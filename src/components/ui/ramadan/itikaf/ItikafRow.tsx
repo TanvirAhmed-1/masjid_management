@@ -74,7 +74,7 @@ const ItikafRow = ({
     <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md bg-white">
       <table className="min-w-full border-collapse text-sm text-gray-700">
         <thead className="bg-gray-100 text-gray-900">
-          <tr className="*:px-5 *:py-3 *:font-semibold *:text-center">
+          <tr className="*:px-5 *:py-3 *:font-semibold *:text-center *:whitespace-nowrap">
             <th>Serial No</th>
             <th>Name</th>
             <th>Year</th>
@@ -87,7 +87,7 @@ const ItikafRow = ({
           {data?.map((itikaf: ItikafData, index: number) => (
             <tr
               key={itikaf.id}
-              className="hover:bg-gray-50 transition-colors *:px-5 *:py-3 *:text-center"
+              className="hover:bg-gray-50 transition-colors *:px-5 *:py-3 *:text-center *:whitespace-nowrap"
             >
               <td>{(page - 1) * limit + index + 1}</td>
               <td>{itikaf.name}</td>

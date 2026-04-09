@@ -44,6 +44,14 @@ export default function RHFSearchSelect({
     formState: { errors },
   } = useFormContext();
   const [open, setOpen] = React.useState(false);
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+  const [width, setWidth] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    if (triggerRef.current) {
+      setWidth(triggerRef.current.offsetWidth);
+    }
+  }, [open]);
 
   const error = errors[name]?.message as string;
 
@@ -60,12 +68,13 @@ export default function RHFSearchSelect({
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button
+                ref={triggerRef}
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
                 className={cn(
-                  "w-full justify-between bg-white font-normal",
-                  error ? "border-red-500" : "border-gray-400"
+                  "w-full flex-1 justify-between bg-white font-normal",
+                  error ? "border-red-500" : "border-gray-400",
                 )}
               >
                 {field.value
@@ -74,9 +83,15 @@ export default function RHFSearchSelect({
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-full p-0 bg-white" align="start">
+            <PopoverContent
+              style={{ width: width ? `${width}px` : "auto" }}
+              className="p-0 bg-white"
+              align="start"
+            >
               <Command>
-                <CommandInput placeholder={`Search ${label?.toLowerCase()}...`} />
+                <CommandInput
+                  placeholder={`Search ${label?.toLowerCase()}...`}
+                />
                 <CommandList>
                   <CommandEmpty>No results found.</CommandEmpty>
                   <CommandGroup>
@@ -85,7 +100,8 @@ export default function RHFSearchSelect({
                         key={opt.value}
                         value={opt.label} // Command searches by this value
                         onSelect={() => {
-                          const newValue = opt.value === field.value ? "" : opt.value;
+                          const newValue =
+                            opt.value === field.value ? "" : opt.value;
                           field.onChange(newValue);
                           onChange?.(newValue);
                           setOpen(false);
@@ -94,7 +110,9 @@ export default function RHFSearchSelect({
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            field.value === opt.value ? "opacity-100" : "opacity-0"
+                            field.value === opt.value
+                              ? "opacity-100"
+                              : "opacity-0",
                           )}
                         />
                         {opt.label}

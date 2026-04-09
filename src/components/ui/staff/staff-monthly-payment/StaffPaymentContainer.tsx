@@ -30,11 +30,10 @@ const StaffPaymentContainer = () => {
     limit,
     ...filters,
   });
-  console.log(data);
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg md:text-3xl">All Staff Payment List</h3>
+      <div className="flex flex-wrap gap-3 justify-between items-center mb-4">
+        <h3 className="text-lg md:text-3xl">All Staff Salary Payment List</h3>
         <AddStaffPaymentModal />
       </div>
 

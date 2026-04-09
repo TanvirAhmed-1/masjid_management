@@ -1,11 +1,17 @@
 "use client";
 
+import LoaderScreen from "@/src/components/shared/LoaderScreen";
 import { useGetifterlistbyidQuery } from "@/src/redux/features/ramadan/iftarlist";
+import { useParams } from "next/navigation";
 
-const RamadanListPage = ({ params }: { params: { id: string } }) => {
-  const { data: ifterlist, isLoading } = useGetifterlistbyidQuery(params.id);
+const RamadanListPage = () => {
+  const params = useParams();
+  const id = params.id as string;
+  const { data: ifterlist, isLoading } = useGetifterlistbyidQuery(id);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return <LoaderScreen />;
+  }
 
   const data = ifterlist?.result || [];
 
@@ -42,7 +48,7 @@ const RamadanListPage = ({ params }: { params: { id: string } }) => {
                   </td>
                   <td className="p-2 border">{doner.dayName}</td>
                 </tr>
-              ))
+              )),
             )}
           </tbody>
         </table>

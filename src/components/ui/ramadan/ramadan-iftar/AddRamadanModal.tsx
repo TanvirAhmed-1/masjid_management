@@ -21,7 +21,6 @@ import { useCreateifterlistMutation } from "@/src/redux/features/ramadan/iftarli
 import toast from "react-hot-toast";
 import RHFSearchSelect from "@/src/components/shared/RHFSearchSelect";
 
-
 type Doner = {
   serialNumber: string;
   iftarDate: string;
@@ -52,7 +51,7 @@ function AddRamadanModal() {
       doners: data.doners.map((item) => ({
         serialNumber: item.serialNumber,
         name: item.name,
-        iftarDate: new Date(item.iftarDate).toISOString(), 
+        iftarDate: new Date(item.iftarDate).toISOString(),
         dayName: item.dayName.charAt(0).toUpperCase() + item.dayName.slice(1),
       })),
     };
@@ -103,7 +102,7 @@ function AddRamadanModal() {
                 placeholder="Select Ramadan Year"
                 rules={{ required: "Ramadan Year is required!" }}
               />
-              <div className="flex justify-center items-center">
+              <div className="md:flex justify-center items-center hidden">
                 <FcNumericalSorting21 className="size-10 animate-bounce" />
               </div>
             </div>
@@ -137,13 +136,22 @@ function DonerFields() {
   // Auto-generate serial numbers
   const handleAddDoner = () => {
     const nextSerial = (fields.length + 1).toString();
-    append({ 
-      serialNumber: nextSerial, 
-      iftarDate: "", 
-      name: "", 
-      dayName: "" 
+    append({
+      serialNumber: nextSerial,
+      iftarDate: "",
+      name: "",
+      dayName: "",
     });
   };
+  const dayOptions = [
+    { value: "শনিবার", label: "শনিবার" },
+    { value: "রবিবার", label: "রবিবার" },
+    { value: "সোমবার", label: "সোমবার" },
+    { value: "মঙ্গলবার", label: "মঙ্গলবার" },
+    { value: "বুধবার", label: "বুধবার" },
+    { value: "বৃহস্পতিবার", label: "বৃহস্পতিবার" },
+    { value: "শুক্রবার", label: "শুক্রবার" },
+  ];
 
   return (
     <div className="space-y-4">
@@ -174,11 +182,20 @@ function DonerFields() {
             placeholder="Select Iftar Date"
             rules={{ required: "Iftar Date required" }}
           />
-          <RHFInput
+          {/* <RHFInput
             label="Day Name"
             name={`doners.${index}.dayName`}
             placeholder="e.g., Monday"
             defaultValue={field.dayName}
+            rules={{ required: "Day name is required!" }}
+          /> */}
+
+          <RHFSearchSelect
+            label="Day Name"
+            name={`doners.${index}.dayName`}
+            placeholder="e.g., Monday"
+            defaultValue={field.dayName}
+            options={dayOptions}
             rules={{ required: "Day name is required!" }}
           />
 

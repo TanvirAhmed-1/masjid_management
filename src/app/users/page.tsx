@@ -1,5 +1,6 @@
 "use client";
 
+import LoaderScreen from "@/src/components/shared/LoaderScreen";
 import { useGetAllUsersQuery } from "@/src/redux/features/auth/authApi";
 
 type User = {
@@ -12,7 +13,9 @@ type User = {
 export default function UserList() {
   const { data: users, error, isLoading } = useGetAllUsersQuery(undefined);
 
-  if (isLoading) return <p>Loading users...</p>;
+    if (isLoading) {
+    return <LoaderScreen />;
+  }
 
   if (error) {
     const errorMessage =

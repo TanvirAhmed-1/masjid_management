@@ -72,7 +72,7 @@ const StaffRow: React.FC<Props> = ({
     <div className=" overflow-x-auto">
       <table className="min-w-full text-sm text-gray-700 shadow-lg rounded-lg overflow-hidden">
         <thead className="bg-teal-600 text-white">
-          <tr className="*:text-center *:px-4 *:py-3">
+          <tr className="*:text-center *:px-4 *:py-3 *:whitespace-nowrap">
             <th>SN</th>
             <th>Name</th>
             <th>Phone</th>
@@ -86,7 +86,7 @@ const StaffRow: React.FC<Props> = ({
 
         <tbody className="divide-y bg-white">
           {data?.map((row, index) => (
-            <tr key={row.id} className="hover:bg-gray-50 text-center *:py-3 *:px-2">
+            <tr key={row.id} className="hover:bg-gray-50 text-center *:py-3 *:px-2 *:whitespace-nowrap">
               <td>{(page - 1) * limit + index + 1}</td>
               <td>{row.name}</td>
               <td>{row.phone ?? "—"}</td>

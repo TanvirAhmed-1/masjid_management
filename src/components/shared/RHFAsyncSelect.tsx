@@ -4,7 +4,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/src/components/ui/popover";
 import {
   Command,
   CommandInput,
@@ -12,9 +12,10 @@ import {
   CommandItem,
   CommandEmpty,
 } from "@/src/components/ui/command";
-import { Button } from "@/components/ui/button";
+
 import { useFormContext, Controller } from "react-hook-form";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/src/components/ui/button";
+import { Label } from "@/src/components/ui/label";
 import { useState } from "react";
 import { ChevronDown, Check } from "lucide-react";
 

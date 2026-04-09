@@ -60,7 +60,7 @@ function CreateStaffModal() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-xl">
+      <DialogContent className="max-w-xl max-h-[75vh] overflow-y-auto ">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">
             Add New Staff Member
@@ -74,23 +74,24 @@ function CreateStaffModal() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
             {/* Image Input with Preview */}
             <div className="flex flex-col">
-              <label className="text-sm font-medium mb-1">Staff Image</label>
+              <label className="text-sm font-medium mb-1">Staff Image link (optional)</label>
               <input
                 type="file"
                 accept="image/*"
+                className="p-2 border border-gray-300 rounded-md"
                 onChange={(e) => {
                   if (e.target.files && e.target.files[0]) {
                     setPreview(URL.createObjectURL(e.target.files[0]));
                   }
                 }}
               />
-              {preview && (
+              {/* {preview && (
                 <img
                   src={preview}
                   alt="preview"
                   className="mt-2 w-32 h-32 object-cover rounded-md border"
                 />
-              )}
+              )} */}
             </div>
 
             <RHFInput

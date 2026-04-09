@@ -68,13 +68,11 @@ const MonthlyPaymentContainer = () => {
   const { data, isLoading, isFetching } = useGetpaymentQuery(queryParams);
   const totalPage = data?.data?.meta?.totalPage ?? 1;
 
- 
-
   return (
     <div>
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg md:text-3xl text-black">
-          Monthly Ramadan Collection
+      <div className="flex flex-wrap gap-3 justify-between items-center">
+        <h3 className="text-xl md:text-3xl text-black">
+          All Member Monthly Payment List
         </h3>
         <MonthlyPaymentModal />
       </div>

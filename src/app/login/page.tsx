@@ -34,10 +34,10 @@ export default function LoginPage() {
         }),
       );
 
-      router.push("/");
       if (res?.result.accessToken) {
         await setTokenCookie(res?.result.accessToken);
       }
+      router.push("/");
     } catch (error) {
       console.log("Login Fail", error);
     }
@@ -90,13 +90,6 @@ export default function LoginPage() {
             )}
           </div>
         </FormProviderWrapper>
-
-        <p className="text-center text-sm text-gray-700 mt-4">
-          Don’t have an account?{" "}
-          <a href="/register" className="text-emerald-600 hover:underline">
-            Register
-          </a>
-        </p>
       </div>
     </div>
   );

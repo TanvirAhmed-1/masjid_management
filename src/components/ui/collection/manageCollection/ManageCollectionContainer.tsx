@@ -56,7 +56,7 @@ const ManageCollectionContainer = ({ id }: { id: string }) => {
 
   const { data, isLoading, isError, isFetching } =
     useGetCollectionByIdQuery(queryParams);
-  console.log(data);
+
   const totalPage = data?.result?.meta?.totalPage ?? 1;
   const collections: CollectionType[] = data?.result?.data
     ? [data.result.data]

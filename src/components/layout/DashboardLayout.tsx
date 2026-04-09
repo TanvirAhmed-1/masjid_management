@@ -135,7 +135,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                     </button>
 
                     {openSections[data.title] && (
-                      <div className="ml-3  mt-2 space-y-1 border-l-2 border-emerald-600/30 pl-3 sm:pl-4">
+                      <div className="ml-1  mt-2 space-y-1 border-l-2 border-emerald-600/30 pl-3 sm:pl-4">
                         {data.subRoutes?.map((sub) => (
                           <Link
                             href={sub.route}

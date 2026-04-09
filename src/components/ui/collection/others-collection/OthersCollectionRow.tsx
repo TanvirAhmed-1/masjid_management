@@ -96,7 +96,7 @@ const OthersCollectionRow = ({
                         size="sm"
                         title="View"
                       >
-                        <FaEye />
+                        <FaEye /> Doners ({collection.donors.length})
                       </Button>
                     </Link>
 

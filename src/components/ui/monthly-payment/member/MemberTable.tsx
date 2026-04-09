@@ -26,7 +26,6 @@ const MemberTable = ({
 }: Props) => {
   const [deleteMember] = useDeleteMemberMutation();
 
-
   const handleDelete = async (id: string) => {
     Swal.fire({
       title: "Are you sure?",
@@ -66,7 +65,7 @@ const MemberTable = ({
     <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md bg-white">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
-          <tr className="text-center text-sm font-medium text-gray-900 *:py-2 *:px-3">
+          <tr className="text-center text-base font-medium text-gray-900 *:py-2 *:px-3  *:whitespace-nowrap">
             <th>SN</th>
             <th>Name</th>
             <th>Phone</th>
@@ -80,7 +79,7 @@ const MemberTable = ({
           {members?.map((member: MemberType, index: number) => (
             <tr
               key={member.id}
-              className="text-base *:text-center *:py-2 *:px-3 hover:bg-gray-50"
+              className="text-sm *:text-center *:py-2 *:px-3 hover:bg-gray-50  *:whitespace-nowrap"
             >
               <td>{(page - 1) * limit + index + 1}</td>
               <td>{member.name}</td>

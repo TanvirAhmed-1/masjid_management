@@ -15,9 +15,9 @@ import RHFInput from "@/src/components/shared/RHFInput";
 import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
 import toast from "react-hot-toast";
-import RHFSelect from "@/src/components/shared/RHFSelect";
 import { useGetStaffListQuery } from "@/src/redux/features/staff/staffApi";
 import { useCreateStaffMonthlyPaymentMutation } from "@/src/redux/features/staff/staffMonthlyPayment";
+import RHFSearchSelect from "@/src/components/shared/RHFSearchSelect";
 
 type FormData = {
   staffId: string;
@@ -53,25 +53,26 @@ function AddStaffPaymentModal() {
       <DialogTrigger asChild>
         <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2">
           <IoMdAdd className="text-lg" />
-          Add New Staff
+          Staff Payment
         </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-xl">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">
-            Add New Staff Member
+            Add Staff Payment
           </DialogTitle>
           <p className="text-sm text-gray-500 mt-1">
-            Enter the staff details below to add them to the system.
+            Please fill in the form below to add a new staff payment.
           </p>
         </DialogHeader>
 
         <FormProviderWrapper<FormData> onSubmit={onSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
-            <RHFSelect
+          <div className="grid grid-cols-1  gap-5 mt-6">
+            <RHFSearchSelect
               name="staffId"
               label="Select Staff"
+              placeholder="Search and select staff"
               options={staffOptions || []}
             />
             <RHFInput

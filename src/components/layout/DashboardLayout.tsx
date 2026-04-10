@@ -15,13 +15,16 @@ import {
 import { RiArrowDropRightLine } from "react-icons/ri";
 import LogoutMenu from "../ui/logout";
 import { useAppSelector } from "@/src/redux/hook";
+import { useGetMosqueQuery } from "@/src/redux/features/mosque/mosqueApi";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const reduxUsername = useAppSelector((state) => state.auth.username);
-
   const [username, setUsername] = useState<string | null>(null);
+
+  const { data: mosqueData } = useGetMosqueQuery(undefined);
+  const mosque = mosqueData?.result || [];
 
   // Prevent hydration mismatch – load only after client mounts
   useEffect(() => {
@@ -41,7 +44,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
     DashboardLinks.forEach((data) => {
       if (data.hasChildren) {
         const isAnySubRouteActive = data.subRoutes?.some((sub) =>
-          pathname?.startsWith(sub.route)
+          pathname?.startsWith(sub.route),
         );
         newOpenSections[data.title] = !!isAnySubRouteActive;
       }
@@ -175,6 +178,12 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
               </div>
             ))}
           </nav>
+
+          <div className=" absolute bottom-3 pt-4 border-t border-emerald-600/30 text-center text-xs text-emerald-200">
+            <p>Developed by Tanvir Ahmed</p>
+            <p>phone/whatsapp: +880 1568953398</p>
+            <p>Copyright &copy; 2023 Tanvir Ahmed. All rights reserved.</p>
+          </div>
         </div>
       </div>
 
@@ -204,13 +213,19 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
             {/* Right section */}
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Search - Hidden on mobile, show on tablet+ */}
-              <div className="relative hidden md:block">
+              {/* <div className="relative hidden md:block">
                 <input
                   type="text"
                   placeholder="Search..."
                   className="w-48 lg:w-64 pl-9 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 bg-gray-50 border border-gray-200 rounded-lg focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 focus:bg-white outline-none transition-all duration-200"
                 />
                 <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              </div> */}
+
+              <div>
+                <p className="text-base font-semibold text-gray-800">
+                  {mosque?.name || "Mosque Name"}
+                </p>
               </div>
 
               {/* Search icon for mobile */}
@@ -225,12 +240,12 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
               </button>
 
               {/* User Profile */}
-              <div className="flex items-center gap-2 px-2 sm:px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 bg-emerald-500 rounded-full flex items-center justify-center">
+              <div className="flex items-center gap-2 px-2 sm:px-3 py-2  rounded-lg transition-colors cursor-pointer">
+                <div className="w-10 h-6 sm:w-10  sm:h-8 bg-emerald-500 rounded-full flex items-center justify-center">
                   {/* <span className="text-white text-xs font-semibold"></span> */}
                   <LogoutMenu />
                 </div>
-                <span className="text-sm text-gray-700 font-medium hidden sm:block">
+                <span className="text-sm  text-gray-800 font-medium hidden sm:block">
                   {username ? (
                     <span>{username}</span>
                   ) : (

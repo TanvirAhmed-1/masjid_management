@@ -75,6 +75,7 @@ export const baseApi = createApi({
     "Dashboard",
     "AccessoryPurchases",
     "tarabiPayment",
+    "masque",
   ],
   endpoints: () => ({}),
 });

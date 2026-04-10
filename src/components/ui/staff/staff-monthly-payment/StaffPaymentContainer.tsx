@@ -9,6 +9,9 @@ import StaffPaymentRow from "./StaffPaymentRow";
 import SearchStaffPayment from "./SearchStaffPayment";
 import { useGetStaffPaymentsQuery } from "@/src/redux/features/staff/StaffPayments";
 import { useGetStaffMonthlyPaymentQuery } from "@/src/redux/features/staff/staffMonthlyPayment";
+import PrintButton from "@/src/components/shared/PrintButton";
+import toast from "react-hot-toast";
+import StaffSalaryPDF from "./form/StaffSalaryPDF";
 
 type SearchFormValues = {
   name?: string;
@@ -30,6 +33,9 @@ const StaffPaymentContainer = () => {
     limit,
     ...filters,
   });
+
+  const paymentsList = data?.result?.data ?? [];
+
   return (
     <div>
       <div className="flex flex-wrap gap-3 justify-between items-center mb-4">
@@ -39,13 +45,26 @@ const StaffPaymentContainer = () => {
 
       <SearchStaffPayment onSearch={handleSearch} />
 
-      <PageSizeSelect
-        value={limit}
-        onChange={(val) => {
-          setLimit(val);
-          setPage(1);
-        }}
-      />
+      <div className="flex flex-wrap gap-4 justify-between items-center mb-4">
+        <PageSizeSelect
+          value={limit}
+          onChange={(val) => {
+            setLimit(val);
+            setPage(1);
+          }}
+        />
+
+        <PrintButton
+          data={paymentsList} 
+          FormComponent={StaffSalaryPDF}
+          onBeforePrint={async () => {
+            const toastId = toast.loading("Preparing document for printing...");
+            await new Promise((resolve) => setTimeout(resolve, 800));
+            toast.dismiss(toastId);
+          }}
+          documentTitle={`Staff_Salary_Report_${new Date().getTime()}`}
+        />
+      </div>
 
       <StaffPaymentRow
         data={data?.result?.data ?? []}

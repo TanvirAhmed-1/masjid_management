@@ -43,7 +43,7 @@ function CreateCollectionName() {
       <DialogTrigger asChild>
         <Button className="bg-teal-500 hover:bg-teal-600 text-white flex justify-center items-center">
           <IoMdAdd />
-          Add Collection Name
+          Create Donations
         </Button>
       </DialogTrigger>
       <DialogContent className="w-3xl">

@@ -58,7 +58,7 @@ function EditFCollectionName({ collection }: { collection: CollectionType }) {
       </DialogTrigger>
       <DialogContent className="w-3xl">
         <DialogHeader>
-          <DialogTitle>Edit Friday Donations</DialogTitle>
+          <DialogTitle>Edit  Donations Name</DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper<FridayCollectionForm>
@@ -70,15 +70,15 @@ function EditFCollectionName({ collection }: { collection: CollectionType }) {
         >
           <div>
             <RHFInput
-              label=" Collection title"
+              label="Donations Name"
               name="title"
-              placeholder="Masjid Development Collection 2025"
+              placeholder="Masjid Development Donations 2025"
               rules={{ required: "Collection title is required" }}
             />
             <RHFTextarea
               label="Description"
               name="description"
-              placeholder="Masjid Development Collection 2025"
+              placeholder="Masjid Development Donations 2025"
               rows={4}
               rules={{ required: "Description is required" }}
             />

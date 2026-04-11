@@ -21,7 +21,7 @@ export const DashboardLinks = [
     icon: <MdOutlineCollectionsBookmark size={18} />,
     subRoutes: [
       { title: "Friday Donations", route: "/friday-collection" },
-      { title: "Create Donation", route: "/donation-data-setup" },
+      { title: "Create Donation", route: "/collection-data-setup" },
       { title: " All Donations", route: "/others-collection" },
     ],
   },

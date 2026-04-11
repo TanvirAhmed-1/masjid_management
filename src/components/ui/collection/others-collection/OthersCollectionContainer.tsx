@@ -64,7 +64,7 @@ const OthersCollectionContainer = () => {
       <div className="flex flex-wrap gap-4 justify-between items-center">
         <h1 className="text-lg md:text-3xl text-start text-black">
           {" "}
-          All Others Donations 
+          All  Donations List 
         </h1>
         <AddOthersCollectionModal />
       </div>

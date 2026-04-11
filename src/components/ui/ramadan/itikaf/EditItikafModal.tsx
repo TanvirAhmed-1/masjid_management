@@ -27,11 +27,9 @@ type ItikafFormData = {
   toDate: string;
   ramadanId: string;
 };
-
 type props = {
   item: ItikafData;
 };
-
 function EditItikafModal({ item }: props) {
   const [updateItikaf, { isLoading }] = useUpdateItikafMutation();
   const { data: ramadanYear } = useGetRamadanYearQuery(undefined);

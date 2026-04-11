@@ -1,11 +1,11 @@
 "use client";
 
 import { useFormContext, Controller } from "react-hook-form";
-import { Label } from "@/components/ui/label";
 import {
   RadioGroup,
   RadioGroupItem,
-} from "@/components/ui/radio-group";
+} from "@/src/components/ui/radio-group";
+import { Label } from "../ui/label";
 
 type RHFRadioGroupProps = {
   name: string;

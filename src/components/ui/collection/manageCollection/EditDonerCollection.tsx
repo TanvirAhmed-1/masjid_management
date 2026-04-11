@@ -17,7 +17,8 @@ import { useUpdateDonerCollectionMutation } from "@/src/redux/features/collectio
 import toast from "react-hot-toast";
 import { FaEdit } from "react-icons/fa";
 import LoadingButton from "@/src/components/shared/LoadingButton";
-import { Donor } from "./ManageCollectionContainer";
+import { Donor } from "@/src/types/collectionType";
+
 
 type OthersCollectionForm = {
   name: string;

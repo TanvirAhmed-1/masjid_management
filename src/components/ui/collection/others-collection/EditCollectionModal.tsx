@@ -21,8 +21,8 @@ import { useUpdateCollectionMutation } from "@/src/redux/features/collection/col
 import { useGetCollectionDataSetUpQuery } from "@/src/redux/features/collection/collectionDataSetUp";
 import toast from "react-hot-toast";
 import { FaEdit } from "react-icons/fa";
-import { OtherCollectionType } from "./OthersCollectionContainer";
 import LoadingButton from "@/src/components/shared/LoadingButton";
+import { OtherCollectionType } from "@/src/types/collectionType";
 
 type Doner = {
   name: string;

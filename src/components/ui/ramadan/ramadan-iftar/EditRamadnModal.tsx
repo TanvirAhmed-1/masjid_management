@@ -13,13 +13,12 @@ import {
 import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "../../../shared/FormProviderWrapper";
 import {
-  useCreateifterlistMutation,
   useUpdateifterlistMutation,
 } from "@/src/redux/features/ramadan/iftarlist";
 import toast from "react-hot-toast";
 import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
-import { Doner } from "./IftarListRow";
 import { FaEdit } from "react-icons/fa";
+import { Doner } from "@/src/types/ramadanTypes";
 
 type FormData = {
   name: string;

@@ -15,10 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mosque Management System | Tanvir Ahmed",
+  title: "Masjid Management System | Tanvir Ahmed",
   description:
     "Developed by Tanvir Ahmed . For inquiries, contact: +880 1568953398 (phone/WhatsApp).",
-  applicationName: "Mosque-MS",
+  applicationName: "Masjid-MS",
   creator: "Tanvir Ahmed",
   icons: {
     icon: "/favicon.png",

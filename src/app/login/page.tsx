@@ -8,6 +8,8 @@ import { toast } from "react-hot-toast";
 import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
 import { useLoginMutation } from "@/src/redux/features/auth/authApi";
+import { Button } from "@/src/components/ui/button";
+
 
 type LoginFormData = {
   email: string;
@@ -46,9 +48,21 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[url('/images/login.jpg')] bg-cover bg-center">
       <div className="bg-white/70 backdrop-blur-xl p-8 rounded-xl shadow-lg w-full max-w-md border border-emerald-300">
-        <h2 className="text-3xl font-bold text-center text-emerald-700 mb-6">
-          Masjid Login
+        <h2 className="text-2xl font-bold text-center text-emerald-700 mb-6">
+          <p className="text-xl"> Welcome to</p>
+         Masjid Management System
         </h2>
+
+        <div className="flex justify-center mb-4">
+          <Button
+            onClick={() => {
+              handleSubmit({ email: "tanvir@gmail.com", password: "Abc@1234" });
+            }}
+            className="bg-emerald-600  hover:bg-emerald-700 text-white py-2 px-4 rounded-lg font-semibold shadow-md mx-auto mb-3"
+          >
+            Guest Login
+          </Button>
+        </div>
         <FormProviderWrapper<LoginFormData> onSubmit={handleSubmit}>
           <div className="space-y-4">
             <RHFInput

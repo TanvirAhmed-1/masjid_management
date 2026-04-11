@@ -15,14 +15,14 @@ export const DashboardLinks = [
     icon: <FaTachometerAlt />,
   },
   {
-    title: "Collection",
+    title: "Donations",
     route: null,
     hasChildren: true,
     icon: <MdOutlineCollectionsBookmark size={18} />,
     subRoutes: [
-      { title: "Friday Collection", route: "/friday-collection" },
-      { title: "Create Collection", route: "/collection-data-setup" },
-      { title: "Collections", route: "/others-collection" },
+      { title: "Friday Donations", route: "/friday-collection" },
+      { title: "Create Donation", route: "/donation-data-setup" },
+      { title: " All Donations", route: "/others-collection" },
     ],
   },
   {

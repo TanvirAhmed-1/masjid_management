@@ -59,7 +59,7 @@ function EditFridayCollectionModal({ collection }: { collection: Collection }) {
       </DialogTrigger>
       <DialogContent className="w-3xl">
         <DialogHeader>
-          <DialogTitle>Edit Friday Collection</DialogTitle>
+          <DialogTitle>Edit Friday Donations</DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper<FridayCollectionForm>

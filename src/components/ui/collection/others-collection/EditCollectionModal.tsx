@@ -84,7 +84,7 @@ function EditCollectionModal({
 
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Edit Collection</DialogTitle>
+          <DialogTitle>Edit Donation</DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper<OthersCollectionForm>

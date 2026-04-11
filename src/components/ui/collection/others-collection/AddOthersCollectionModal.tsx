@@ -68,13 +68,13 @@ function AddOthersCollectionModal() {
       <DialogTrigger asChild>
         <Button className="bg-teal-500 hover:bg-teal-600 text-white flex items-center">
           <IoMdAdd className="mr-1" />
-          Add Others Collection
+          Add Donation
         </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Add Others Collection</DialogTitle>
+          <DialogTitle>Add Doner by Donation Type </DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper<OthersCollectionForm>

@@ -47,12 +47,12 @@ export function AddFridayCollectionModal() {
       <DialogTrigger asChild>
         <Button className="bg-teal-500 hover:bg-teal-600 text-white flex justify-center items-center">
           <IoMdAdd />
-          Add Friday-Collection
+          Add Friday Donations
         </Button>
       </DialogTrigger>
       <DialogContent className="min-w-sm max-w-lg mx-auto">
         <DialogHeader>
-          <DialogTitle>Add Friday Collection</DialogTitle>
+          <DialogTitle>Add Friday Donations</DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper<FridayCollectionForm> onSubmit={onSubmit}>

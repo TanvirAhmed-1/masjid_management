@@ -62,7 +62,7 @@ const FridayCollectionContainer = () => {
     <div>
       <div className="flex flex-wrap gap-4 justify-between items-center">
         <h3 className="text-lg md:text-3xl text-start text-black">
-          All Friday-Collection
+          All Friday Donations
         </h3>
         <AddFridayCollectionModal />
       </div>

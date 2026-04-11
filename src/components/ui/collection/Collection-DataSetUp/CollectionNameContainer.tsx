@@ -54,7 +54,7 @@ const CollectionNameContainer = () => {
   return (
     <div>
       <div className="flex flex-wrap gap-3 justify-between items-center">
-        <h3 className="text-lg md:text-3xl text-start text-black"> All Collection Names</h3>
+        <h3 className="text-lg md:text-3xl text-start text-black"> All Donations Names</h3>
         <CreateCollectionName />
       </div>
       <div>

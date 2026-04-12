@@ -64,6 +64,9 @@ export const DashboardLinks = [
     route: null,
     hasChildren: true,
     icon: <FaMosque />,
-    subRoutes: [{ title: "Create Mosques", route: "/mosques-create" }],
+    subRoutes: [
+      { title: "Create Mosques", route: "/mosques-create" },
+      { title: "Payment Credentials", route: "/payment-credentials" },
+    ],
   },
 ];

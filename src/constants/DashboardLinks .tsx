@@ -3,6 +3,7 @@ import {
   FaMoon,
   FaMosque,
   FaMoneyBillWave,
+  FaBook,
 } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { MdOutlineCollectionsBookmark } from "react-icons/md";
@@ -68,5 +69,11 @@ export const DashboardLinks = [
       { title: "Create Mosques", route: "/mosques-create" },
       { title: "Payment Credentials", route: "/payment-credentials" },
     ],
+  },
+  {
+    title: "User Guide",
+    route: "/guide",
+    hasChildren: false,
+    icon: <FaBook />,
   },
 ];

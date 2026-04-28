@@ -2,7 +2,6 @@ import { baseApi } from "../../api/baseApi";
 
 export const paymentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // ১. bKash ক্রেডেনশিয়াল সেভ বা আপডেট করা
     saveBkashCredentials: builder.mutation({
       query: (payload) => ({
         url: "/bkash-credentials",
@@ -11,7 +10,7 @@ export const paymentApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["paymentCredentials"],
     }),
-
+ 
     getPaymentCredentials: builder.query({
       query: () => "/bkash-credentials",
       providesTags: ["paymentCredentials"],

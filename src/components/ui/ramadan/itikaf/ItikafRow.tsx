@@ -64,7 +64,7 @@ const ItikafRow = ({
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md bg-white">
       <table className="min-w-full border-collapse text-sm text-gray-700">
-        <thead className="bg-gray-100 text-gray-900">
+        <thead className="bg-teal-600 text-white">
           <tr className="*:px-5 *:py-3 *:font-semibold *:text-center *:whitespace-nowrap">
             <th>Serial No</th>
             <th>Name</th>

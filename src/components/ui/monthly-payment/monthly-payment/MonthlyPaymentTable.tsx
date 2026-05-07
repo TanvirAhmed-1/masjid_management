@@ -64,8 +64,8 @@ export default function MonthlyPaymentsTable({
       <>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-100 border-b-2 border-gray-200">
-              <tr className="*:text-center text-base *:p-2 *:font-semibold *:text-gray-900 *:whitespace-nowrap">
+            <thead className="bg-teal-600 text-white">
+              <tr className="*:text-center text-base *:p-3 *:font-semibold *:whitespace-nowrap">
                 <th>#</th>
                 <th>Member Name</th>
                 <th>Phone</th>

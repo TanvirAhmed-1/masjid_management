@@ -63,8 +63,8 @@ const MemberTable = ({
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md bg-white">
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr className="text-center text-base font-medium text-gray-900 *:py-2 *:px-3  *:whitespace-nowrap">
+        <thead className="bg-teal-600 text-white">
+          <tr className="text-center text-base font-medium *:py-3 *:px-3  *:whitespace-nowrap">
             <th>SN</th>
             <th>Name</th>
             <th>Phone</th>

@@ -48,8 +48,8 @@ const TarabiTable: React.FC<Props> = ({
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mt-4">
       <table className="min-w-full border-collapse bg-white text-left text-sm text-gray-700">
-        <thead className="bg-teal-50">
-          <tr className="*:px-4 *:py-3 *:whitespace-nowrap *:text-center font-bold text-teal-900 border-b">
+        <thead className="bg-teal-600 text-white">
+          <tr className="*:px-4 *:py-3 *:whitespace-nowrap *:text-center font-bold border-b">
             <th>SL</th>
             <th>Member Name</th>
             <th>Phone</th>

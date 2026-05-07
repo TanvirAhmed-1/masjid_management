@@ -80,12 +80,15 @@ function AddRamadanModal() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="w-full md:max-w-6xl">
-        <DialogHeader>
-          <DialogTitle className="font-semibold text-2xl">
-            Create Iftar List
-          </DialogTitle>
-        </DialogHeader>
+      <DialogContent className="w-full md:max-w-2xl overflow-hidden p-0 border-none shadow-2xl">
+        <div className="bg-gradient-to-r from-teal-600 to-emerald-600 p-6 text-white">
+          <DialogHeader>
+            <DialogTitle className="font-bold text-2xl text-white">
+              Create Iftar List
+            </DialogTitle>
+            <p className="text-teal-50/80 text-sm mt-1">Add donors for the Ramadan iftar schedule</p>
+          </DialogHeader>
+        </div>
 
         <FormProviderWrapper<OthersCollectionForm>
           defaultValues={{
@@ -96,8 +99,8 @@ function AddRamadanModal() {
           }}
           onSubmit={onSubmit}
         >
-          <div className="p-6 max-h-[70vh] overflow-y-auto space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="p-6 max-h-[70vh] overflow-y-auto space-y-6 bg-gray-50/50">
+            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
               <RHFSearchSelect
                 options={ramadanYearOptions}
                 label="Ramadan Year"
@@ -105,22 +108,23 @@ function AddRamadanModal() {
                 placeholder="Select Ramadan Year"
                 rules={{ required: "Ramadan Year is required!" }}
               />
-              <div className="md:flex justify-center items-center hidden">
-                <FcNumericalSorting21 className="size-10 animate-bounce" />
-              </div>
             </div>
 
             <DonerFields />
           </div>
 
-          <DialogFooter className="mt-4 flex justify-end gap-2">
+          <DialogFooter className="p-6 bg-white border-t flex justify-end gap-3">
             <DialogClose asChild>
-              <Button variant="outline" type="button">
+              <Button variant="ghost" type="button" className="text-gray-500 hover:text-gray-700">
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save"}
+            <Button 
+              type="submit" 
+              disabled={isLoading}
+              className="bg-teal-600 hover:bg-teal-700 text-white px-8 shadow-lg shadow-teal-600/20 transition-all active:scale-95"
+            >
+              {isLoading ? "Saving..." : "Save Iftar List"}
             </Button>
           </DialogFooter>
         </FormProviderWrapper>
@@ -158,84 +162,95 @@ function DonerFields() {
 
   return (
     <div className="space-y-4">
-      <div className="font-semibold text-lg mb-2">Add Doner List</div>
+      <div className="flex justify-between items-center px-1">
+        <h3 className="font-bold text-gray-800 text-lg flex items-center gap-2">
+          Donor List
+          <span className="bg-teal-100 text-teal-700 text-xs py-0.5 px-2 rounded-full">{fields.length}</span>
+        </h3>
+      </div>
 
-      {fields.map((field, index) => (
-        <div
-          key={field.id}
-          className="grid grid-cols-1 md:grid-cols-4 gap-3 items-end border p-3 rounded-md bg-gray-50 relative"
-        >
-          <RHFInput
-            label="Serial Number"
-            name={`doners.${index}.serialNumber`}
-            placeholder="Enter serial number"
-            defaultValue={field.serialNumber}
-            rules={{ required: "Serial number required" }}
-          />
-          <RHFInput
-            label="Name"
-            name={`doners.${index}.name`}
-            placeholder="Enter name"
-            defaultValue={field.name}
-            rules={{ required: "Name required" }}
-          />
-          <RHFDatePicker
-            label="Iftar Date"
-            name={`doners.${index}.iftarDate`}
-            placeholder="Select Iftar Date"
-            rules={{ required: "Iftar Date required" }}
-          />
-          {/* <RHFInput
-            label="Day Name"
-            name={`doners.${index}.dayName`}
-            placeholder="e.g., Monday"
-            defaultValue={field.dayName}
-            rules={{ required: "Day name is required!" }}
-          /> */}
+      <div className="space-y-4">
+        {fields.map((field, index) => (
+          <div
+            key={field.id}
+            className="group relative bg-white border border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:border-teal-200"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-2">
+                <div className="col-span-1">
+                  <RHFInput
+                    label="SN"
+                    name={`doners.${index}.serialNumber`}
+                    placeholder="No"
+                    defaultValue={field.serialNumber}
+                    rules={{ required: "Req" }}
+                  />
+                </div>
+                <div className="col-span-2">
+                  <RHFInput
+                    label="Donor Name"
+                    name={`doners.${index}.name`}
+                    placeholder="Full Name"
+                    defaultValue={field.name}
+                    rules={{ required: "Name req" }}
+                  />
+                </div>
+              </div>
 
-          <RHFSearchSelect
-            label="Day Name"
-            name={`doners.${index}.dayName`}
-            placeholder="e.g., Monday"
-            defaultValue={field.dayName}
-            options={dayOptions}
-            rules={{ required: "Day name is required!" }}
-          />
+              <div className="grid grid-cols-2 gap-2">
+                <RHFDatePicker
+                  label="Iftar Date"
+                  name={`doners.${index}.iftarDate`}
+                  placeholder="Select Date"
+                  rules={{ required: "Date req" }}
+                />
+                <RHFSearchSelect
+                  label="Day"
+                  name={`doners.${index}.dayName`}
+                  placeholder="Day"
+                  defaultValue={field.dayName}
+                  options={dayOptions}
+                  rules={{ required: "Day req" }}
+                />
+              </div>
+            </div>
 
-          {fields.length > 1 && (
-            <button
-              type="button"
-              onClick={() => remove(index)}
-              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition"
-              title="Remove Doner"
-            >
-              <IoMdClose size={18} />
-            </button>
-          )}
-        </div>
-      ))}
+            {fields.length > 1 && (
+              <button
+                type="button"
+                onClick={() => remove(index)}
+                className="absolute -top-2 -right-2 bg-white border border-red-100 text-red-500 rounded-full p-1.5 shadow-sm hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100"
+                title="Remove Doner"
+              >
+                <IoMdClose size={16} />
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
 
       {fields.length < 31 && (
-        <div className="flex justify-end">
+        <div className="flex justify-center pt-2">
           <button
             type="button"
             onClick={handleAddDoner}
-            className="text-teal-600 font-medium bg-teal-100 px-3 py-2 rounded-md hover:bg-teal-200 hover:text-teal-700 transition flex items-center gap-1"
+            className="flex items-center gap-2 px-6 py-2.5 rounded-full border-2 border-dashed border-teal-200 text-teal-600 font-semibold hover:bg-teal-50 hover:border-teal-300 transition-all active:scale-95 group"
             title="Add Doner"
           >
-            <IoMdAdd size={20} />
-            Add Doner
+            <IoMdAdd size={20} className="group-hover:rotate-90 transition-transform" />
+            Add Another Donor
           </button>
         </div>
       )}
 
       {fields.length >= 31 && (
-        <p className="text-sm text-red-500 text-right">
-          Maximum 31 doners allowed for this Ramadan year
+        <p className="text-xs text-red-500 text-center font-medium">
+          Maximum 31 donors allowed for this Ramadan year
         </p>
       )}
     </div>
   );
 }
+
 
 export default AddRamadanModal;

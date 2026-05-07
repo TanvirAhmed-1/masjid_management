@@ -38,16 +38,6 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
     });
   }, [year]);
 
-  if (isLoading) return <LoaderScreen />;
-
-  if (isError || !members.length) {
-    return (
-      <Card className="p-10 text-center text-gray-500">
-        No payment data available for {year}
-      </Card>
-    );
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -91,104 +81,120 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
           </thead>
 
           <tbody>
-            {members.map((member: any) => {
-              const monthlyAmount = member.monthlyAmount;
-              const payments = member.payments || [];
+            {isLoading ? (
+              <tr>
+                <td colSpan={17} className="py-10">
+                  <LoaderScreen className="h-auto" />
+                </td>
+              </tr>
+            ) : isError || !members.length ? (
+              <tr>
+                <td colSpan={17} className="py-10 text-center text-gray-500">
+                  No payment data available for {year}
+                </td>
+              </tr>
+            ) : (
+              members.map((member: any) => {
+                const monthlyAmount = member.monthlyAmount;
+                const payments = member.payments || [];
 
-              const totalPaid = payments.reduce(
-                (sum: number, p: any) => sum + p.amount,
-                0,
-              );
+                const totalPaid = payments.reduce(
+                  (sum: number, p: any) => sum + p.amount,
+                  0,
+                );
 
-              /** Find due months */
-              const dueMonths = months.filter(
-                (m) => !payments.some((p: any) => p.monthKey === m.monthKey),
-              );
+                /** Find due months */
+                const dueMonths = months.filter(
+                  (m) => !payments.some((p: any) => p.monthKey === m.monthKey),
+                );
 
-              const dueAmount = dueMonths.length * monthlyAmount;
+                const dueAmount = dueMonths.length * monthlyAmount;
 
-              return (
-                <tr key={member.id} className="border-b text-sm">
-                  {/* MEMBER */}
-                  <td className="px-5 py-3">
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-gray-400" />
-                      <div>
-                        <p className="font-semibold">{member.name}</p>
-                        <p className="text-xs text-gray-500">
-                          {monthlyAmount}৳ / month
-                        </p>
+                return (
+                  <tr key={member.id} className="border-b text-sm">
+                    {/* MEMBER */}
+                    <td className="px-5 py-3">
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4 text-gray-400" />
+                        <div>
+                          <p className="font-semibold">{member.name}</p>
+                          <p className="text-xs text-gray-500">
+                            {monthlyAmount}৳ / month
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </td>
+                    </td>
 
-                  {/* PHONE */}
-                  <td className="px-4 py-3 text-center">
-                    {member.phone || "-"}
-                  </td>
+                    {/* PHONE */}
+                    <td className="px-4 py-3 text-center">
+                      {member.phone || "-"}
+                    </td>
 
-                  {/* MONTH CELLS */}
-                  {months.map((m) => {
-                    const payment = payments.find(
-                      (p: any) => p.monthKey === m.monthKey,
-                    );
+                    {/* MONTH CELLS */}
+                    {months.map((m) => {
+                      const payment = payments.find(
+                        (p: any) => p.monthKey === m.monthKey,
+                      );
 
-                    return (
-                      <td key={m.monthKey} className="px-4 py-3 text-center">
-                        {payment ? (
-                          <>
-                            <span className="text-green-600 font-semibold">
-                              {payment.amount}৳
+                      return (
+                        <td key={m.monthKey} className="px-4 py-3 text-center">
+                          {payment ? (
+                            <>
+                              <span className="text-green-600 font-semibold">
+                                {payment.amount}৳
+                              </span>
+                              <p className="text-[10px] text-gray-500">
+                                {format(
+                                  new Date(payment.paidDate),
+                                  "dd MMM yyyy",
+                                )}
+                              </p>
+                            </>
+                          ) : (
+                            <span className="text-red-500 font-semibold">
+                              —
                             </span>
-                            <p className="text-[10px] text-gray-500">
-                              {format(
-                                new Date(payment.paidDate),
-                                "dd MMM yyyy",
-                              )}
-                            </p>
-                          </>
-                        ) : (
-                          <span className="text-red-500 font-semibold">—</span>
-                        )}
-                      </td>
-                    );
-                  })}
+                          )}
+                        </td>
+                      );
+                    })}
 
-                  {/* TOTAL PAID */}
-                  <td className="px-4 py-3 text-center font-bold text-green-600">
-                    {totalPaid}৳
-                  </td>
+                    {/* TOTAL PAID */}
+                    <td className="px-4 py-3 text-center font-bold text-green-600">
+                      {totalPaid}৳
+                    </td>
 
-                  {/* DUE MONTHS */}
-                  <td className="px-4 py-3 text-center w-44">
-                    {dueMonths.length === 0 ? (
-                      <span className="text-green-600 font-semibold">
-                        Clear
-                      </span>
-                    ) : (
-                      <div>
-                        <p className="font-bold text-[11px] text-red-600">
-                          {dueMonths.length} month
-                          {dueMonths.length > 1 ? "s" : ""}
-                        </p>
-                        <p className="text-[11px] flex flex-wrap text-gray-500">
-                          {dueMonths.map((m) => m.monthName).join(", ")}
-                        </p>
-                      </div>
-                    )}
-                  </td>
+                    {/* DUE MONTHS */}
+                    <td className="px-4 py-3 text-center w-44">
+                      {dueMonths.length === 0 ? (
+                        <span className="text-green-600 font-semibold">
+                          Clear
+                        </span>
+                      ) : (
+                        <div>
+                          <p className="font-bold text-[11px] text-red-600">
+                            {dueMonths.length} month
+                            {dueMonths.length > 1 ? "s" : ""}
+                          </p>
+                          <p className="text-[11px] flex flex-wrap text-gray-500">
+                            {dueMonths.map((m) => m.monthName).join(", ")}
+                          </p>
+                        </div>
+                      )}
+                    </td>
 
-                  {/* DUE AMOUNT */}
-                  <td
-                    className={`px-4 py-3 text-center font-bold ${
-                      dueAmount > 0 ? "text-red-600" : "text-green-600"
-                    }`}
-                  >
-                    {dueAmount > 0 ? `${dueAmount}৳` : "Clear"}
-                  </td>
-                </tr>
-              );
-            })}
+                    {/* DUE AMOUNT */}
+                    <td
+                      className={`px-4 py-3 text-center font-bold ${
+                        dueAmount > 0 ? "text-red-600" : "text-green-600"
+                      }`}
+                    >
+                      {dueAmount > 0 ? `${dueAmount}৳` : "Clear"}
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>

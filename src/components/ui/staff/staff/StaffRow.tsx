@@ -43,12 +43,7 @@ const StaffRow: React.FC<Props> = ({
 }) => {
   const [deleteStaff] = useDeleteStaffMutation();
 
-  if (isLoading) return <LoaderScreen />;
-  if (isFetching) return <FetchingLoader />;
 
-  if (!data.length) {
-    return <p className="text-center py-6 text-gray-600">No Data Available</p>;
-  }
   const handleDelete = async (id: string) => {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -85,7 +80,20 @@ const StaffRow: React.FC<Props> = ({
         </thead>
 
         <tbody className="divide-y bg-white">
-          {data?.map((row, index) => (
+          {isLoading || isFetching ? (
+            <tr>
+              <td colSpan={8} className="py-10">
+                <LoaderScreen className="h-auto" />
+              </td>
+            </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={8} className="py-10 text-center text-gray-500">
+                No Data Available
+              </td>
+            </tr>
+          ) : (
+            data?.map((row, index) => (
             <tr key={row.id} className="hover:bg-gray-50 text-center *:py-3 *:px-2 *:whitespace-nowrap">
               <td>{(page - 1) * limit + index + 1}</td>
               <td>{row.name}</td>
@@ -109,7 +117,8 @@ const StaffRow: React.FC<Props> = ({
                 </div>
               </td>
             </tr>
-          ))}
+            ))
+          )}
         </tbody>
       </table>
     </div>

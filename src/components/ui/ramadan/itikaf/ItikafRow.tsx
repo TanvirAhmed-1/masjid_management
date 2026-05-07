@@ -59,16 +59,7 @@ const ItikafRow = ({
     });
   };
 
-  if (isLoading) {
-    return <LoaderScreen />;
-  }
 
-  if (data?.length === 0) {
-    return <p className="text-center py-6">No Itikaf Found</p>;
-  }
-  if (isFetching) {
-    return <FetchingLoader />;
-  }
 
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md bg-white">
@@ -84,7 +75,20 @@ const ItikafRow = ({
         </thead>
 
         <tbody className="divide-y divide-gray-200">
-          {data?.map((itikaf: ItikafData, index: number) => (
+          {isLoading || isFetching ? (
+            <tr>
+              <td colSpan={5} className="py-10">
+                <LoaderScreen className="h-auto" />
+              </td>
+            </tr>
+          ) : data?.length === 0 ? (
+            <tr>
+              <td colSpan={5} className="py-10 text-center text-gray-500">
+                No Itikaf Found
+              </td>
+            </tr>
+          ) : (
+            data?.map((itikaf: ItikafData, index: number) => (
             <tr
               key={itikaf.id}
               className="hover:bg-gray-50 transition-colors *:px-5 *:py-3 *:text-center *:whitespace-nowrap"
@@ -117,7 +121,8 @@ const ItikafRow = ({
                 </div>
               </td>
             </tr>
-          ))}
+            ))
+          )}
         </tbody>
       </table>
     </div>

@@ -26,12 +26,7 @@ const IftarListTable: React.FC<Props> = ({
 }) => {
   const [removeIftar] = useDeletedonernameMutation();
 
-  if (isLoading) return <LoaderScreen />;
 
-  if (!data || data.length === 0) {
-    return <p className="text-center py-6 text-gray-600">No Data Available</p>;
-  }
-  if (isFetching) return <FetchingLoader />;
   const rows =
     data?.flatMap((list: IftarListResponse) =>
       list.doners.map((doner: Doner) => ({
@@ -41,8 +36,7 @@ const IftarListTable: React.FC<Props> = ({
       })),
     ) || [];
 
-  if (rows.length === 0)
-    return <p className="text-center py-6 text-gray-600">No Data Available</p>;
+
 
   const handleDelete = async (id: string) => {
     Swal.fire({
@@ -81,7 +75,20 @@ const IftarListTable: React.FC<Props> = ({
         </thead>
 
         <tbody className="divide-y bg-white">
-          {rows.map((row: any, index: number) => (
+          {isLoading || isFetching ? (
+            <tr>
+              <td colSpan={7} className="py-10">
+                <LoaderScreen className="h-auto" />
+              </td>
+            </tr>
+          ) : rows.length === 0 ? (
+            <tr>
+              <td colSpan={7} className="py-10 text-center text-gray-500">
+                No Data Available
+              </td>
+            </tr>
+          ) : (
+            rows.map((row: any, index: number) => (
             <tr
               key={row.id}
               className="hover:bg-gray-50 text-center *:px-4 *:py-3"
@@ -107,7 +114,8 @@ const IftarListTable: React.FC<Props> = ({
                 </div>
               </td>
             </tr>
-          ))}
+            ))
+          )}
         </tbody>
       </table>
     </div>

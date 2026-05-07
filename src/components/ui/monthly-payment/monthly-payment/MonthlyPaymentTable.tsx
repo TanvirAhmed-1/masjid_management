@@ -57,12 +57,7 @@ export default function MonthlyPaymentsTable({
     });
   };
 
-  if (isLoading) {
-    return <LoaderScreen />;
-  }
-  if (isFetching) {
-    return <FetchingLoader />;
-  }
+
 
   return (
     <div className="bg-white rounded-lg shadow-xl border overflow-hidden">
@@ -82,7 +77,20 @@ export default function MonthlyPaymentsTable({
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {data?.map((member: PaymentType, index: number) => (
+              {isLoading || isFetching ? (
+                <tr>
+                  <td colSpan={8} className="py-10">
+                    <LoaderScreen className="h-auto" />
+                  </td>
+                </tr>
+              ) : data.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="py-10 text-center text-gray-500">
+                    No records found.
+                  </td>
+                </tr>
+              ) : (
+                data?.map((member: PaymentType, index: number) => (
                 <tr
                   key={member.id}
                   className="text-sm *:text-center *:py-2 *:px-3 hover:bg-gray-50 *:whitespace-nowrap"
@@ -110,7 +118,8 @@ export default function MonthlyPaymentsTable({
                     </div>
                   </td>
                 </tr>
-              ))}
+                ))
+              )}
             </tbody>
           </table>
         </div>

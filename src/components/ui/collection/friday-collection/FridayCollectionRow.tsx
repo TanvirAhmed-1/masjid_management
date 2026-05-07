@@ -54,9 +54,7 @@ const FridayCollectionRow: React.FC<Props> = ({
       });
   };
 
-  if (isLoading) {
-    return <LoaderScreen />;
-  }
+
 
   if (isError) {
     return <p className="p-4 text-red-500">Error fetching data.</p>;
@@ -75,7 +73,13 @@ const FridayCollectionRow: React.FC<Props> = ({
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {data && data?.length > 0 ? (
+          {isLoading ? (
+            <tr>
+              <td colSpan={5} className="py-10">
+                <LoaderScreen className="h-auto" />
+              </td>
+            </tr>
+          ) : data && data?.length > 0 ? (
             data?.map((item: Collection, index: number) => (
               <tr
                 key={index}

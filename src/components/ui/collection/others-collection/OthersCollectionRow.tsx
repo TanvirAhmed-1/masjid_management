@@ -43,14 +43,7 @@ const OthersCollectionRow = ({
         error("Failed to delete Collection");
       });
   };
-  if (isLoading) {
-    return <LoaderScreen />;
-  }
-  if (isFetching) {
-    return <FetchingLoader />;
-  }
-  if (isError) return <div>Error loading data.</div>;
-  if (!data || data.length === 0) return <div>No collections found.</div>;
+
 
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
@@ -65,58 +58,78 @@ const OthersCollectionRow = ({
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {data.map((collection, index) => {
-            const totalAmount = collection.donors.reduce(
-              (acc, donor) => acc + donor.amount,
-              0,
-            );
+          {isLoading || isFetching ? (
+            <tr>
+              <td colSpan={5} className="py-10">
+                <LoaderScreen className="h-auto" />
+              </td>
+            </tr>
+          ) : isError ? (
+            <tr>
+              <td colSpan={5} className="py-10 text-center text-red-500">
+                Error loading data.
+              </td>
+            </tr>
+          ) : !data || data.length === 0 ? (
+            <tr>
+              <td colSpan={5} className="py-10 text-center text-gray-500">
+                No collections found.
+              </td>
+            </tr>
+          ) : (
+            data.map((collection, index) => {
+              const totalAmount = collection.donors.reduce(
+                (acc, donor) => acc + donor.amount,
+                0,
+              );
 
-            return (
-              <tr
-                key={collection.id}
-                className="hover:bg-gray-50 text-center *:whitespace-nowrap"
-              >
-                <td>{(page - 1) * limit + index + 1}</td>
-                <td className="px-4 py-3">
-                  {collection.otherCollectionName.title}
-                </td>
-                <td className="px-4 py-3">
-                  {collection.donors.length > 0
-                    ? collection.donors.length
-                    : "-"}
-                </td>
-                <td className="px-4 py-3">{totalAmount}</td>
-                <td className="px-4 py-3">
-                  <div className="flex flex-row gap-2 justify-center items-center">
-                    {/* View Button */}
-                    <Link href={`/others-collection/${collection.id}`}>
+              return (
+                <tr
+                  key={collection.id}
+                  className="hover:bg-gray-50 text-center *:whitespace-nowrap"
+                >
+                  <td>{(page - 1) * limit + index + 1}</td>
+                  <td className="px-4 py-3">
+                    {collection.otherCollectionName.title}
+                  </td>
+                  <td className="px-4 py-3">
+                    {collection.donors.length > 0
+                      ? collection.donors.length
+                      : "-"}
+                  </td>
+                  <td className="px-4 py-3">{totalAmount}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-row gap-2 justify-center items-center">
+                      {/* View Button */}
+                      <Link href={`/others-collection/${collection.id}`}>
+                        <Button
+                          type="button"
+                          className="bg-teal-500 hover:bg-teal-700 text-white rounded cursor-pointer"
+                          size="sm"
+                          title="View"
+                        >
+                          <FaEye /> Doners ({collection.donors.length})
+                        </Button>
+                      </Link>
+
+                      {/* <EditCollectionModal data={collection} /> */}
+
+                      {/* Delete */}
                       <Button
                         type="button"
-                        className="bg-teal-500 hover:bg-teal-700 text-white rounded cursor-pointer"
+                        onClick={() => handleDelete(collection.id)}
+                        className="bg-red-500 hover:bg-red-700 text-white rounded cursor-pointer"
                         size="sm"
-                        title="View"
+                        title="Delete"
                       >
-                        <FaEye /> Doners ({collection.donors.length})
+                        <FaTrashAlt />
                       </Button>
-                    </Link>
-
-                    {/* <EditCollectionModal data={collection} /> */}
-
-                    {/* Delete */}
-                    <Button
-                      type="button"
-                      onClick={() => handleDelete(collection.id)}
-                      className="bg-red-500 hover:bg-red-700 text-white rounded cursor-pointer"
-                      size="sm"
-                      title="Delete"
-                    >
-                      <FaTrashAlt />
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
     </div>

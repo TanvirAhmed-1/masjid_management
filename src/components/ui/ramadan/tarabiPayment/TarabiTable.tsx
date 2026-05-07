@@ -43,9 +43,7 @@ const TarabiTable: React.FC<Props> = ({
       error("Failed to delete payment");
     }
   };
-  if (isFetching) return <FetchingLoader />;
-  if (isLoading) return <LoaderScreen />;
-  if (isError) return <p className="p-4 text-red-500">Error fetching data.</p>;
+
 
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mt-4">
@@ -64,7 +62,19 @@ const TarabiTable: React.FC<Props> = ({
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {data && data.length > 0 ? (
+          {isLoading || isFetching ? (
+            <tr>
+              <td colSpan={9} className="py-10">
+                <LoaderScreen className="h-auto" />
+              </td>
+            </tr>
+          ) : isError ? (
+            <tr>
+              <td colSpan={9} className="py-10 text-center text-red-500">
+                Error fetching data.
+              </td>
+            </tr>
+          ) : data && data.length > 0 ? (
             data.map((item, index) => (
               <tr
                 key={item.id}
@@ -109,7 +119,7 @@ const TarabiTable: React.FC<Props> = ({
           ) : (
             <tr>
               <td
-                colSpan={7}
+                colSpan={9}
                 className="px-4 py-10 text-center text-gray-500 font-medium"
               >
                 No Tarabi payment records found.

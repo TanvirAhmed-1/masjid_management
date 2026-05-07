@@ -58,8 +58,7 @@ const MemberTable = ({
     });
   };
 
-  if (isLoading) return <LoaderScreen />;
-  if (isFetching) return <FetchingLoader />;
+
 
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md bg-white">
@@ -76,7 +75,20 @@ const MemberTable = ({
         </thead>
 
         <tbody className="bg-white divide-y divide-gray-200">
-          {members?.map((member: MemberType, index: number) => (
+          {isLoading || isFetching ? (
+            <tr>
+              <td colSpan={6} className="py-10">
+                <LoaderScreen className="h-auto" />
+              </td>
+            </tr>
+          ) : members.length === 0 ? (
+            <tr>
+              <td colSpan={6} className="py-10 text-center text-gray-500">
+                No members found.
+              </td>
+            </tr>
+          ) : (
+            members?.map((member: MemberType, index: number) => (
             <tr
               key={member.id}
               className="text-sm *:text-center *:py-2 *:px-3 hover:bg-gray-50  *:whitespace-nowrap"
@@ -108,7 +120,8 @@ const MemberTable = ({
                 </div>
               </td>
             </tr>
-          ))}
+            ))
+          )}
         </tbody>
       </table>
     </div>

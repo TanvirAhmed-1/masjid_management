@@ -1,11 +1,11 @@
-import React from "react";
+import { cn } from "@/src/lib/utils";
 import { FaMosque } from "react-icons/fa";
 type Props = {
   className?: string;
 };
 const LoaderScreen = ({ className }: Props) => {
   return (
-    <div className={`flex items-center justify-center h-[500px]  ${className}`}>
+    <div className={cn("flex items-center justify-center h-[500px]", className)}>
       <div className="text-center">
         {/* Mosque Icon with Animation */}
         <div className="relative inline-block mb-8">

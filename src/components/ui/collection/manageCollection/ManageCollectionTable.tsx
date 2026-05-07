@@ -30,9 +30,7 @@ const ManageCollectionTable = ({
   const [deleteCollection] = useDeleteDonerCollectionMutation();
   const { confirm, success, error } = useConfirm();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading data.</div>;
-  if (data.length === 0) return <div>No donors found.</div>;
+
 
   const donors = data.flatMap((collection) =>
     collection.donors.map((donor) => ({
@@ -56,22 +54,7 @@ const ManageCollectionTable = ({
     }
   };
 
-  if (isLoading) {
-    return <LoaderScreen />;
-  }
-  if (isError)
-    return (
-      <div className="text-red-500 flex justify-center items-center h-svh">
-        Error loading data.
-      </div>
-    );
-  if (donors.length === 0)
-    return (
-      <div className="text-red-500 flex justify-center items-center h-svh">
-        No donors found.
-      </div>
-    );
-  if (isFetching) return <FetchingLoader />;
+
 
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
@@ -87,7 +70,26 @@ const ManageCollectionTable = ({
         </thead>
 
         <tbody className="divide-y divide-gray-200">
-          {donors.map((donor: Donor, index: number) => (
+          {isLoading || isFetching ? (
+            <tr>
+              <td colSpan={5} className="py-10">
+                <LoaderScreen className="h-auto" />
+              </td>
+            </tr>
+          ) : isError ? (
+            <tr>
+              <td colSpan={5} className="py-10 text-center text-red-500">
+                Error loading data.
+              </td>
+            </tr>
+          ) : donors.length === 0 ? (
+            <tr>
+              <td colSpan={5} className="py-10 text-center text-gray-500">
+                No donors found.
+              </td>
+            </tr>
+          ) : (
+            donors.map((donor: Donor, index: number) => (
             <tr key={index} className="text-center *:whitespace-nowrap">
               <td className="px-4 py-3">{(page - 1) * limit + index + 1}</td>
               <td className="px-4 py-3">{donor.name}</td>
@@ -106,7 +108,8 @@ const ManageCollectionTable = ({
                 </Button>
               </td>
             </tr>
-          ))}
+            ))
+          )}
         </tbody>
       </table>
     </div>

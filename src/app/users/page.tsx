@@ -13,9 +13,7 @@ type User = {
 export default function UserList() {
   const { data: users, error, isLoading } = useGetAllUsersQuery(undefined);
 
-    if (isLoading) {
-    return <LoaderScreen />;
-  }
+
 
   if (error) {
     const errorMessage =
@@ -31,7 +29,9 @@ export default function UserList() {
     <div className="p-4 max-w-xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">All Registered Users</h2>
       <ul className="space-y-2">
-        {users?.map((user: User) => (
+        {isLoading ? (
+          <LoaderScreen className="h-auto py-10" />
+        ) : users?.map((user: User) => (
           <li key={user._id} className="p-3 border rounded shadow-sm">
             <p>
               <strong>Name:</strong> {user.name || user.username}

@@ -9,9 +9,7 @@ const RamadanListPage = () => {
   const id = params.id as string;
   const { data: ifterlist, isLoading } = useGetifterlistbyidQuery(id);
 
-  if (isLoading) {
-    return <LoaderScreen />;
-  }
+
 
   const data = ifterlist?.result || [];
 
@@ -38,7 +36,20 @@ const RamadanListPage = () => {
           </thead>
 
           <tbody>
-            {data.flatMap((item: any) =>
+            {isLoading ? (
+              <tr>
+                <td colSpan={4} className="py-10">
+                  <LoaderScreen className="h-auto" />
+                </td>
+              </tr>
+            ) : data.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="py-10 text-center text-gray-500">
+                  No records found.
+                </td>
+              </tr>
+            ) : (
+              data.flatMap((item: any) =>
               item.doners?.map((doner: any) => (
                 <tr key={doner.id} className="text-center hover:bg-gray-100">
                   <td className="p-2 border">{doner.serialNumber}</td>
@@ -48,8 +59,9 @@ const RamadanListPage = () => {
                   </td>
                   <td className="p-2 border">{doner.dayName}</td>
                 </tr>
-              )),
-            )}
+              ))
+            )
+          )}
           </tbody>
         </table>
       </div>

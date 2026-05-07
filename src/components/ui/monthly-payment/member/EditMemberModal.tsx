@@ -1,6 +1,8 @@
 "use client";
 
+import React, { useState } from "react";
 import { Button } from "@/src/components/ui/button";
+import toast from "react-hot-toast";
 import {
   Dialog,
   DialogClose,
@@ -27,19 +29,22 @@ type EditMemberModalProps = {
 };
 
 function EditMemberModal({ member }: EditMemberModalProps) {
+  const [open, setOpen] = useState(false);
   const [updateMember, { isLoading }] = useUpdateMemberMutation();
 
   const onSubmit = async (data: MemberFormData) => {
     try {
       const result = await updateMember({ id: member.id, ...data }).unwrap();
       console.log("Member updated successfully:", result);
+      toast.success("Member updated successfully!");
+      setOpen(false);
     } catch (error) {
       console.log("Error updating member:", error);
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           type="button"

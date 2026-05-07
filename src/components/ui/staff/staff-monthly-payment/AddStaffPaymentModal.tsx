@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { Button } from "@/src/components/ui/button";
 import {
@@ -26,6 +27,7 @@ type FormData = {
 };
 
 function AddStaffPaymentModal() {
+  const [open, setOpen] = useState(false);
   const [monthlyPaymenttaff, { isLoading }] =
     useCreateStaffMonthlyPaymentMutation();
   const { data } = useGetStaffListQuery(undefined);
@@ -39,6 +41,7 @@ function AddStaffPaymentModal() {
     try {
       const res = await monthlyPaymenttaff(payload).unwrap();
       toast.success(res?.message || "Staff payment created successfully");
+      setOpen(false);
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to create staff payment");
     }
@@ -49,7 +52,7 @@ function AddStaffPaymentModal() {
     value: staff.id,
   }));
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2">
           <IoMdAdd className="text-lg" />

@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { Button } from "@/src/components/ui/button";
 import {
@@ -37,6 +38,7 @@ type MosqueCreateFormData = {
 };
 
 function MosqueCreate() {
+  const [open, setOpen] = useState(false);
   const [createMosque, { isLoading }] = useCreateMosqueMutation();
 
   const onSubmit = async (data: MosqueCreateFormData) => {
@@ -68,6 +70,7 @@ function MosqueCreate() {
 
       const result = await createMosque(payload).unwrap();
       toast.success("Mosque & Admin created successfully!");
+      setOpen(false);
       console.log(result);
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to create mosque and admin");
@@ -75,7 +78,7 @@ function MosqueCreate() {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2">
           <IoMdAdd />

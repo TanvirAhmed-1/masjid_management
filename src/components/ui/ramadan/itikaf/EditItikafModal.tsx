@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { Button } from "@/src/components/ui/button";
 import {
   Dialog,
@@ -31,6 +32,7 @@ type props = {
   item: ItikafData;
 };
 function EditItikafModal({ item }: props) {
+  const [open, setOpen] = useState(false);
   const [updateItikaf, { isLoading }] = useUpdateItikafMutation();
   const { data: ramadanYear } = useGetRamadanYearQuery(undefined);
 
@@ -58,13 +60,14 @@ function EditItikafModal({ item }: props) {
           error: "Update failed. Please try again.",
         },
       );
+      setOpen(false);
     } catch (error) {
       console.error("Update error:", error);
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           type="button"

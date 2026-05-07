@@ -36,6 +36,7 @@ type Props = {
 };
 
 function EditStaffModal({ staff }: Props) {
+  const [open, setOpen] = useState(false);
   const [updateStaff, { isLoading }] = useUpdateStaffMutation();
   const [preview, setPreview] = useState<string | null>(staff.image ?? null);
 
@@ -60,13 +61,14 @@ function EditStaffModal({ staff }: Props) {
     try {
       const res = await updateStaff({ id: staff.id, data: payload }).unwrap();
       toast.success(res?.message || "Staff updated successfully");
+      setOpen(false);
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to update staff");
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           type="button"

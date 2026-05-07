@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { IoMdAdd, IoMdClose } from "react-icons/io";
 import { Button } from "@/src/components/ui/button";
 import {
@@ -34,6 +35,7 @@ type OthersCollectionForm = {
 };
 
 function AddRamadanModal() {
+  const [open, setOpen] = useState(false);
   const [createIftar, { isLoading }] = useCreateifterlistMutation();
   const { data: ramadanYear } = useGetRamadanYearQuery(undefined);
 
@@ -62,6 +64,7 @@ function AddRamadanModal() {
       const result = await createIftar(payload).unwrap();
       console.log("Iftar list created successfully", result);
       toast.success("Iftar list created successfully!");
+      setOpen(false);
     } catch (error: any) {
       console.log("Iftar creation error", error);
       toast.error(error?.data?.message || "Failed to create iftar list");
@@ -69,7 +72,7 @@ function AddRamadanModal() {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-teal-500 hover:bg-teal-600 text-white font-medium flex justify-center items-center gap-1">
           <IoMdAdd />

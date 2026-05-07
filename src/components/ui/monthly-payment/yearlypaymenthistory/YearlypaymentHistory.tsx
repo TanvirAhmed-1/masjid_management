@@ -38,6 +38,41 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
     });
   }, [year]);
 
+  const processedMembers = useMemo(() => {
+    return members.map((member: any) => {
+      const monthlyAmount = member.monthlyAmount || 0;
+      const payments = member.payments || [];
+
+      const totalPaid = payments.reduce(
+        (sum: number, p: any) => sum + p.amount,
+        0,
+      );
+
+      /** Find due months */
+      const memberDueMonths = months.filter(
+        (m) => !payments.some((p: any) => p.monthKey === m.monthKey),
+      );
+
+      const dueAmount = memberDueMonths.length * monthlyAmount;
+
+      const monthCells = months.map((m) => {
+        const payment = payments.find((p: any) => p.monthKey === m.monthKey);
+        return {
+          monthKey: m.monthKey,
+          payment,
+        };
+      });
+
+      return {
+        ...member,
+        totalPaid,
+        dueMonths: memberDueMonths,
+        dueAmount,
+        monthCells,
+      };
+    });
+  }, [members, months]);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -87,113 +122,88 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
                   <LoaderScreen className="h-auto" />
                 </td>
               </tr>
-            ) : isError || !members.length ? (
+            ) : isError || !processedMembers.length ? (
               <tr>
                 <td colSpan={17} className="py-10 text-center text-gray-500">
                   No payment data available for {year}
                 </td>
               </tr>
             ) : (
-              members.map((member: any) => {
-                const monthlyAmount = member.monthlyAmount;
-                const payments = member.payments || [];
-
-                const totalPaid = payments.reduce(
-                  (sum: number, p: any) => sum + p.amount,
-                  0,
-                );
-
-                /** Find due months */
-                const dueMonths = months.filter(
-                  (m) => !payments.some((p: any) => p.monthKey === m.monthKey),
-                );
-
-                const dueAmount = dueMonths.length * monthlyAmount;
-
-                return (
-                  <tr key={member.id} className="border-b text-sm">
-                    {/* MEMBER */}
-                    <td className="px-5 py-3">
-                      <div className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-gray-400" />
-                        <div>
-                          <p className="font-semibold">{member.name}</p>
-                          <p className="text-xs text-gray-500">
-                            {monthlyAmount}৳ / month
-                          </p>
-                        </div>
+              processedMembers.map((member: any) => (
+                <tr key={member.id} className="border-b text-sm">
+                  {/* MEMBER */}
+                  <td className="px-5 py-3">
+                    <div className="flex items-center gap-2">
+                      <User className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <p className="font-semibold">{member.name}</p>
+                        <p className="text-xs text-gray-500">
+                          {member.monthlyAmount}৳ / month
+                        </p>
                       </div>
-                    </td>
+                    </div>
+                  </td>
 
-                    {/* PHONE */}
-                    <td className="px-4 py-3 text-center">
-                      {member.phone || "-"}
-                    </td>
+                  {/* PHONE */}
+                  <td className="px-4 py-3 text-center">
+                    {member.phone || "-"}
+                  </td>
 
-                    {/* MONTH CELLS */}
-                    {months.map((m) => {
-                      const payment = payments.find(
-                        (p: any) => p.monthKey === m.monthKey,
-                      );
-
-                      return (
-                        <td key={m.monthKey} className="px-4 py-3 text-center">
-                          {payment ? (
-                            <>
-                              <span className="text-green-600 font-semibold">
-                                {payment.amount}৳
-                              </span>
-                              <p className="text-[10px] text-gray-500">
-                                {format(
-                                  new Date(payment.paidDate),
-                                  "dd MMM yyyy",
-                                )}
-                              </p>
-                            </>
-                          ) : (
-                            <span className="text-red-500 font-semibold">
-                              —
-                            </span>
-                          )}
-                        </td>
-                      );
-                    })}
-
-                    {/* TOTAL PAID */}
-                    <td className="px-4 py-3 text-center font-bold text-green-600">
-                      {totalPaid}৳
-                    </td>
-
-                    {/* DUE MONTHS */}
-                    <td className="px-4 py-3 text-center w-44">
-                      {dueMonths.length === 0 ? (
-                        <span className="text-green-600 font-semibold">
-                          Clear
-                        </span>
+                  {/* MONTH CELLS */}
+                  {member.monthCells.map((cell: any) => (
+                    <td key={cell.monthKey} className="px-4 py-3 text-center">
+                      {cell.payment ? (
+                        <>
+                          <span className="text-green-600 font-semibold">
+                            {cell.payment.amount}৳
+                          </span>
+                          <p className="text-[10px] text-gray-500">
+                            {format(
+                              new Date(cell.payment.paidDate),
+                              "dd MMM yyyy",
+                            )}
+                          </p>
+                        </>
                       ) : (
-                        <div>
-                          <p className="font-bold text-[11px] text-red-600">
-                            {dueMonths.length} month
-                            {dueMonths.length > 1 ? "s" : ""}
-                          </p>
-                          <p className="text-[11px] flex flex-wrap text-gray-500">
-                            {dueMonths.map((m) => m.monthName).join(", ")}
-                          </p>
-                        </div>
+                        <span className="text-red-500 font-semibold">—</span>
                       )}
                     </td>
+                  ))}
 
-                    {/* DUE AMOUNT */}
-                    <td
-                      className={`px-4 py-3 text-center font-bold ${
-                        dueAmount > 0 ? "text-red-600" : "text-green-600"
-                      }`}
-                    >
-                      {dueAmount > 0 ? `${dueAmount}৳` : "Clear"}
-                    </td>
-                  </tr>
-                );
-              })
+                  {/* TOTAL PAID */}
+                  <td className="px-4 py-3 text-center font-bold text-green-600">
+                    {member.totalPaid}৳
+                  </td>
+
+                  {/* DUE MONTHS */}
+                  <td className="px-4 py-3 text-center w-44">
+                    {member.dueMonths.length === 0 ? (
+                      <span className="text-green-600 font-semibold">
+                        Clear
+                      </span>
+                    ) : (
+                      <div>
+                        <p className="font-bold text-[11px] text-red-600">
+                          {member.dueMonths.length} month
+                          {member.dueMonths.length > 1 ? "s" : ""}
+                        </p>
+                        <p className="text-[11px] flex flex-wrap text-gray-500">
+                          {member.dueMonths.map((m: any) => m.monthName).join(", ")}
+                        </p>
+                      </div>
+                    )}
+                  </td>
+
+                  {/* DUE AMOUNT */}
+                  <td
+                    className={`px-4 py-3 text-center font-bold ${
+                      member.dueAmount > 0 ? "text-red-600" : "text-green-600"
+                    }`}
+                  >
+                    {member.dueAmount > 0 ? `${member.dueAmount}৳` : "Clear"}
+                  </td>
+                </tr>
+              ))
             )}
           </tbody>
         </table>

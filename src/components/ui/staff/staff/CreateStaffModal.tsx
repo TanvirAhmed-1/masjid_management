@@ -30,6 +30,7 @@ type FormData = {
 };
 
 function CreateStaffModal() {
+  const [open, setOpen] = useState(false);
   const [createStaff, { isLoading }] = useCreateStaffMutation();
   const [preview, setPreview] = useState<string | null>(null); // ✅ image preview
 
@@ -46,13 +47,14 @@ function CreateStaffModal() {
     try {
       const res = await createStaff(payload).unwrap();
       toast.success(res?.message || "Staff created successfully");
+      setOpen(false);
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to create staff");
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2">
           <IoMdAdd className="text-lg" />

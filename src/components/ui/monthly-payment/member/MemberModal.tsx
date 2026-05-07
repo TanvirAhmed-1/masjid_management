@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { Button } from "@/src/components/ui/button";
 import {
@@ -25,6 +26,7 @@ type MemberFormData = {
 };
 
 function MemberModal() {
+  const [open, setOpen] = useState(false);
   const [createMember, { isLoading }] = useCreateMemberMutation();
 
 
@@ -43,6 +45,7 @@ const onSubmit = async (data: MemberFormData) => {
     console.log("Member created successfully:", result);
 
     toast.success("Member created successfully!");
+    setOpen(false);
   } catch (error: any) {
     console.error("Error creating member:", error);
 
@@ -54,7 +57,7 @@ const onSubmit = async (data: MemberFormData) => {
 
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2 font-medium">
           <IoMdAdd className="text-lg" />

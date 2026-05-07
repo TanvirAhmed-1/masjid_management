@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useMemo } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { Button } from "../../button";
 import Swal from "sweetalert2";
@@ -27,14 +28,17 @@ const IftarListTable: React.FC<Props> = ({
   const [removeIftar] = useDeletedonernameMutation();
 
 
-  const rows =
-    data?.flatMap((list: IftarListResponse) =>
-      list.doners.map((doner: Doner) => ({
-        ...doner,
-        ramadanYear: list.ramadanyear?.ramadanYear ?? "-",
-        ramadanyearId: list.ramadanyearId,
-      })),
-    ) || [];
+  const rows = useMemo(() => {
+    return (
+      data?.flatMap((list: IftarListResponse) =>
+        list.doners.map((doner: Doner) => ({
+          ...doner,
+          ramadanYear: list.ramadanyear?.ramadanYear ?? "-",
+          ramadanyearId: list.ramadanyearId,
+        })),
+      ) || []
+    );
+  }, [data]);
 
 
 

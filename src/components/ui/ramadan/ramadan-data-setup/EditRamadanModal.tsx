@@ -1,6 +1,8 @@
 "use client";
 
+import React, { useState } from "react";
 import { Button } from "@/src/components/ui/button";
+import toast from "react-hot-toast";
 import {
   Dialog,
   DialogClose,
@@ -30,6 +32,7 @@ type ProntProps = {
 };
 
 function EditRamadanModal({ item }: { item: ProntProps }) {
+  const [open, setOpen] = useState(false);
   const [updateYear, { isLoading }] = useUpdateRamadanYearMutation();
 
   const onSubmit = async (data: FormData) => {
@@ -37,6 +40,8 @@ function EditRamadanModal({ item }: { item: ProntProps }) {
     try {
       const result = await updateYear({ id: item.id, data }).unwrap();
       console.log("date create succesfully", result);
+      toast.success("Ramadan Year updated successfully!");
+      setOpen(false);
     } catch (error) {
       console.log("date create Error", error);
     }
@@ -44,7 +49,7 @@ function EditRamadanModal({ item }: { item: ProntProps }) {
 
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           type="button"

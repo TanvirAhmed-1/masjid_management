@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { Button } from "@/src/components/ui/button";
 import {
   Dialog,
@@ -30,6 +31,7 @@ type Props = {
   item: Doner;
 };
 function EditRamadnModal({ item }: Props) {
+  const [open, setOpen] = useState(false);
   const [updateIftar, { isLoading }] = useUpdateifterlistMutation();
 
   const onSubmit = async (data: FormData) => {
@@ -46,6 +48,7 @@ function EditRamadnModal({ item }: Props) {
       const result = await updateIftar({ id: item.id, data: paypoad }).unwrap();
       console.log("Iftar list created successfully", result);
       toast.success("Iftar list Update successfully!");
+      setOpen(false);
     } catch (error: any) {
       console.log("Iftar creation error", error);
       toast.error(error?.data?.message || "Failed to create iftar list");
@@ -53,7 +56,7 @@ function EditRamadnModal({ item }: Props) {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           size="sm"

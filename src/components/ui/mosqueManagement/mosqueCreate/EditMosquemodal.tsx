@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { Button } from "@/src/components/ui/button";
 import {
   Dialog,
@@ -51,6 +52,7 @@ type EditMosqueModalProps = {
 };
 
 function EditMosquemodal({ mosque }: EditMosqueModalProps) {
+  const [open, setOpen] = useState(false);
   const [createMosque, { isLoading }] = useCreateMosqueMutation();
 
   const defaultValues: MosqueCreateFormData = {
@@ -79,13 +81,14 @@ function EditMosquemodal({ mosque }: EditMosqueModalProps) {
     try {
       await createMosque(data).unwrap();
       toast.success("Mosque updated successfully!");
+      setOpen(false);
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to update mosque");
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           type="button"

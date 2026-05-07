@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { Button } from "@/src/components/ui/button";
 import {
@@ -22,19 +23,21 @@ type FormData = {
 };
 
 function RamadanModal() {
+  const [open, setOpen] = useState(false);
   const [createYear, { isLoading }] = useCreateRamadanYearMutation();
 
   const onSubmit = async (data: FormData) => {
     try {
       const result = await createYear(data).unwrap();
       toast.success(`${result.message}`);
+      setOpen(false);
     } catch (error) {
       toast.error("Failed to create Ramadan Year");
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2 font-medium">
           <IoMdAdd className="text-lg" />

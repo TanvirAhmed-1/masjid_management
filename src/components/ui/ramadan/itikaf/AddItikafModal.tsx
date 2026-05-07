@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { Button } from "@/src/components/ui/button";
 import {
@@ -27,6 +28,7 @@ type ItikafFormData = {
 };
 
 function AddItikafModal() {
+  const [open, setOpen] = useState(false);
   const [createItikaf, { isLoading }] = useCreateItikafMutation();
   const { data: ramadanYear } = useGetRamadanYearQuery(undefined);
 
@@ -45,13 +47,14 @@ function AddItikafModal() {
     try {
       const res = await createItikaf(payload).unwrap();
       toast.success(res?.message || "Itikaf created successfully");
+      setOpen(false);
     } catch (error) {
       toast.error("Failed to create Itikaf");
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2 font-medium">
           <IoMdAdd className="text-lg" />

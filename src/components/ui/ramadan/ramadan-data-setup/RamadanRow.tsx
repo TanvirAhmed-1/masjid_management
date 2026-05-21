@@ -6,12 +6,12 @@ import { FaEye, FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 import {
   useDeleteRamadanYearMutation,
-  useGetRamadanYearQuery,
 } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import EditRamadanModal from "./EditRamadanModal";
 import Link from "next/link";
 import ShowItikafListModal from "./ShowItikafListModal";
-import FetchingLoader from "@/src/components/shared/FetchingLoader";
+import LoaderScreen from "@/src/components/shared/LoaderScreen";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 export interface RamadanData {
   id: string;
@@ -21,6 +21,7 @@ export interface RamadanData {
   updatedAt: string;
   userId: string;
 }
+
 type Props = {
   data?: RamadanData[];
   isLoading: boolean;
@@ -31,46 +32,50 @@ type Props = {
 
 const RamadanRow = ({ data, isLoading, isFetching, page, limit }: Props) => {
   const [removeYear] = useDeleteRamadanYearMutation();
+  const { t } = useTranslationContext();
 
-  if (isLoading) {
-    return <p className="text-center py-6">Loading...</p>;
+  if (isLoading || isFetching) {
+    return (
+      <div className="py-16 flex justify-center items-center">
+        <LoaderScreen className="h-auto" />
+      </div>
+    );
   }
 
   if (!data || data.length === 0) {
-    return <p className="text-center py-6">No data available</p>;
+    return (
+      <p className="text-center py-10 text-gray-500 font-medium">
+        No data available
+      </p>
+    );
   }
-
-  if (isFetching) return <FetchingLoader />;
-
-  // delete the item
 
   const handleDelete = async (id: string) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be Delete this Item!",
+      title: t("confirm_title"),
+      text: t("error_occurred"), // or customized warning
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: t("delete_confirm_btn"),
+      cancelButtonText: t("cancel"),
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await removeYear(id).unwrap();
+          await removeYear(id).unwrap();
 
           Swal.fire({
-            title: "Deleted!",
+            title: t("deleted_success_title"),
             text: "Year has been deleted successfully.",
             icon: "success",
-            timer: 1800,
+            timer: 1500,
             showConfirmButton: false,
           });
-
-          console.log("Delete successfully", res);
         } catch (error) {
           Swal.fire({
-            title: "Failed!",
-            text: "Something went wrong!",
+            title: t("failed_title"),
+            text: t("error_occurred"),
             icon: "error",
           });
         }
@@ -83,12 +88,12 @@ const RamadanRow = ({ data, isLoading, isFetching, page, limit }: Props) => {
       <table className="min-w-full border-collapse text-sm text-gray-700">
         <thead className="bg-teal-600 text-white">
           <tr className="*:px-5 *:py-3 *:font-semibold *:text-center  *:whitespace-nowrap">
-            <th>SN</th>
-            <th>Year</th>
-            <th>Title</th>
-            <th>Iftar List</th>
-            <th>Itikaf List</th>
-            <th>Action</th>
+            <th>{t("sn")}</th>
+            <th>{t("year")}</th>
+            <th>{t("title")}</th>
+            <th>{t("iftar_list_col")}</th>
+            <th>{t("itikaf_list_col")}</th>
+            <th>{t("action")}</th>
           </tr>
         </thead>
 
@@ -107,6 +112,7 @@ const RamadanRow = ({ data, isLoading, isFetching, page, limit }: Props) => {
                   <Button
                     size="sm"
                     className="bg-teal-500 hover:bg-teal-600 text-white p-2 rounded"
+                    title={t("view")}
                   >
                     <FaEye size={14} />
                   </Button>
@@ -127,7 +133,7 @@ const RamadanRow = ({ data, isLoading, isFetching, page, limit }: Props) => {
                     onClick={() => handleDelete(item.id)}
                     className="bg-red-500 hover:bg-red-600 text-white p-2  shadow-sm transition-all duration-200"
                     size="sm"
-                    title="Delete"
+                    title={t("delete")}
                   >
                     <FaTrashAlt size={14} />
                   </Button>

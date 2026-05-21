@@ -5,7 +5,7 @@ import { useDeleteCollectionMutation } from "@/src/redux/features/collection/col
 import Link from "next/link";
 import { OtherCollectionType } from "@/src/types/collectionType";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
-import FetchingLoader from "@/src/components/shared/FetchingLoader";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type Props = {
   data: OtherCollectionType[];
@@ -26,6 +26,7 @@ const OthersCollectionRow = ({
 }: Props) => {
   const [deleteCollection] = useDeleteCollectionMutation();
   const { confirm, success, error } = useConfirm();
+  const { t } = useTranslationContext();
 
   const handleDelete = async (id: string) => {
     const isConfirmed = await confirm(
@@ -44,17 +45,16 @@ const OthersCollectionRow = ({
       });
   };
 
-
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
       <table className="min-w-full border-collapse bg-white text-left text-sm text-gray-700">
         <thead className="bg-teal-600 text-white">
           <tr className="text-center *:px-4 *:py-3 *:whitespace-nowrap">
-            <th>Serial No</th>
-            <th>Collection Title</th>
-            <th>Donors</th>
-            <th>Total Amount</th>
-            <th>Action</th>
+            <th>{t("serial_no")}</th>
+            <th>{t("collection_title")}</th>
+            <th>{t("donors")}</th>
+            <th>{t("total_amount")}</th>
+            <th>{t("action")}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -106,13 +106,11 @@ const OthersCollectionRow = ({
                           type="button"
                           className="bg-teal-500 hover:bg-teal-700 text-white rounded cursor-pointer"
                           size="sm"
-                          title="View"
+                          title={t("view")}
                         >
-                          <FaEye /> Doners ({collection.donors.length})
+                          <FaEye /> {t("donors")} ({collection.donors.length})
                         </Button>
                       </Link>
-
-                      {/* <EditCollectionModal data={collection} /> */}
 
                       {/* Delete */}
                       <Button
@@ -120,7 +118,7 @@ const OthersCollectionRow = ({
                         onClick={() => handleDelete(collection.id)}
                         className="bg-red-500 hover:bg-red-700 text-white rounded cursor-pointer"
                         size="sm"
-                        title="Delete"
+                        title={t("delete")}
                       >
                         <FaTrashAlt />
                       </Button>

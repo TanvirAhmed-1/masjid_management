@@ -8,6 +8,7 @@ import Pagination from "@/src/components/shared/Pagination";
 import StaffSearch from "./StaffSearch";
 import StaffRow from "./StaffRow";
 import CreateStaffModal from "./CreateStaffModal";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type SearchFormValues = {
   name?: string;
@@ -18,6 +19,7 @@ const StaffContainer = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [filters, setFilters] = useState<SearchFormValues>();
+  const { t } = useTranslationContext();
 
   const handleSearch = (data?: SearchFormValues) => {
     setFilters(clearqueryObject(data));
@@ -33,7 +35,9 @@ const StaffContainer = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg md:text-3xl font-medium">All Staff List</h3>
+        <h3 className="text-lg md:text-3xl font-medium">
+          {t("all_staff_list")}
+        </h3>
         <CreateStaffModal />
       </div>
 

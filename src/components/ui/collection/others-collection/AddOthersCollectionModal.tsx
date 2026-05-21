@@ -21,6 +21,7 @@ import { useCreateCollectionMutation } from "@/src/redux/features/collection/col
 import { useGetCollectionDataSetUpQuery } from "@/src/redux/features/collection/collectionDataSetUp";
 import toast from "react-hot-toast";
 import LoadingButton from "@/src/components/shared/LoadingButton";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type Doner = {
   name: string;
@@ -36,6 +37,7 @@ type OthersCollectionForm = {
 
 function AddOthersCollectionModal() {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslationContext();
   const { data, isLoading } = useGetCollectionDataSetUpQuery(undefined);
   const [createCollection, { isLoading: isCreating }] =
     useCreateCollectionMutation();
@@ -68,33 +70,33 @@ function AddOthersCollectionModal() {
       <DialogTrigger asChild>
         <Button className="bg-teal-500 hover:bg-teal-600 text-white flex items-center">
           <IoMdAdd className="mr-1" />
-          Add Donation
+          {t("add_donation")}
         </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Add Doner by Donation Type </DialogTitle>
+          <DialogTitle>{t("add_donor_by_donation_type")}</DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper<OthersCollectionForm>
           onSubmit={onSubmit}
-          defaultValues={{ doners: [{ name: "", amount: 0 }] }} // ← start with 1 Doner
+          defaultValues={{ doners: [{ name: "", amount: 0 }] }}
         >
           <div className="p-6 max-h-[70vh] overflow-y-auto">
             <div className="space-y-4">
               <RHFSelect
-                label="Collection Type"
+                label={t("collection_type")}
                 name="otherCollectionNameId"
-                placeholder="Select Collection Type"
-                rules={{ required: "Collection Type is required!" }}
+                placeholder={t("select_collection_type")}
+                rules={{ required: t("collection_type_required") }}
                 options={options || []}
               />
               <RHFDatePicker
-                label="Date"
+                label={t("date")}
                 name="date"
-                placeholder="Enter Date"
-                rules={{ required: "Date is required!" }}
+                placeholder={t("select_start_date")}
+                rules={{ required: t("date_required") }}
               />
 
               {/* Doner Fields */}
@@ -104,9 +106,9 @@ function AddOthersCollectionModal() {
 
           <DialogFooter className="mt-4 flex justify-end gap-2">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("cancel")}</Button>
             </DialogClose>
-            <LoadingButton isLoading={isCreating}>Save</LoadingButton>
+            <LoadingButton isLoading={isCreating}>{t("save")}</LoadingButton>
           </DialogFooter>
         </FormProviderWrapper>
       </DialogContent>
@@ -116,6 +118,7 @@ function AddOthersCollectionModal() {
 
 function DonerFields() {
   const { control, setValue } = useFormContext<OthersCollectionForm>();
+  const { t } = useTranslationContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "doners",
@@ -139,14 +142,14 @@ function DonerFields() {
           className="grid grid-cols-2 gap-3 items-end border p-3 rounded-md bg-gray-50 relative"
         >
           <RHFInput
-            label="Doner Name"
+            label={t("donor_name")}
             name={`doners.${index}.name`}
-            placeholder="Enter Doner Name"
+            placeholder={t("enter_donor_name")}
           />
           <RHFInput
-            label="Amount"
+            label={t("amount")}
             name={`doners.${index}.amount`}
-            placeholder="Enter Amount"
+            placeholder={t("enter_amount")}
           />
 
           {fields.length > 1 && (
@@ -154,7 +157,7 @@ function DonerFields() {
               type="button"
               onClick={() => remove(index)}
               className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition"
-              title="Remove Doner"
+              title={t("delete")}
             >
               <IoMdClose size={18} />
             </button>
@@ -164,13 +167,13 @@ function DonerFields() {
 
       <div className="flex justify-between items-center">
         <div className="mt-4 text-left font-semibold text-lg">
-          Total Amount: <span className="text-teal-600">৳ {total}</span>
+          {t("total_amount_label")}: <span className="text-teal-600">৳ {total}</span>
         </div>
         <button
           type="button"
           onClick={() => append({ name: "", amount: 0 })}
           className="text-teal-600 bg-teal-100 p-1 rounded-full hover:bg-teal-200 hover:text-teal-700 transition"
-          title="Add Doner"
+          title={t("add_donation")}
         >
           <IoMdAdd size={20} />
         </button>

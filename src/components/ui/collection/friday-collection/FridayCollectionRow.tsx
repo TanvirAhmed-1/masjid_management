@@ -5,6 +5,7 @@ import { useDeleteFridayCollectionMutation } from "@/src/redux/features/collecti
 import { useConfirm } from "@/src/components/shared/useConfirm";
 import { FaTrashAlt } from "react-icons/fa";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type User = {
   name: string;
@@ -37,6 +38,8 @@ const FridayCollectionRow: React.FC<Props> = ({
 }) => {
   const { confirm, success, error } = useConfirm();
   const [deleteFridayCollection] = useDeleteFridayCollectionMutation();
+  const { t } = useTranslationContext();
+
   const handleDelete = async (id: string) => {
     const isConfirmed = await confirm(
       "Are you sure you want to delete this collection?",
@@ -54,8 +57,6 @@ const FridayCollectionRow: React.FC<Props> = ({
       });
   };
 
-
-
   if (isError) {
     return <p className="p-4 text-red-500">Error fetching data.</p>;
   }
@@ -65,11 +66,11 @@ const FridayCollectionRow: React.FC<Props> = ({
       <table className="min-w-full border-collapse bg-white text-left text-sm text-gray-700">
         <thead className="bg-teal-600 text-white">
           <tr className="*:text-center *:px-4 *:py-3 *:whitespace-nowrap">
-            <th>SN</th>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Action</th>
+            <th>{t("sn")}</th>
+            <th>{t("name")}</th>
+            <th>{t("date")}</th>
+            <th>{t("amount")}</th>
+            <th>{t("actions")}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -96,7 +97,7 @@ const FridayCollectionRow: React.FC<Props> = ({
                     onClick={() => handleDelete(item.id)}
                     className="bg-red-500 hover:bg-red-600 text-white p-2 shadow-sm transition-all duration-200"
                     size="sm"
-                    title="Delete"
+                    title={t("delete")}
                   >
                     <FaTrashAlt size={14} />
                   </Button>
@@ -105,7 +106,7 @@ const FridayCollectionRow: React.FC<Props> = ({
             ))
           ) : (
             <tr>
-              <td colSpan={4} className="px-4 py-3 text-center text-gray-500">
+              <td colSpan={5} className="px-4 py-3 text-center text-gray-500">
                 No data found
               </td>
             </tr>

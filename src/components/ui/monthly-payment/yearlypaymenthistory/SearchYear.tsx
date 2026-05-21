@@ -6,6 +6,7 @@ import RHFSelect from "@/src/components/shared/RHFSelect";
 import { Button } from "../../button";
 import { IoReload, IoSearch } from "react-icons/io5";
 import YearlyPaymentHistory from "./YearlypaymentHistory";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type FormValue = { year: string };
 
@@ -21,6 +22,7 @@ const useYearOptions = () =>
 export default function SearchYear() {
   const currentYear = String(new Date().getFullYear());
   const [selectedYear, setSelectedYear] = useState(currentYear);
+  const { t } = useTranslationContext();
 
   const yearOptions = useYearOptions();
 
@@ -33,7 +35,7 @@ export default function SearchYear() {
       <div className="flex flex-wrap gap-3 items-center justify-between w-full ">
         <div>
           <h1 className="md:text-2xl  font-bold text-gray-800">
-            Yearly Payment History — {selectedYear}
+            {t("yearly_payment_history")} — {selectedYear}
           </h1>
         </div>
         {/* FORM */}
@@ -44,14 +46,14 @@ export default function SearchYear() {
           >
             {({ reset }) => (
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                <RHFSelect label="Year" name="year" options={yearOptions} />
+                <RHFSelect label={t("year")} name="year" options={yearOptions} />
 
                 <div className="flex gap-2">
                   <Button
                     type="submit"
                     className="flex items-center gap-1 bg-green-700 text-white hover:bg-green-800"
                   >
-                    <IoSearch /> Search
+                    <IoSearch /> {t("search")}
                   </Button>
 
                   <Button
@@ -62,7 +64,7 @@ export default function SearchYear() {
                     }}
                     className="flex items-center gap-1 bg-gray-700 text-white hover:bg-gray-800"
                   >
-                    <IoReload /> Reset
+                    <IoReload /> {t("reset_button") || "Reset"}
                   </Button>
                 </div>
               </div>

@@ -12,6 +12,7 @@ import PrintButton from "@/src/components/shared/PrintButton";
 import { format } from "date-fns";
 import FridayCollectionPDF from "./form/FridayCollectionPDF";
 import toast from "react-hot-toast";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type SearchFormValues = {
   fromDate?: string;
@@ -23,6 +24,7 @@ const FridayCollectionContainer = () => {
   const [limit, setLimit] = useState(10);
   const [filters, setFilters] = useState<SearchFormValues | undefined>();
   const [initialLoaded, setInitialLoaded] = useState(false);
+  const { t } = useTranslationContext();
 
   useEffect(() => {
     if (!initialLoaded) {
@@ -62,7 +64,7 @@ const FridayCollectionContainer = () => {
     <div>
       <div className="flex flex-wrap gap-4 justify-between items-center">
         <h3 className="text-lg md:text-3xl text-start text-black">
-          All Friday Donations
+          {t("all_friday_donations")}
         </h3>
         <AddFridayCollectionModal />
       </div>

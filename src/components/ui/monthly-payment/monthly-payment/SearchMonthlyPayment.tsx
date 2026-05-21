@@ -5,6 +5,7 @@ import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper
 import { Button } from "@/src/components/ui/button";
 import RHFInput from "@/src/components/shared/RHFInput";
 import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type FormValue = {
   name?: string;
@@ -19,36 +20,43 @@ type Props = {
 };
 
 export default function SearchMonthlyPayment({ onSearch }: Props) {
+  const { t } = useTranslationContext();
+
   return (
     <div className="my-4">
       <FormProviderWrapper<FormValue> onSubmit={onSearch}>
         {({ reset }) => (
           <div className="grid grid-cols-1 md:grid-cols-6 gap-2">
-            <RHFInput label="Name" name="name" placeholder="Enter your name" />
             <RHFInput
-              label="Phone"
+              label={t("name")}
+              name="name"
+              placeholder={t("enter_name")}
+            />
+            <RHFInput
+              label={t("phone")}
               name="phone"
-              placeholder="Enter phone number"
+              placeholder={t("enter_phone")}
             />
             <RHFInput
-              label="Month"
+              label={t("month")}
               name="monthKey"
-              placeholder="Enter month key"
+              placeholder={t("enter_month")}
             />
             <RHFDatePicker
-              label="Form Date"
+              label={t("from_date")}
               name="form"
-              placeholder="Select form date"
+              placeholder={t("select_start_date")}
             />
             <RHFDatePicker
-              label="To Date"
+              label={t("to_date")}
               name="to"
-              placeholder="Select to date"
+              placeholder={t("select_end_date")}
             />
             <div className="flex-1 flex items-end justify-end gap-2">
               <Button
                 type="submit"
                 className="flex cursor-pointer items-center gap-1 bg-green-700 text-white hover:bg-green-800"
+                title={t("search")}
               >
                 <IoSearch />
               </Button>

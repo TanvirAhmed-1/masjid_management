@@ -8,6 +8,7 @@ import MonthlyPaymentTable from "./MonthlyPaymentTable";
 import { clearqueryObject } from "@/src/utils/clearqueryObject";
 import Pagination from "@/src/components/shared/Pagination";
 import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 export interface PaymentType {
   id: string;
@@ -47,6 +48,7 @@ const MonthlyPaymentContainer = () => {
   const [limit, setLimit] = useState(10);
   const [filters, setFilters] = useState<SearchFormValues | undefined>();
   const [initialLoaded, setInitialLoaded] = useState(false);
+  const { t } = useTranslationContext();
 
   useEffect(() => {
     if (!initialLoaded) {
@@ -72,7 +74,7 @@ const MonthlyPaymentContainer = () => {
     <div>
       <div className="flex flex-wrap gap-3 justify-between items-center">
         <h3 className="text-xl md:text-3xl text-black">
-          All Member Monthly Payment List
+          {t("all_member_monthly_payment_list")}
         </h3>
         <MonthlyPaymentModal />
       </div>

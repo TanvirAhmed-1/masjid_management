@@ -7,11 +7,11 @@ import Pagination from "@/src/components/shared/Pagination";
 import AddStaffPaymentModal from "./AddStaffPaymentModal";
 import StaffPaymentRow from "./StaffPaymentRow";
 import SearchStaffPayment from "./SearchStaffPayment";
-import { useGetStaffPaymentsQuery } from "@/src/redux/features/staff/StaffPayments";
 import { useGetStaffMonthlyPaymentQuery } from "@/src/redux/features/staff/staffMonthlyPayment";
 import PrintButton from "@/src/components/shared/PrintButton";
 import toast from "react-hot-toast";
 import StaffSalaryPDF from "./form/StaffSalaryPDF";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type SearchFormValues = {
   name?: string;
@@ -22,6 +22,7 @@ const StaffPaymentContainer = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [filters, setFilters] = useState<SearchFormValues>();
+  const { t } = useTranslationContext();
 
   const handleSearch = (data?: SearchFormValues) => {
     setFilters(clearqueryObject(data));
@@ -39,7 +40,9 @@ const StaffPaymentContainer = () => {
   return (
     <div>
       <div className="flex flex-wrap gap-3 justify-between items-center mb-4">
-        <h3 className="text-lg md:text-3xl">All Staff Salary Payment List</h3>
+        <h3 className="text-lg md:text-3xl font-medium">
+          {t("all_staff_salary_payment_list")}
+        </h3>
         <AddStaffPaymentModal />
       </div>
 

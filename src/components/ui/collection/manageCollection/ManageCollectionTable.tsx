@@ -7,8 +7,8 @@ import { useDeleteDonerCollectionMutation } from "@/src/redux/features/collectio
 import EditDonerCollection from "./EditDonerCollection";
 import { CollectionType, Donor } from "@/src/types/collectionType";
 import { format } from "date-fns";
-import FetchingLoader from "@/src/components/shared/FetchingLoader";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type Props = {
   data?: CollectionType[];
@@ -29,8 +29,7 @@ const ManageCollectionTable = ({
 }: Props) => {
   const [deleteCollection] = useDeleteDonerCollectionMutation();
   const { confirm, success, error } = useConfirm();
-
-
+  const { t } = useTranslationContext();
 
   const donors = data.flatMap((collection) =>
     collection.donors.map((donor) => ({
@@ -54,18 +53,16 @@ const ManageCollectionTable = ({
     }
   };
 
-
-
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
       <table className="min-w-full border-collapse bg-white text-sm text-gray-700">
         <thead className="bg-teal-600 text-white">
           <tr className="text-center *:px-4 *:py-3 *:whitespace-nowrap">
-            <th>SL</th>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Action</th>
+            <th>{t("sn")}</th>
+            <th>{t("name")}</th>
+            <th>{t("amount")}</th>
+            <th>{t("date")}</th>
+            <th>{t("action")}</th>
           </tr>
         </thead>
 
@@ -90,24 +87,25 @@ const ManageCollectionTable = ({
             </tr>
           ) : (
             donors.map((donor: Donor, index: number) => (
-            <tr key={index} className="text-center *:whitespace-nowrap">
-              <td className="px-4 py-3">{(page - 1) * limit + index + 1}</td>
-              <td className="px-4 py-3">{donor.name}</td>
-              <td className="px-4 py-3 font-medium">{donor.amount}</td>
-              <td className="px-4 py-3">
-                {format(new Date(donor.createdAt), "dd/MM/yyyy")}
-              </td>
-              <td className="px-4 py-3 flex justify-center items-center gap-2">
-                <EditDonerCollection data={donor} />
-                <Button
-                  size="sm"
-                  className="bg-red-500 hover:bg-red-700 text-white"
-                  onClick={() => handleDelete(donor.id)}
-                >
-                  <FaTrashAlt />
-                </Button>
-              </td>
-            </tr>
+              <tr key={index} className="text-center *:whitespace-nowrap">
+                <td className="px-4 py-3">{(page - 1) * limit + index + 1}</td>
+                <td className="px-4 py-3">{donor.name}</td>
+                <td className="px-4 py-3 font-medium">{donor.amount}</td>
+                <td className="px-4 py-3">
+                  {format(new Date(donor.createdAt), "dd/MM/yyyy")}
+                </td>
+                <td className="px-4 py-3 flex justify-center items-center gap-2">
+                  <EditDonerCollection data={donor} />
+                  <Button
+                    size="sm"
+                    className="bg-red-500 hover:bg-red-700 text-white"
+                    onClick={() => handleDelete(donor.id)}
+                    title={t("delete")}
+                  >
+                    <FaTrashAlt />
+                  </Button>
+                </td>
+              </tr>
             ))
           )}
         </tbody>

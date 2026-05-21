@@ -8,17 +8,20 @@ import { useGetCollectionQuery } from "@/src/redux/features/collection/collectio
 import { clearqueryObject } from "@/src/utils/clearqueryObject";
 import Pagination from "@/src/components/shared/Pagination";
 import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type SearchFormValues = {
   fromDate?: string;
   toDate?: string;
   name?: string;
 };
+
 const OthersCollectionContainer = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [filters, setFilters] = useState<SearchFormValues | undefined>();
   const [initialLoaded, setInitialLoaded] = useState(false);
+  const { t } = useTranslationContext();
 
   useEffect(() => {
     if (!initialLoaded) {
@@ -59,12 +62,12 @@ const OthersCollectionContainer = () => {
   } = useGetCollectionQuery(queryParams);
   const totalPage = data?.data?.meta?.totalPage ?? 1;
   const collections = data?.data?.data ?? [];
+
   return (
     <div>
       <div className="flex flex-wrap gap-4 justify-between items-center">
         <h1 className="text-lg md:text-3xl text-start text-black">
-          {" "}
-          All  Donations List 
+          {t("all_donations_list")}
         </h1>
         <AddOthersCollectionModal />
       </div>

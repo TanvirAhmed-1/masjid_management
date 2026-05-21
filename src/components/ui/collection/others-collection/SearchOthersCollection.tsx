@@ -5,40 +5,46 @@ import { FormProviderWrapper } from "../../../shared/FormProviderWrapper";
 import RHFDatePicker from "../../../shared/RHFDatePicker";
 import { Button } from "../../button";
 import RHFInput from "@/src/components/shared/RHFInput";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type FormValue = {
   formDate: string;
   toDate: string;
   name: string;
 };
+
 type Props = {
   onSearch: (data?: FormValue) => void;
 };
+
 const SearchOthersCollection = ({ onSearch }: Props) => {
+  const { t } = useTranslationContext();
+
   return (
     <div className="my-4">
       <FormProviderWrapper<FormValue> onSubmit={onSearch}>
         {({ reset }) => (
           <div className="grid md:grid-cols-4 gap-4 grid-cols-1">
             <RHFInput
-              label="Doner Name"
+              label={t("donor_name")}
               name="name"
-              placeholder="Enter Doner Name"
+              placeholder={t("enter_donor_name")}
             />
             <RHFDatePicker
-              label="Form Date"
+              label={t("from_date")}
               name="formDate"
-              placeholder="Enter Form Date "
+              placeholder={t("select_start_date")}
             />
             <RHFDatePicker
-              label="To Date"
+              label={t("to_date")}
               name="toDate"
-              placeholder="Enter To Date "
+              placeholder={t("select_end_date")}
             />
             <div className="flex items-end gap-2">
               <Button
                 type="submit"
                 className="bg-green-700 text-white cursor-pointer"
+                title={t("search")}
               >
                 <IoSearch />
               </Button>
@@ -48,7 +54,7 @@ const SearchOthersCollection = ({ onSearch }: Props) => {
                   reset();
                   onSearch();
                 }}
-                className=" bg-gray-700 text-white cursor-pointer"
+                className="bg-gray-700 text-white cursor-pointer"
               >
                 <IoReload />
               </Button>

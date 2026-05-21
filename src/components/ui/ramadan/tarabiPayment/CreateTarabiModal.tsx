@@ -20,17 +20,20 @@ import { useCreateTarabiPaymentMutation } from "@/src/redux/features/ramadan/tar
 import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import { useGetMembersQuery } from "@/src/redux/features/monthly-salary/memberApi";
 import RHFSearchSelect from "@/src/components/shared/RHFSearchSelect";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
+
 type FormData = {
   memberId: string;
   ramadanYearId: string;
   amount: number;
   paidAmount: number;
 };
+
 function CreateTarabiModal() {
   const [open, setOpen] = useState(false);
   const [createPayment, { isLoading }] = useCreateTarabiPaymentMutation();
+  const { t } = useTranslationContext();
 
-  // Fetching data
   const { data: membersData } = useGetMembersQuery(undefined);
   const { data: yearsData } = useGetRamadanYearQuery(undefined);
 
@@ -53,20 +56,20 @@ function CreateTarabiModal() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-teal-600 hover:bg-teal-700 text-white">
-          <IoMdAdd className="mr-1" /> Add Tarabi Payment
+          <IoMdAdd className="mr-1" /> {t("add_tarabi_payment")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="text-teal-700">
-            New Tarabi Payment
+            {t("new_tarabi_payment")}
           </DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper<FormData> onSubmit={onSubmit}>
           <div className="grid grid-cols-1 gap-4 mt-4">
             <RHFSearchSelect
-              label="Select Member (Hafez/Imam)"
+              label={t("select_member_hafez_imam")}
               name="memberId"
               options={
                 membersData?.result?.data?.map((m: any) => ({
@@ -77,7 +80,7 @@ function CreateTarabiModal() {
               rules={{ required: "Member is required" }}
             />
             <RHFSearchSelect
-              label="Ramadan Year"
+              label={t("ramadan_year")}
               name="ramadanYearId"
               options={
                 yearsData?.result?.data?.map((y: any) => ({
@@ -89,13 +92,13 @@ function CreateTarabiModal() {
             />
 
             <RHFInput
-              label="Tarabi Fee (৳)"
+              label={t("tarabi_fee")}
               name="amount"
               type="number"
               rules={{ required: "Amount is required" }}
             />
             <RHFInput
-              label="Paid Amount (৳)"
+              label={t("paid_amount_label")}
               name="paidAmount"
               type="number"
               rules={{ required: "Amount is required" }}
@@ -105,11 +108,11 @@ function CreateTarabiModal() {
           <DialogFooter className="mt-6">
             <DialogClose asChild>
               <Button variant="outline" type="button">
-                Cancel
+                {t("cancel")}
               </Button>
             </DialogClose>
             <LoadingButton isLoading={isLoading} className="bg-teal-600">
-              Save
+              {t("save")}
             </LoadingButton>
           </DialogFooter>
         </FormProviderWrapper>

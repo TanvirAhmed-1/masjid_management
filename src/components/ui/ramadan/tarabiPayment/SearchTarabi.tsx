@@ -7,15 +7,16 @@ import { Button } from "@/src/components/ui/button";
 import { useGetMembersQuery } from "@/src/redux/features/monthly-salary/memberApi";
 import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import { IoReload, IoSearch } from "react-icons/io5";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type Props = {
   onSearch: (data?: any) => void;
 };
 
 const SearchTarabi = ({ onSearch }: Props) => {
-  // Fetching data
   const { data: membersData } = useGetMembersQuery(undefined);
   const { data: yearsData } = useGetRamadanYearQuery(undefined);
+  const { t } = useTranslationContext();
 
   return (
     <div className=" p-4  ">
@@ -24,7 +25,7 @@ const SearchTarabi = ({ onSearch }: Props) => {
           <div className="grid md:grid-cols-5 grid-cols-1 gap-4 items-end">
             {/* Member Search Select */}
             <RHFSearchSelect
-              label="Member Name"
+              label={t("member_name")}
               name="memberId"
               options={
                 membersData?.result?.data?.map((m: any) => ({
@@ -32,12 +33,12 @@ const SearchTarabi = ({ onSearch }: Props) => {
                   value: m.id,
                 })) || []
               }
-              placeholder="Search member..."
+              placeholder={t("search_member")}
             />
 
             {/* Ramadan Year Search Select */}
             <RHFSearchSelect
-              label="Ramadan Year"
+              label={t("ramadan_year")}
               name="ramadanYearId"
               options={
                 yearsData?.result?.data?.map((y: any) => ({
@@ -45,31 +46,36 @@ const SearchTarabi = ({ onSearch }: Props) => {
                   value: y.id,
                 })) || []
               }
-              placeholder="Search year..."
+              placeholder={t("search_year")}
             />
 
             <RHFDatePicker
-              label="From Date"
+              label={t("from_date")}
               name="from"
-              placeholder="Start Date"
+              placeholder={t("start_date")}
             />
 
-            <RHFDatePicker label="To Date" name="to" placeholder="End Date" />
+            <RHFDatePicker
+              label={t("to_date")}
+              name="to"
+              placeholder={t("end_date")}
+            />
 
             <div className="flex gap-2">
               <Button
                 type="submit"
                 className="bg-green-700 hover:bg-green-800 text-white"
               >
-                <IoSearch className="mr-2" /> Search
+                <IoSearch className="mr-2" /> {t("search")}
               </Button>
               <Button
-                type="button" // Changed to button to prevent accidental native form reset behavior
+                type="button"
                 onClick={() => {
                   reset();
-                  onSearch({}); // Passing empty object to clear filters on the server side
+                  onSearch({});
                 }}
                 className="bg-slate-700 hover:bg-slate-800 text-white"
+                title={t("reset_button") || "Reset"}
               >
                 <IoReload />
               </Button>

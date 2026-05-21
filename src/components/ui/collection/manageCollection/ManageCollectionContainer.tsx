@@ -12,17 +12,21 @@ import Pagination from "@/src/components/shared/Pagination";
 import PrintButton from "@/src/components/shared/PrintButton";
 import CollectionPDF from "./form/CollectionPDF";
 import toast from "react-hot-toast";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
+
 type SearchFormValues = {
   fromDate?: string;
   toDate?: string;
   donorName?: string;
   amount?: number;
 };
+
 const ManageCollectionContainer = ({ id }: { id: string }) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [filters, setFilters] = useState<SearchFormValues | undefined>();
   const [initialLoaded, setInitialLoaded] = useState(false);
+  const { t } = useTranslationContext();
 
   useEffect(() => {
     if (!initialLoaded) {
@@ -66,7 +70,7 @@ const ManageCollectionContainer = ({ id }: { id: string }) => {
     <div>
       <div className="flex flex-wrap gap-4 justify-between items-center mb-4">
         <h3 className="text-lg md:text-3xl font-semibold text-black">
-          Manage Collection Donor
+          {t("manage_collection_donor")}
         </h3>
         <CreateDonerModal id={id} />
       </div>

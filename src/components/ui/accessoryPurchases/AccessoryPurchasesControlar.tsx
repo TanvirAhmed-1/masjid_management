@@ -8,6 +8,7 @@ import AccessoryTable from "./AccessoryTable";
 import CreateAccessoryModal from "./CreateAccessoryModal";
 import { useGetAccessoryPurchasesQuery } from "@/src/redux/features/monthly-salary/accessoryPurchase/accessoryPurchaseApi";
 import SearchAccessory from "./SharchAccessory";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type SearchFormValues = {
   from?: string;
@@ -20,6 +21,7 @@ const AccessoryPurchasesContainer = () => {
   const [limit, setLimit] = useState(10);
   const [filters, setFilters] = useState<SearchFormValues | undefined>();
   const [initialLoaded, setInitialLoaded] = useState(false);
+  const { t } = useTranslationContext();
 
   useEffect(() => {
     if (!initialLoaded) {
@@ -48,7 +50,7 @@ const AccessoryPurchasesContainer = () => {
     <div className="rounded-lg ">
       <div className="flex flex-wrap gap-3 justify-between items-center">
         <h3 className="text-xl md:text-3xl font-semibold text-slate-800">
-          Accessory Purchase Records
+          {t("accessory_purchase_records")}
         </h3>
         <CreateAccessoryModal />
       </div>

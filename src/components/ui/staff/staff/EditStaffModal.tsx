@@ -19,6 +19,7 @@ import toast from "react-hot-toast";
 import { useUpdateStaffMutation } from "@/src/redux/features/staff/staffApi";
 import { IStaff } from "./StaffRow";
 import { Edit } from "lucide-react";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type FormData = {
   name: string;
@@ -31,14 +32,13 @@ type FormData = {
   image?: FileList;
 };
 
-type Props = {
-  staff: IStaff;
-};
+type Props = { staff: IStaff };
 
 function EditStaffModal({ staff }: Props) {
   const [open, setOpen] = useState(false);
   const [updateStaff, { isLoading }] = useUpdateStaffMutation();
   const [preview, setPreview] = useState<string | null>(staff.image ?? null);
+  const { t } = useTranslationContext();
 
   const defaultValues = {
     name: staff.name,
@@ -52,12 +52,9 @@ function EditStaffModal({ staff }: Props) {
   const onSubmit = async (formData: FormData) => {
     const payload = {
       ...formData,
-      joinDate: formData.joinDate
-        ? new Date(formData.joinDate).toISOString()
-        : undefined,
+      joinDate: formData.joinDate ? new Date(formData.joinDate).toISOString() : undefined,
       baseSalary: Number(formData.baseSalary),
     };
-
     try {
       const res = await updateStaff({ id: staff.id, data: payload }).unwrap();
       toast.success(res?.message || "Staff updated successfully");
@@ -74,7 +71,7 @@ function EditStaffModal({ staff }: Props) {
           type="button"
           className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 shadow-sm transition-all duration-200"
           size="sm"
-          title="Edit"
+          title={t("edit")}
         >
           <Edit size={14} />
         </Button>
@@ -83,21 +80,16 @@ function EditStaffModal({ staff }: Props) {
       <DialogContent className="max-w-xl">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">
-            Edit Staff Member
+            {t("edit_staff_member")}
           </DialogTitle>
-          <p className="text-sm text-gray-500 mt-1">
-            Update staff information and save changes.
-          </p>
+          <p className="text-sm text-gray-500 mt-1">{t("update_staff_info")}</p>
         </DialogHeader>
 
-        <FormProviderWrapper<FormData>
-          onSubmit={onSubmit}
-          defaultValues={defaultValues}
-        >
+        <FormProviderWrapper<FormData> onSubmit={onSubmit} defaultValues={defaultValues}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
             {/* Image */}
             <div className="flex flex-col">
-              <label className="text-sm font-medium mb-1">Staff Image</label>
+              <label className="text-sm font-medium mb-1">{t("staff_image_edit")}</label>
               <input
                 type="file"
                 accept="image/*"
@@ -108,65 +100,28 @@ function EditStaffModal({ staff }: Props) {
                 }}
               />
               {preview && (
-                <img
-                  src={preview}
-                  alt="preview"
-                  className="mt-2 w-32 h-32 object-cover rounded-md border"
-                />
+                <img src={preview} alt="preview" className="mt-2 w-32 h-32 object-cover rounded-md border" />
               )}
             </div>
 
-            <RHFInput
-              name="name"
-              label="Full Name"
-              placeholder="Enter full name"
-            />
-
-            <RHFInput
-              name="phone"
-              label="Phone Number"
-              placeholder="01XXXXXXXXX"
-            />
-
-            <RHFInput
-              name="role"
-              label="Role / Position"
-              placeholder="Enter staff role"
-            />
-
-            <RHFInput
-              name="baseSalary"
-              label="Base Salary (BDT)"
-              type="number"
-              placeholder="Enter base salary"
-            />
-
-            <RHFDatePicker
-              name="joinDate"
-              label="Joining Date"
-              placeholder="Select join date"
-            />
-
-            <RHFTextarea
-              name="address"
-              label="Address"
-              placeholder="Enter full address"
-            />
+            <RHFInput name="name" label={t("full_name")} placeholder={t("enter_full_name")} />
+            <RHFInput name="phone" label={t("phone_number")} placeholder={t("enter_phone_number")} />
+            <RHFInput name="role" label={t("role_position")} placeholder={t("enter_staff_role")} />
+            <RHFInput name="baseSalary" label={t("base_salary_bdt")} type="number" placeholder={t("enter_base_salary")} />
+            <RHFDatePicker name="joinDate" label={t("joining_date")} placeholder={t("select_join_date")} />
+            <RHFTextarea name="address" label={t("address")} placeholder={t("enter_full_address")} />
           </div>
 
           <DialogFooter className="mt-8 flex justify-end gap-3">
             <DialogClose asChild>
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
+              <Button type="button" variant="outline">{t("cancel")}</Button>
             </DialogClose>
-
             <Button
               type="submit"
               disabled={isLoading}
               className="min-w-[140px] bg-blue-600 hover:bg-blue-700"
             >
-              {isLoading ? "Updating..." : "Update Staff"}
+              {isLoading ? t("updating") : t("update_staff_btn")}
             </Button>
           </DialogFooter>
         </FormProviderWrapper>

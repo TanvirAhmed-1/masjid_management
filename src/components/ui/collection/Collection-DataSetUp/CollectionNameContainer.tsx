@@ -8,15 +8,19 @@ import { clearqueryObject } from "@/src/utils/clearqueryObject";
 import { useEffect, useState } from "react";
 import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
 import Pagination from "@/src/components/shared/Pagination";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
+
 type SearchFormValues = {
   fromDate?: string;
   toDate?: string;
 };
+
 const CollectionNameContainer = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [filters, setFilters] = useState<SearchFormValues | undefined>();
   const [initialLoaded, setInitialLoaded] = useState(false);
+  const { t } = useTranslationContext();
 
   useEffect(() => {
     if (!initialLoaded) {
@@ -54,7 +58,9 @@ const CollectionNameContainer = () => {
   return (
     <div>
       <div className="flex flex-wrap gap-3 justify-between items-center">
-        <h3 className="text-lg md:text-3xl text-start text-black"> All Donations Names</h3>
+        <h3 className="text-lg md:text-3xl text-start text-black font-semibold">
+          {t("all_donations_names")}
+        </h3>
         <CreateCollectionName />
       </div>
       <div>

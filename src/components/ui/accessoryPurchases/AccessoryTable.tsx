@@ -3,11 +3,12 @@
 import React from "react";
 import { Button } from "@/src/components/ui/button";
 import { useConfirm } from "@/src/components/shared/useConfirm";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import { format } from "date-fns";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
 import { useDeleteAccessoryPurchaseMutation } from "@/src/redux/features/monthly-salary/accessoryPurchase/accessoryPurchaseApi";
 import EditAccessoryModal from "./EditAccessoryModal";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 export interface AccessoryType {
   id: string;
@@ -37,6 +38,7 @@ const AccessoryTable: React.FC<Props> = ({
 }) => {
   const { confirm, success, error } = useConfirm();
   const [deleteAccessory] = useDeleteAccessoryPurchaseMutation();
+  const { t } = useTranslationContext();
 
   const handleDelete = async (id: string) => {
     const isConfirmed = await confirm("Delete this purchase record?");
@@ -50,21 +52,19 @@ const AccessoryTable: React.FC<Props> = ({
     }
   };
 
-
-
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mt-4">
       <table className="min-w-full border-collapse bg-white text-left text-sm text-gray-700">
         <thead className="bg-teal-600 text-white">
           <tr className="*:px-4 *:py-3 *:whitespace-nowrap font-bold border-b *:text-center">
-            <th>SL</th>
-            <th>Item Name</th>
-            <th>Qty</th>
-            <th>Price</th>
-            <th>Total</th>
-            <th>Purchased By</th>
-            <th>Date</th>
-            <th>Action</th>
+            <th>{t("sn")}</th>
+            <th>{t("accessory_name")}</th>
+            <th>{t("qty")}</th>
+            <th>{t("price")}</th>
+            <th>{t("total")}</th>
+            <th>{t("purchased_by")}</th>
+            <th>{t("date")}</th>
+            <th>{t("action")}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -103,6 +103,7 @@ const AccessoryTable: React.FC<Props> = ({
                     onClick={() => handleDelete(item.id)}
                     className="bg-rose-500 hover:bg-rose-600 text-white"
                     size="sm"
+                    title={t("delete")}
                   >
                     <FaTrashAlt size={14} />
                   </Button>

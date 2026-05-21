@@ -5,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type PageSizeSelectProps = {
   value: number;
@@ -19,6 +20,8 @@ const PageSizeSelect = ({
   onChange,
   className = "",
 }: PageSizeSelectProps) => {
+  const { t } = useTranslationContext();
+
   return (
     <div className="flex items-center space-x-2 mb-1.5">
       <Select
@@ -43,7 +46,7 @@ const PageSizeSelect = ({
         </SelectContent>
       </Select>
       <label className="text-sm font-medium text-gray-600">
-        Items per page
+        {t("items_per_page")}
       </label>
     </div>
   );

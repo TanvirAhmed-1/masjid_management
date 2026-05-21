@@ -6,6 +6,7 @@ import EditFCollectionName from "./EditFCollectionName";
 import { useDeleteCollectionDataSetUpMutation } from "@/src/redux/features/collection/collectionDataSetUp";
 import { format } from "date-fns";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 export interface CollectionType {
   id: string;
@@ -33,6 +34,8 @@ const CollectionTable: React.FC<Props> = ({
 }) => {
   const { confirm, success, error } = useConfirm();
   const [deleteCollection] = useDeleteCollectionDataSetUpMutation();
+  const { t } = useTranslationContext();
+
   const handleDelete = async (id: string) => {
     const isConfirmed = await confirm(
       "Are you sure you want to delete this collection?",
@@ -50,8 +53,6 @@ const CollectionTable: React.FC<Props> = ({
       });
   };
 
-
-
   if (isError) {
     return <p className="p-4 text-red-500">Error fetching data.</p>;
   }
@@ -61,11 +62,11 @@ const CollectionTable: React.FC<Props> = ({
       <table className="min-w-full border-collapse bg-white text-left text-sm text-gray-700">
         <thead className="bg-teal-600 text-white">
           <tr className="*:text-center *:px-4 *:py-3 *:whitespace-nowrap">
-            <th>Serial No</th>
-            <th>Title Name</th>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Action</th>
+            <th>{t("serial_no")}</th>
+            <th>{t("title_name")}</th>
+            <th>{t("date")}</th>
+            <th>{t("description")}</th>
+            <th>{t("action")}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -92,7 +93,7 @@ const CollectionTable: React.FC<Props> = ({
                     onClick={() => handleDelete(item.id)}
                     className="bg-red-500 hover:bg-red-600 text-white p-2 shadow-sm transition-all duration-200"
                     size="sm"
-                    title="Delete"
+                    title={t("delete")}
                   >
                     <FaTrashAlt size={14} />
                   </Button>

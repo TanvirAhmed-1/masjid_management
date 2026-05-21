@@ -11,11 +11,13 @@ import { useState } from "react";
 import PrintButton from "@/src/components/shared/PrintButton";
 import toast from "react-hot-toast";
 import TarabiPaymentPDF from "./form/TarabiPaymentPDF";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 const TarabiContainer = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [filters, setFilters] = useState<any>(undefined);
+  const { t } = useTranslationContext();
 
   const handleSearch = (data?: any) => {
     const cleaned = clearqueryObject(data);
@@ -74,7 +76,7 @@ const TarabiContainer = () => {
     <div>
       <div className="flex flex-wrap gap-3 justify-between items-center mb-2">
         <h3 className="text-xl md:text-3xl font-bold text-slate-800">
-          Tarabi Salary Payments
+          {t("tarabi_salary_payments")}
         </h3>
         <CreateTarabiModal />
       </div>

@@ -8,19 +8,8 @@ import { useEffect, useState } from "react";
 import { clearqueryObject } from "@/src/utils/clearqueryObject";
 import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
 import Pagination from "@/src/components/shared/Pagination";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
-export interface MemberType {
-  id: string;
-  name: string;
-  phone: string;
-  address: string;
-  monthlyAmount: number;
-  userId: string;
-  mosqueId: string;
-  createdAt: string;
-  updatedAt: string;
-  payments: Payment[];
-}
 export interface Payment {
   id: string;
   memberId: string;
@@ -33,16 +22,32 @@ export interface Payment {
   updatedAt: string;
 }
 
+export interface MemberType {
+  id: string;
+  name: string;
+  phone?: string;
+  address?: string;
+  email?: string;
+  monthlyAmount: number;
+  mosqueId: string;
+  createdAt: string;
+  updatedAt: string;
+  payments: Payment[];
+}
+
+
 type SearchFormValues = {
   name?: string;
   phone?: string;
   address?: string;
 };
+
 const MemberContainer = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [filters, setFilters] = useState<SearchFormValues | undefined>();
   const [initialLoaded, setInitialLoaded] = useState(false);
+  const { t } = useTranslationContext();
 
   useEffect(() => {
     if (!initialLoaded) {
@@ -53,7 +58,6 @@ const MemberContainer = () => {
 
   const handleSearch = (data?: SearchFormValues) => {
     const cleaned = clearqueryObject(data);
-    console.log("Cleaned search data:", cleaned);
     setFilters(cleaned);
     setPage(1);
   };
@@ -71,8 +75,8 @@ const MemberContainer = () => {
   return (
     <div>
       <div className="flex justify-between items-center">
-        <h3 className="text-lg text-start text-black md:text-3xl">
-          All Members List
+        <h3 className="text-lg text-start text-black md:text-3xl font-semibold">
+          {t("all_member_list")}
         </h3>
         <MemberModal />
       </div>

@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
 import EditTarabiModal from "./EditTarabiModal";
 import { useDeleteTarabiPaymentMutation } from "@/src/redux/features/ramadan/tarabiPaymentApi";
-import FetchingLoader from "@/src/components/shared/FetchingLoader";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type Props = {
   data?: any[];
@@ -29,6 +29,7 @@ const TarabiTable: React.FC<Props> = ({
 }) => {
   const { confirm, success, error } = useConfirm();
   const [deletePayment] = useDeleteTarabiPaymentMutation();
+  const { t } = useTranslationContext();
 
   const handleDelete = async (id: string) => {
     const isConfirmed = await confirm(
@@ -44,21 +45,20 @@ const TarabiTable: React.FC<Props> = ({
     }
   };
 
-
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mt-4">
       <table className="min-w-full border-collapse bg-white text-left text-sm text-gray-700">
         <thead className="bg-teal-600 text-white">
           <tr className="*:px-4 *:py-3 *:whitespace-nowrap *:text-center font-bold border-b">
-            <th>SL</th>
-            <th>Member Name</th>
-            <th>Phone</th>
-            <th>Year</th>
-            <th>Amount</th>
-            <th>Payment Amount</th>
-            <th>Due Amount</th>
-            <th>Dete</th>
-            <th>Action</th>
+            <th>{t("sn")}</th>
+            <th>{t("member_name")}</th>
+            <th>{t("phone")}</th>
+            <th>{t("year")}</th>
+            <th>{t("amount")}</th>
+            <th>{t("payment_amount")}</th>
+            <th>{t("due_amount")}</th>
+            <th>{t("date")}</th>
+            <th>{t("action")}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
@@ -110,6 +110,7 @@ const TarabiTable: React.FC<Props> = ({
                     onClick={() => handleDelete(item.id)}
                     className="bg-red-500 hover:bg-red-600 text-white shadow-sm"
                     size="sm"
+                    title={t("delete")}
                   >
                     <FaTrashAlt size={14} />
                   </Button>
@@ -131,4 +132,5 @@ const TarabiTable: React.FC<Props> = ({
     </div>
   );
 };
+
 export default TarabiTable;

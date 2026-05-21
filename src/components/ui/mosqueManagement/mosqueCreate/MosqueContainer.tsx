@@ -3,13 +3,12 @@
 import MosqueCreate from "./MosqueCreateModal";
 import MosqueTable from "./MosqueTable";
 import SearchMosque from "./Searchmosque";
-
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 export interface MosqueUser {
   name: string;
   email: string;
 }
-
 
 export interface MosqueType {
   id: string;
@@ -23,11 +22,13 @@ export interface MosqueType {
 }
 
 const MosqueContainer = () => {
+  const { t } = useTranslationContext();
+
   return (
     <div>
       <div className="flex justify-between items-center">
-        <h3 className="text-lg text-start text-black md:text-3xl">
-          All Mosque List
+        <h3 className="text-lg text-start text-black md:text-3xl font-semibold">
+          {t("mosque_table_title")}
         </h3>
         <MosqueCreate />
       </div>

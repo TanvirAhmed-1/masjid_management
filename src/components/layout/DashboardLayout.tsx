@@ -16,9 +16,19 @@ import { RiArrowDropRightLine } from "react-icons/ri";
 import LogoutMenu from "../ui/logout";
 import { useAppSelector } from "@/src/redux/hook";
 import { useGetMosqueQuery } from "@/src/redux/features/mosque/mosqueApi";
+import { LanguageToggle } from "../shared/LanguageToggle";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
+import { TranslationKeys } from "@/src/utils/translations";
+
+const getTranslationKey = (title: string): TranslationKeys => {
+  const normalized = title.trim().toLowerCase().replace(/\s+/g, "_");
+  if (normalized === "accessory_purchases" || normalized === "purchases_accessory") return "purchases_accessory";
+  return normalized as TranslationKeys;
+};
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { t } = useTranslationContext();
 
   const reduxUsername = useAppSelector((state) => state.auth.username);
   const [username, setUsername] = useState<string | null>(null);
@@ -104,10 +114,10 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
             <FaMosque className="text-2xl sm:text-3xl text-amber-300 mr-2 sm:mr-3 flex-shrink-0" />
             <div className="min-w-0">
               <h1 className="text-base font-semibold text-white truncate">
-                Mosque Management
+                {t("mosque_management_system")}
               </h1>
               <p className="text-emerald-200 text-xs  truncate">
-                Admin Dashboard
+                {t("admin_dashboard")}
               </p>
             </div>
           </div>
@@ -127,7 +137,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                           {data?.icon}
                         </span>
                         <span className="font-medium text-sm sm:text-base truncate">
-                          {data.title}
+                          {t(getTranslationKey(data.title))}
                         </span>
                       </div>
                       {openSections[data.title] ? (
@@ -151,7 +161,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                               }`}
                           >
                             <RiArrowDropRightLine className="text-base sm:text-lg flex-shrink-0" />
-                            <span className="truncate">{sub.title}</span>
+                            <span className="truncate">{t(getTranslationKey(sub.title))}</span>
                           </Link>
                         ))}
                       </div>
@@ -171,7 +181,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                       {data?.icon}
                     </span>
                     <span className="font-medium text-sm sm:text-base truncate">
-                      {data.title}
+                      {t(getTranslationKey(data.title))}
                     </span>
                   </Link>
                 )}
@@ -180,9 +190,9 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className=" absolute bottom-3 pt-4 border-t border-emerald-600/30 text-center text-xs text-emerald-200">
-            <p>Developed by Tanvir Ahmed</p>
+            <p>{t("developed_by")}</p>
             <p>phone/whatsapp: +880 1568953398</p>
-            <p>Copyright &copy; 2023 Tanvir Ahmed. All rights reserved.</p>
+            <p>Copyright &copy; 2023 Tanvir Ahmed. {t("rights_reserved")}</p>
           </div>
         </div>
       </div>
@@ -202,10 +212,10 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
               </button>
               <div className="hidden sm:block">
                 <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
-                  Dashboard
+                  {t("dashboard")}
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-600 hidden md:block">
-                  Mosque Management System
+                  {t("mosque_management_system")}
                 </p>
               </div>
             </div>
@@ -227,6 +237,9 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                   {mosque?.name || "Mosque Name"}
                 </p>
               </div>
+
+              {/* Language Toggle Button */}
+              <LanguageToggle />
 
               {/* Search icon for mobile */}
               <button className="md:hidden text-gray-600 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-100 transition-colors">

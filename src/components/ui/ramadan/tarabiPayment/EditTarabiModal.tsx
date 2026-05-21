@@ -17,12 +17,16 @@ import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper
 import toast from "react-hot-toast";
 import LoadingButton from "@/src/components/shared/LoadingButton";
 import { useUpdateTarabiPaymentMutation } from "@/src/redux/features/ramadan/tarabiPaymentApi";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
+
 type FromData = {
   amount: number;
 };
+
 const EditTarabiModal = ({ payment }: { payment: any }) => {
   const [open, setOpen] = useState(false);
   const [updatePayment, { isLoading }] = useUpdateTarabiPaymentMutation();
+  const { t } = useTranslationContext();
 
   const onSubmit = async (data: FromData) => {
     try {
@@ -44,7 +48,7 @@ const EditTarabiModal = ({ payment }: { payment: any }) => {
           type="button"
           className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-lg shadow-sm transition-all duration-200"
           size="sm"
-          title="Edit"
+          title={t("edit") || "Edit"}
         >
           <FaEdit size={14} />
         </Button>
@@ -52,14 +56,14 @@ const EditTarabiModal = ({ payment }: { payment: any }) => {
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="text-teal-700">
-            Edit Tarabi Payment
+            {t("edit_tarabi_payment")}
           </DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper onSubmit={onSubmit} defaultValues={payment}>
           <div className="grid grid-cols-1 gap-4 mt-4">
             <RHFInput
-              label="Amount (৳)"
+              label={t("amount_label")}
               name="amount"
               type="number"
               rules={{ required: "Amount is required" }}
@@ -68,10 +72,10 @@ const EditTarabiModal = ({ payment }: { payment: any }) => {
 
           <DialogFooter className="mt-6">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("cancel")}</Button>
             </DialogClose>
             <LoadingButton isLoading={isLoading} className="bg-teal-600">
-              Update
+              {t("update")}
             </LoadingButton>
           </DialogFooter>
         </FormProviderWrapper>

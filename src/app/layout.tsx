@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "../components/hooks/ReduxProvider";
+import { TranslationProvider } from "../contexts/TranslationContext";
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
@@ -37,7 +38,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <TranslationProvider>
+            {children}
+          </TranslationProvider>
+        </ReduxProvider>
         <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>

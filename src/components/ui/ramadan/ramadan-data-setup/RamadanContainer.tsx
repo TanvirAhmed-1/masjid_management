@@ -8,14 +8,19 @@ import { clearqueryObject } from "@/src/utils/clearqueryObject";
 import { useEffect, useState } from "react";
 import Pagination from "@/src/components/shared/Pagination";
 import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
+import LoaderScreen from "@/src/components/shared/LoaderScreen";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
+
 type SearchFormValues = {
   year?: string;
 };
+
 const RamadanDataSetUpContainer = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [filters, setFilters] = useState<SearchFormValues | undefined>();
   const [initialLoaded, setInitialLoaded] = useState(false);
+  const { t } = useTranslationContext();
 
   useEffect(() => {
     if (!initialLoaded) {
@@ -35,6 +40,7 @@ const RamadanDataSetUpContainer = () => {
     limit,
     ...filters,
   };
+
   const {
     data: ramadanYear,
     isLoading,
@@ -44,8 +50,8 @@ const RamadanDataSetUpContainer = () => {
   return (
     <div>
       <div className="flex flex-wrap gap-4 justify-between items-center">
-        <h3 className="text-lg text-start text-black md:text-3xl">
-          All Ramadan Year List
+        <h3 className="text-lg text-start text-black md:text-3xl font-semibold">
+          {t("all_ramadan_year_list")}
         </h3>
         <RamadanModal />
       </div>
@@ -61,26 +67,35 @@ const RamadanDataSetUpContainer = () => {
             }}
           />
         </div>
-        {/* table section */}
-        <RamadanRow
-          data={ramadanYear?.result?.data}
-          isLoading={isLoading}
-          isFetching={isFetching}
-          page={page}
-          limit={limit}
-        />
+        
+        {/* table section with premium loading wrapper */}
+        {isLoading ? (
+          <div className="py-20 flex justify-center items-center">
+            <LoaderScreen className="h-auto" />
+          </div>
+        ) : (
+          <>
+            <RamadanRow
+              data={ramadanYear?.result?.data}
+              isLoading={isLoading}
+              isFetching={isFetching}
+              page={page}
+              limit={limit}
+            />
 
-        <Pagination
-          page={page}
-          totalPage={ramadanYear?.result?.meta?.totalPages ?? 0}
-          totalRecords={ramadanYear?.result?.meta?.total ?? 0}
-          limit={limit}
-          onPageChange={(newPage) => setPage(newPage)}
-          onLimitChange={(newLimit) => {
-            setLimit(newLimit);
-            setPage(1);
-          }}
-        />
+            <Pagination
+              page={page}
+              totalPage={ramadanYear?.result?.meta?.totalPages ?? 0}
+              totalRecords={ramadanYear?.result?.meta?.total ?? 0}
+              limit={limit}
+              onPageChange={(newPage) => setPage(newPage)}
+              onLimitChange={(newLimit) => {
+                setLimit(newLimit);
+                setPage(1);
+              }}
+            />
+          </>
+        )}
       </div>
     </div>
   );

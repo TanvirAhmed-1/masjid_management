@@ -9,7 +9,7 @@ import { useDeletedonernameMutation } from "@/src/redux/features/ramadan/itikafA
 import EditRamadnModal from "./EditRamadnModal";
 import { Doner, IftarListResponse } from "@/src/types/ramadanTypes";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
-import FetchingLoader from "@/src/components/shared/FetchingLoader";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type Props = {
   data?: any[];
@@ -18,6 +18,7 @@ type Props = {
   page: number;
   limit: number;
 };
+
 const IftarListTable: React.FC<Props> = ({
   data,
   isLoading,
@@ -26,7 +27,7 @@ const IftarListTable: React.FC<Props> = ({
   limit,
 }) => {
   const [removeIftar] = useDeletedonernameMutation();
-
+  const { t } = useTranslationContext();
 
   const rows = useMemo(() => {
     return (
@@ -40,24 +41,23 @@ const IftarListTable: React.FC<Props> = ({
     );
   }, [data]);
 
-
-
   const handleDelete = async (id: string) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won’t be able to undo this!",
+      title: t("confirm_title"),
+      text: t("error_occurred"),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: t("delete_confirm_btn"),
+      cancelButtonText: t("cancel"),
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           await removeIftar(id).unwrap();
-          Swal.fire("Deleted!", "Record removed successfully.", "success");
-        } catch {
-          Swal.fire("Failed!", "Something went wrong!", "error");
+          Swal.fire(t("deleted_success_title"), "Record removed successfully.", "success");
+        } catch (error) {
+          Swal.fire(t("failed_title"), t("error_occurred"), "error");
         }
       }
     });
@@ -67,14 +67,14 @@ const IftarListTable: React.FC<Props> = ({
     <div className=" overflow-x-auto">
       <table className="min-w-full text-sm text-gray-700 border-collapse shadow-lg rounded-lg overflow-hidden">
         <thead className="bg-teal-600 text-white">
-          <tr className="*:text-center *:px-4 *:py-3 *:whitespace-nowrap">
+          <tr className="text-center *:px-4 *:py-3 *:whitespace-nowrap">
             <th>#</th>
-            <th>Serial No</th>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Day</th>
-            <th>Ramadan Year</th>
-            <th>Actions</th>
+            <th>{t("serial_no")}</th>
+            <th>{t("name")}</th>
+            <th>{t("date")}</th>
+            <th>{t("day")}</th>
+            <th>{t("ramadan_year")}</th>
+            <th>{t("actions")}</th>
           </tr>
         </thead>
 
@@ -93,31 +93,32 @@ const IftarListTable: React.FC<Props> = ({
             </tr>
           ) : (
             rows.map((row: any, index: number) => (
-            <tr
-              key={row.id}
-              className="hover:bg-gray-50 text-center *:px-4 *:py-3"
-            >
-              <td>{(page - 1) * limit + index + 1}</td>
-              <td>{row.serialNumber}</td>
-              <td>{row.name}</td>
-              <td>{format(new Date(row.iftarDate), "dd/MM/yyyy")}</td>
-              <td>{row.dayName}</td>
-              <td>{row.ramadanYear}</td>
+              <tr
+                key={row.id}
+                className="hover:bg-gray-50 text-center *:px-4 *:py-3"
+              >
+                <td>{(page - 1) * limit + index + 1}</td>
+                <td>{row.serialNumber}</td>
+                <td>{row.name}</td>
+                <td>{format(new Date(row.iftarDate), "dd/MM/yyyy")}</td>
+                <td>{row.dayName}</td>
+                <td>{row.ramadanYear}</td>
 
-              <td>
-                <div className="flex justify-center gap-2">
-                  <EditRamadnModal item={row} />
+                <td>
+                  <div className="flex justify-center gap-2">
+                    <EditRamadnModal item={row} />
 
-                  <Button
-                    size="sm"
-                    onClick={() => handleDelete(row.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
-                  >
-                    <FaTrashAlt size={14} />
-                  </Button>
-                </div>
-              </td>
-            </tr>
+                    <Button
+                      size="sm"
+                      onClick={() => handleDelete(row.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
+                      title={t("delete")}
+                    >
+                      <FaTrashAlt size={14} />
+                    </Button>
+                  </div>
+                </td>
+              </tr>
             ))
           )}
         </tbody>

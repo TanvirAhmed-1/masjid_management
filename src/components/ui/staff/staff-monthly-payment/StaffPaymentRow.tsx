@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { format } from "date-fns";
 import { useDeleteStaffMutation } from "@/src/redux/features/staff/staffApi";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
-import FetchingLoader from "@/src/components/shared/FetchingLoader";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 export interface IMonthlySalary {
   id: string;
@@ -64,22 +64,24 @@ const StaffPaymentRow: React.FC<Props> = ({
   limit,
 }) => {
   const [deleteStaff] = useDeleteStaffMutation();
+  const { t } = useTranslationContext();
 
   const handleDelete = async (id: string) => {
     const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "You won’t be able to undo this!",
+      title: t("confirm_title"),
+      text: t("error_occurred"),
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: t("delete_confirm_btn"),
+      cancelButtonText: t("cancel"),
     });
 
     if (result.isConfirmed) {
       try {
         await deleteStaff(id).unwrap();
-        Swal.fire("Deleted!", "Staff removed successfully.", "success");
+        Swal.fire(t("deleted_success_title"), "Staff removed successfully.", "success");
       } catch {
-        Swal.fire("Failed!", "Something went wrong!", "error");
+        Swal.fire(t("failed_title"), t("error_occurred"), "error");
       }
     }
   };
@@ -89,15 +91,15 @@ const StaffPaymentRow: React.FC<Props> = ({
       <table className="min-w-full text-sm text-gray-700 shadow-lg rounded-lg overflow-hidden">
         <thead className="bg-teal-600 text-white">
           <tr className="*:text-center *:px-2 *:py-3 *:whitespace-nowrap">
-            <th>SN</th>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Amount</th>
-            <th>Month</th>
-            <th>Role</th>
-            <th>Status</th> 
-            <th>Salary</th>
-            <th>Actions</th>
+            <th>{t("sn")}</th>
+            <th>{t("name")}</th>
+            <th>{t("phone")}</th>
+            <th>{t("amount")}</th>
+            <th>{t("month")}</th>
+            <th>{t("role")}</th>
+            <th>{t("status")}</th> 
+            <th>{t("salary")}</th>
+            <th>{t("actions")}</th>
           </tr>
         </thead>
 
@@ -116,38 +118,38 @@ const StaffPaymentRow: React.FC<Props> = ({
             </tr>
           ) : (
             data?.map((row: IMonthlySalary, index) => (
-            <tr key={row.id} className="hover:bg-gray-50 text-center *:p-2 *:whitespace-nowrap  ">
-              <td>{(page - 1) * limit + index + 1}</td>
-              <td>{row.staff.name}</td>
-              <td>{row.staff.phone}</td>
-              <td>{row.totalSalary}</td>
-              <td>{format(new Date(row?.month), "dd/MM/yyyy")}</td>
-              <td>{row.staff.role}</td>
-              <td>
-                <span
-                  className={`px-2 py-1 rounded text-xs ${
-                    row.staff.active
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {row.staff.active ? "Active" : "Inactive"}
-                </span>
-              </td>
-              <td>{row.staff.baseSalary}</td>
-              <td>
-                <div className="flex justify-center gap-2">
-                  {/* <EditStaffPaymentModal staff={row} /> */}
-                  <Button
-                    size="sm"
-                    onClick={() => handleDelete(row.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white"
+              <tr key={row.id} className="hover:bg-gray-50 text-center *:p-2 *:whitespace-nowrap  ">
+                <td>{(page - 1) * limit + index + 1}</td>
+                <td>{row.staff.name}</td>
+                <td>{row.staff.phone}</td>
+                <td>{row.totalSalary}</td>
+                <td>{format(new Date(row?.month), "dd/MM/yyyy")}</td>
+                <td>{row.staff.role}</td>
+                <td>
+                  <span
+                    className={`px-2 py-1 rounded text-xs ${
+                      row.staff.active
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
                   >
-                    <FaTrashAlt size={14} />
-                  </Button>
-                </div>
-              </td>
-            </tr>
+                    {row.staff.active ? t("active") : t("inactive")}
+                  </span>
+                </td>
+                <td>{row.staff.baseSalary}</td>
+                <td>
+                  <div className="flex justify-center gap-2">
+                    <Button
+                      size="sm"
+                      onClick={() => handleDelete(row.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white"
+                      title={t("delete")}
+                    >
+                      <FaTrashAlt size={14} />
+                    </Button>
+                  </div>
+                </td>
+              </tr>
             ))
           )}
         </tbody>

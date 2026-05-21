@@ -3,7 +3,6 @@
 import React, { useMemo, useState } from "react";
 import { format, isValid } from "date-fns";
 import { User } from "lucide-react";
-import { Card } from "@/src/components/ui/card";
 import Pagination from "@/src/components/shared/Pagination";
 import { useGetAllMembersPaymentStatusQuery } from "@/src/redux/features/monthly-salary/paymentApi";
 import PageSizeSelect from "@/src/components/shared/PageSizeSelect";
@@ -11,10 +10,12 @@ import LoaderScreen from "@/src/components/shared/LoaderScreen";
 import PrintButton from "@/src/components/shared/PrintButton";
 import YearlyPaymentPDF from "./form/YearlyPaymentPDF";
 import toast from "react-hot-toast";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 export default function YearlyPaymentHistory({ year }: { year: string }) {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const { t } = useTranslationContext();
 
   const { data, isLoading, isError } = useGetAllMembersPaymentStatusQuery({
     year,
@@ -48,7 +49,6 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
         0,
       );
 
-      /** Find due months */
       const memberDueMonths = months.filter(
         (m) => !payments.some((p: any) => p.monthKey === m.monthKey),
       );
@@ -100,18 +100,18 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
         <table className="w-full min-w-max">
           <thead className="bg-gradient-to-r from-green-600 to-teal-600 text-white text-sm">
             <tr>
-              <th className="px-5 py-3 text-left">Member</th>
-              <th className="px-5 py-3 text-center">Phone</th>
+              <th className="px-5 py-3 text-left">{t("member")}</th>
+              <th className="px-5 py-3 text-center">{t("phone")}</th>
 
               {months.map((m) => (
                 <th key={m.monthKey} className="px-4 py-3 text-center">
-                  {m.monthName}
+                  {t(m.monthName as any)}
                 </th>
               ))}
 
-              <th className="px-5 py-3 text-center">Total Paid</th>
-              <th className="px-5 py-3 text-center">Due Months</th>
-              <th className="px-5 py-3 text-center">Due Amount</th>
+              <th className="px-5 py-3 text-center">{t("total_paid")}</th>
+              <th className="px-5 py-3 text-center">{t("due_months_label")}</th>
+              <th className="px-5 py-3 text-center">{t("due_amount")}</th>
             </tr>
           </thead>
 
@@ -138,7 +138,7 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
                       <div>
                         <p className="font-semibold">{member.name}</p>
                         <p className="text-xs text-gray-500">
-                          {member.monthlyAmount}৳ / month
+                          {member.monthlyAmount}৳ / {t("per_month")}
                         </p>
                       </div>
                     </div>
@@ -179,16 +179,17 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
                   <td className="px-4 py-3 text-center w-44">
                     {member.dueMonths.length === 0 ? (
                       <span className="text-green-600 font-semibold">
-                        Clear
+                        {t("clear")}
                       </span>
                     ) : (
                       <div>
                         <p className="font-bold text-[11px] text-red-600">
-                          {member.dueMonths.length} month
-                          {member.dueMonths.length > 1 ? "s" : ""}
+                          {member.dueMonths.length} {t("due_month_text")}
                         </p>
                         <p className="text-[11px] flex flex-wrap text-gray-500">
-                          {member.dueMonths.map((m: any) => m.monthName).join(", ")}
+                          {member.dueMonths
+                            .map((m: any) => t(m.monthName as any))
+                            .join(", ")}
                         </p>
                       </div>
                     )}
@@ -200,7 +201,7 @@ export default function YearlyPaymentHistory({ year }: { year: string }) {
                       member.dueAmount > 0 ? "text-red-600" : "text-green-600"
                     }`}
                   >
-                    {member.dueAmount > 0 ? `${member.dueAmount}৳` : "Clear"}
+                    {member.dueAmount > 0 ? `${member.dueAmount}৳` : t("clear")}
                   </td>
                 </tr>
               ))

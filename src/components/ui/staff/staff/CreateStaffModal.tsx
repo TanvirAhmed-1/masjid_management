@@ -18,6 +18,7 @@ import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper
 import toast from "react-hot-toast";
 import RHFTextarea from "@/src/components/shared/RHFTextarea";
 import { useCreateStaffMutation } from "@/src/redux/features/staff/staffApi";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type FormData = {
   name: string;
@@ -32,18 +33,16 @@ type FormData = {
 function CreateStaffModal() {
   const [open, setOpen] = useState(false);
   const [createStaff, { isLoading }] = useCreateStaffMutation();
-  const [preview, setPreview] = useState<string | null>(null); // ✅ image preview
+  const [preview, setPreview] = useState<string | null>(null);
+  const { t } = useTranslationContext();
 
   const onSubmit = async (data: FormData) => {
     const payload = {
       ...data,
-      joinDate: data.joinDate
-        ? new Date(data.joinDate).toISOString()
-        : undefined,
+      joinDate: data.joinDate ? new Date(data.joinDate).toISOString() : undefined,
       baseSalary: Number(data.baseSalary),
       active: true,
     };
-
     try {
       const res = await createStaff(payload).unwrap();
       toast.success(res?.message || "Staff created successfully");
@@ -58,25 +57,23 @@ function CreateStaffModal() {
       <DialogTrigger asChild>
         <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2">
           <IoMdAdd className="text-lg" />
-          Add New Staff
+          {t("add_new_staff")}
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-xl max-h-[75vh] overflow-y-auto ">
+      <DialogContent className="max-w-xl max-h-[75vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">
-            Add New Staff Member
+            {t("add_new_staff_member")}
           </DialogTitle>
-          <p className="text-sm text-gray-500 mt-1">
-            Enter the staff details below to add them to the system.
-          </p>
+          <p className="text-sm text-gray-500 mt-1">{t("enter_staff_details")}</p>
         </DialogHeader>
 
         <FormProviderWrapper<FormData> onSubmit={onSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
             {/* Image Input with Preview */}
             <div className="flex flex-col">
-              <label className="text-sm font-medium mb-1">Staff Image link (optional)</label>
+              <label className="text-sm font-medium mb-1">{t("staff_image")}</label>
               <input
                 type="file"
                 accept="image/*"
@@ -87,66 +84,26 @@ function CreateStaffModal() {
                   }
                 }}
               />
-              {/* {preview && (
-                <img
-                  src={preview}
-                  alt="preview"
-                  className="mt-2 w-32 h-32 object-cover rounded-md border"
-                />
-              )} */}
             </div>
 
-            <RHFInput
-              name="name"
-              label="Full Name"
-              placeholder="Enter full name"
-            />
-
-            <RHFInput
-              name="phone"
-              label="Phone Number"
-              placeholder="01XXXXXXXXX"
-            />
-
-            <RHFInput
-              name="role"
-              label="Role / Position"
-              placeholder="Enter staff role"
-            />
-
-            <RHFInput
-              name="baseSalary"
-              label="Base Salary (BDT)"
-              type="number"
-              placeholder="Enter base salary"
-            />
-
-            <RHFDatePicker
-              name="joinDate"
-              label="Joining Date"
-              placeholder="Select join date"
-            />
-
-            <RHFTextarea
-              name="address"
-              label="Address"
-              placeholder="Enter full address"
-            />
+            <RHFInput name="name" label={t("full_name")} placeholder={t("enter_full_name")} />
+            <RHFInput name="phone" label={t("phone_number")} placeholder={t("enter_phone_number")} />
+            <RHFInput name="role" label={t("role_position")} placeholder={t("enter_staff_role")} />
+            <RHFInput name="baseSalary" label={t("base_salary_bdt")} type="number" placeholder={t("enter_base_salary")} />
+            <RHFDatePicker name="joinDate" label={t("joining_date")} placeholder={t("select_join_date")} />
+            <RHFTextarea name="address" label={t("address")} placeholder={t("enter_full_address")} />
           </div>
 
           <DialogFooter className="mt-8 flex justify-end gap-3">
             <DialogClose asChild>
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
+              <Button type="button" variant="outline">{t("cancel")}</Button>
             </DialogClose>
-
             <Button
               type="submit"
               disabled={isLoading}
               className="min-w-[140px] bg-blue-600 hover:bg-blue-700"
             >
-              {isLoading ? "Creating..." : "Create Staff"}
+              {isLoading ? t("creating") : t("create_staff_btn")}
             </Button>
           </DialogFooter>
         </FormProviderWrapper>

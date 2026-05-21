@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import LoadingButton from "@/src/components/shared/LoadingButton";
 import { useState } from "react";
 import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type FridayCollectionForm = {
   amount: string;
@@ -26,8 +27,10 @@ type FridayCollectionForm = {
 
 export function AddFridayCollectionModal() {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslationContext();
   const [createFridayCollection, { isLoading }] =
     useCreateFridayCollectionMutation();
+
   const onSubmit = async (data: FridayCollectionForm) => {
     const payload = {
       amount: parseInt(data.amount),
@@ -47,35 +50,35 @@ export function AddFridayCollectionModal() {
       <DialogTrigger asChild>
         <Button className="bg-teal-500 hover:bg-teal-600 text-white flex justify-center items-center">
           <IoMdAdd />
-          Add Friday Donations
+          {t("add_friday_donations")}
         </Button>
       </DialogTrigger>
       <DialogContent className="min-w-sm max-w-lg mx-auto">
         <DialogHeader>
-          <DialogTitle>Add Friday Donations</DialogTitle>
+          <DialogTitle>{t("add_friday_donations")}</DialogTitle>
         </DialogHeader>
 
         <FormProviderWrapper<FridayCollectionForm> onSubmit={onSubmit}>
           <div className="space-y-3">
             <RHFDatePicker
-              label="Collection Date"
+              label={t("collection_date")}
               name="collectionDate"
-              placeholder="Select Friday Date"
+              placeholder={t("select_friday_date")}
             />
             <RHFInput
-              label="Amount"
+              label={t("amount")}
               name="amount"
-              placeholder="Enter Amount"
-              rules={{ required: "Amount must be filled" }}
+              placeholder={t("enter_amount")}
+              rules={{ required: t("amount_required") }}
             />
           </div>
 
           <DialogFooter className="mt-4 flex justify-end gap-2">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("cancel")}</Button>
             </DialogClose>
-            <LoadingButton loadingText="Saving" isLoading={isLoading}>
-              Save
+            <LoadingButton loadingText={t("saving")} isLoading={isLoading}>
+              {t("save")}
             </LoadingButton>
           </DialogFooter>
         </FormProviderWrapper>

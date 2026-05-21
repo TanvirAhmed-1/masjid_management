@@ -8,8 +8,9 @@ import { format } from "date-fns";
 import Swal from "sweetalert2";
 import EditItikafModal from "./EditItikafModal";
 import { ItikafData } from "./ItikafContainer";
-import FetchingLoader from "@/src/components/shared/FetchingLoader";
 import LoaderScreen from "@/src/components/shared/LoaderScreen";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
+
 type ItikafRowProps = {
   data?: ItikafData[];
   isLoading: boolean;
@@ -17,6 +18,7 @@ type ItikafRowProps = {
   page: number;
   limit: number;
 };
+
 const ItikafRow = ({
   data,
   isLoading,
@@ -25,33 +27,34 @@ const ItikafRow = ({
   limit,
 }: ItikafRowProps) => {
   const [removeItikaf] = useDeleteItikafMutation();
+  const { t } = useTranslationContext();
 
-  console.log("Itikaf Data:", data);
   const handleDelete = async (id: string) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be Delete this Item!",
+      title: t("confirm_title"),
+      text: t("error_occurred"),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: t("delete_confirm_btn"),
+      cancelButtonText: t("cancel"),
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await removeItikaf(id).unwrap();
+          await removeItikaf(id).unwrap();
 
           Swal.fire({
-            title: "Deleted!",
-            text: "Year has been deleted successfully.",
+            title: t("deleted_success_title"),
+            text: "Record has been deleted successfully.",
             icon: "success",
-            timer: 1800,
+            timer: 1500,
             showConfirmButton: false,
           });
         } catch (error) {
           Swal.fire({
-            title: "Failed!",
-            text: "Something went wrong!",
+            title: t("failed_title"),
+            text: t("error_occurred"),
             icon: "error",
           });
         }
@@ -59,18 +62,16 @@ const ItikafRow = ({
     });
   };
 
-
-
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-md bg-white">
       <table className="min-w-full border-collapse text-sm text-gray-700">
         <thead className="bg-teal-600 text-white">
           <tr className="*:px-5 *:py-3 *:font-semibold *:text-center *:whitespace-nowrap">
-            <th>Serial No</th>
-            <th>Name</th>
-            <th>Year</th>
-            <th>Duration</th>
-            <th>Action</th>
+            <th>{t("serial_no")}</th>
+            <th>{t("name")}</th>
+            <th>{t("year")}</th>
+            <th>{t("duration")}</th>
+            <th>{t("action")}</th>
           </tr>
         </thead>
 
@@ -89,38 +90,37 @@ const ItikafRow = ({
             </tr>
           ) : (
             data?.map((itikaf: ItikafData, index: number) => (
-            <tr
-              key={itikaf.id}
-              className="hover:bg-gray-50 transition-colors *:px-5 *:py-3 *:text-center *:whitespace-nowrap"
-            >
-              <td>{(page - 1) * limit + index + 1}</td>
-              <td>{itikaf.name}</td>
-              <td>{itikaf.ramadanYear.ramadanYear}</td>
-              <td className="space-x-3">
-                <span>{format(new Date(itikaf.fromDate), "dd MMM yyyy")}</span>{" "}
-                <span>to</span>{" "}
-                <span>{format(new Date(itikaf.toDate), "dd MMM yyyy")}</span>
-              </td>
+              <tr
+                key={itikaf.id}
+                className="hover:bg-gray-50 transition-colors *:px-5 *:py-3 *:text-center *:whitespace-nowrap"
+              >
+                <td>{(page - 1) * limit + index + 1}</td>
+                <td>{itikaf.name}</td>
+                <td>{itikaf.ramadanYear.ramadanYear}</td>
+                <td className="space-x-3">
+                  <span>{format(new Date(itikaf.fromDate), "dd MMM yyyy")}</span>{" "}
+                  <span>{t("to")}</span>{" "}
+                  <span>{format(new Date(itikaf.toDate), "dd MMM yyyy")}</span>
+                </td>
 
-              <td>
-                <div className="flex justify-center items-center gap-2">
-                  {/* Edit Button */}
+                <td>
+                  <div className="flex justify-center items-center gap-2">
+                    {/* Edit Button */}
+                    <EditItikafModal item={itikaf} />
 
-                  <EditItikafModal item={itikaf} />
-
-                  {/* Delete Button */}
-                  <Button
-                    type="button"
-                    onClick={() => handleDelete(itikaf.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg shadow-sm transition-all duration-200"
-                    size="sm"
-                    title="Delete"
-                  >
-                    <FaTrashAlt size={14} />
-                  </Button>
-                </div>
-              </td>
-            </tr>
+                    {/* Delete Button */}
+                    <Button
+                      type="button"
+                      onClick={() => handleDelete(itikaf.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg shadow-sm transition-all duration-200"
+                      size="sm"
+                      title={t("delete")}
+                    >
+                      <FaTrashAlt size={14} />
+                    </Button>
+                  </div>
+                </td>
+              </tr>
             ))
           )}
         </tbody>

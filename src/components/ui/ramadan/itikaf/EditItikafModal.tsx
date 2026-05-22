@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import { format } from "date-fns";
 import { FaEdit } from "react-icons/fa";
 import { ItikafData } from "./ItikafContainer";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type ItikafFormData = {
   name: string;
@@ -35,6 +36,7 @@ function EditItikafModal({ item }: props) {
   const [open, setOpen] = useState(false);
   const [updateItikaf, { isLoading }] = useUpdateItikafMutation();
   const { data: ramadanYear } = useGetRamadanYearQuery(undefined);
+  const { t } = useTranslationContext();
 
   const ramadanYearOptions =
     ramadanYear?.result?.data?.map((year: any) => ({
@@ -55,9 +57,9 @@ function EditItikafModal({ item }: props) {
       await toast.promise(
         updateItikaf({ id: item.id, data: formattedData }).unwrap(),
         {
-          loading: "Updating Itikaf Participant...",
-          success: "Itikaf Participant Updated Successfully!",
-          error: "Update failed. Please try again.",
+          loading: t("updating_participant"),
+          success: t("itikaf_update_success"),
+          error: t("itikaf_update_failed"),
         },
       );
       setOpen(false);
@@ -73,7 +75,7 @@ function EditItikafModal({ item }: props) {
           type="button"
           className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-lg shadow-sm transition-all duration-200"
           size="sm"
-          title="Edit"
+          title={t("edit")}
         >
           <FaEdit size={14} />
         </Button>
@@ -82,10 +84,10 @@ function EditItikafModal({ item }: props) {
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold text-gray-800">
-            Edit Participant for Ramadan I'tikāf
+            {t("edit_participant_itikaf")}
           </DialogTitle>
           <p className="text-sm text-gray-500">
-            Update the details below to edit the I'tikāf participant.
+            {t("edit_participant_itikaf_desc")}
           </p>
         </DialogHeader>
 
@@ -104,42 +106,42 @@ function EditItikafModal({ item }: props) {
         >
           <div className="space-y-4 mt-4">
             <RHFSelect
-              label="Ramadan Year"
+              label={t("ramadan_year")}
               name="ramadanId"
-              placeholder="Select Ramadan year"
+              placeholder={t("enter_ramadan_year")}
               options={ramadanYearOptions}
-              rules={{ required: "Ramadan year is required" }}
+              rules={{ required: t("ramadan_year") + " is required" }}
             />
             <RHFInput
-              label="Participant Name"
+              label={t("participant_name")}
               name="name"
-              placeholder="Enter participant's name"
-              rules={{ required: "Participant name is required" }}
+              placeholder={t("enter_participant_name")}
+              rules={{ required: t("participant_name_required") }}
             />
             <RHFDatePicker
-              label="From Date"
+              label={t("from_date")}
               name="fromDate"
-              placeholder="Select start date"
-              rules={{ required: "Start date is required" }}
+              placeholder={t("select_start_date")}
+              rules={{ required: t("from_date") + " is required" }}
             />
             <RHFDatePicker
-              label="To Date"
+              label={t("to_date")}
               name="toDate"
-              placeholder="Select end date"
-              rules={{ required: "End date is required" }}
+              placeholder={t("select_end_date")}
+              rules={{ required: t("to_date") + " is required" }}
             />
           </div>
 
           <DialogFooter className="mt-6 flex justify-end gap-2">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("cancel")}</Button>
             </DialogClose>
             <Button
               type="submit"
               className="bg-teal-600 hover:bg-teal-700 text-white"
               disabled={isLoading}
             >
-              {isLoading ? "Updating..." : "Update Participant"}
+              {isLoading ? t("updating_participant") : t("update_participant")}
             </Button>
           </DialogFooter>
         </FormProviderWrapper>

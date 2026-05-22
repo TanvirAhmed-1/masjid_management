@@ -16,6 +16,7 @@ import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
 import { FaEdit } from "react-icons/fa";
 import { useUpdateRamadanYearMutation } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type FormData = {
   titleName: string;
@@ -34,19 +35,17 @@ type ProntProps = {
 function EditRamadanModal({ item }: { item: ProntProps }) {
   const [open, setOpen] = useState(false);
   const [updateYear, { isLoading }] = useUpdateRamadanYearMutation();
+  const { t } = useTranslationContext();
 
   const onSubmit = async (data: FormData) => {
-    console.log("Form Submitted:", data);
     try {
-      const result = await updateYear({ id: item.id, data }).unwrap();
-      console.log("date create succesfully", result);
-      toast.success("Ramadan Year updated successfully!");
+      await updateYear({ id: item.id, data }).unwrap();
+      toast.success(t("ramadan_year_updated_success"));
       setOpen(false);
     } catch (error) {
       console.log("date create Error", error);
     }
   };
-
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -55,7 +54,7 @@ function EditRamadanModal({ item }: { item: ProntProps }) {
           type="button"
           className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 shadow-sm transition-all duration-200"
           size="sm"
-          title="Edit"
+          title={t("edit")}
         >
           <FaEdit size={14} />
         </Button>
@@ -64,10 +63,10 @@ function EditRamadanModal({ item }: { item: ProntProps }) {
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold text-gray-800">
-            Update Ramadan Year
+            {t("update_ramadan_year")}
           </DialogTitle>
           <p className="text-sm text-gray-500">
-            Update ramadan year and title like Ramadan (2026)
+            {t("update_ramadan_year_desc")}
           </p>
         </DialogHeader>
 
@@ -80,27 +79,27 @@ function EditRamadanModal({ item }: { item: ProntProps }) {
         >
           <div className="space-y-4 mt-4">
             <RHFInput
-              label="Ramadan Year"
+              label={t("ramadan_year")}
               name="ramadanYear"
-              placeholder="Enter Ramadan year"
+              placeholder={t("enter_ramadan_year")}
             />
             <RHFInput
-              label="Title Name"
+              label={t("title_name")}
               name="titleName"
-              placeholder="Enter participant's name"
-              rules={{ required: "Participant name is required" }}
+              placeholder={t("enter_participant_name")}
+              rules={{ required: t("participant_name_required") }}
             />
           </div>
 
           <DialogFooter className="mt-6 flex justify-end gap-2">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("cancel")}</Button>
             </DialogClose>
             <Button
               type="submit"
               className="bg-teal-600 hover:bg-teal-700 text-white"
             >
-              {isLoading ? "Saving.." : "Save"}
+              {isLoading ? t("saving") : t("save")}
             </Button>
           </DialogFooter>
         </FormProviderWrapper>

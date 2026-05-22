@@ -31,7 +31,9 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { t } = useTranslationContext();
 
   const reduxUsername = useAppSelector((state) => state.auth.username);
+  const reduxRole = useAppSelector((state) => state.auth.role);
   const [username, setUsername] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
 
   const { data: mosqueData } = useGetMosqueQuery(undefined);
   const mosque = mosqueData?.result || [];
@@ -39,7 +41,8 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   // Prevent hydration mismatch – load only after client mounts
   useEffect(() => {
     setUsername(reduxUsername);
-  }, [reduxUsername]);
+    setRole(reduxRole);
+  }, [reduxUsername, reduxRole]);
 
   // Mobile sidebar state
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -149,21 +152,28 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
 
                     {openSections[data.title] && (
                       <div className="ml-1  mt-2 space-y-1 border-l-2 border-emerald-600/30 pl-3 sm:pl-4">
-                        {data.subRoutes?.map((sub) => (
-                          <Link
-                            href={sub.route}
-                            key={sub.title}
-                            className={`text-xs sm:text-sm font-medium px-2.5 sm:px-3 py-2 rounded-lg flex items-center gap-2 transition-all duration-200
-                              ${
-                                isActiveRoute(sub.route)
-                                  ? "bg-amber-500 text-white shadow-lg"
-                                  : "text-emerald-100 hover:bg-white/10 hover:text-white"
-                              }`}
-                          >
-                            <RiArrowDropRightLine className="text-base sm:text-lg flex-shrink-0" />
-                            <span className="truncate">{t(getTranslationKey(sub.title))}</span>
-                          </Link>
-                        ))}
+                        {data.subRoutes
+                          ?.filter((sub) => {
+                            if (sub.route === "/mosques-create") {
+                              return role === "SUPER_ADMIN";
+                            }
+                            return true;
+                          })
+                          ?.map((sub) => (
+                            <Link
+                              href={sub.route}
+                              key={sub.title}
+                              className={`text-xs sm:text-sm font-medium px-2.5 sm:px-3 py-2 rounded-lg flex items-center gap-2 transition-all duration-200
+                                ${
+                                  isActiveRoute(sub.route)
+                                    ? "bg-amber-500 text-white shadow-lg"
+                                    : "text-emerald-100 hover:bg-white/10 hover:text-white"
+                                }`}
+                            >
+                              <RiArrowDropRightLine className="text-base sm:text-lg flex-shrink-0" />
+                              <span className="truncate">{t(getTranslationKey(sub.title))}</span>
+                            </Link>
+                          ))}
                       </div>
                     )}
                   </>
@@ -232,7 +242,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                 <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               </div> */}
 
-              <div>
+              <div className="hidden sm:block">
                 <p className="text-base font-semibold text-gray-800">
                   {mosque?.name || "Mosque Name"}
                 </p>

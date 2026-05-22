@@ -16,6 +16,7 @@ import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "@/src/components/shared/FormProviderWrapper";
 import { useCreateRamadanYearMutation } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import toast from "react-hot-toast";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type FormData = {
   titleName: string;
@@ -25,6 +26,7 @@ type FormData = {
 function RamadanModal() {
   const [open, setOpen] = useState(false);
   const [createYear, { isLoading }] = useCreateRamadanYearMutation();
+  const { t } = useTranslationContext();
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -32,7 +34,7 @@ function RamadanModal() {
       toast.success(`${result.message}`);
       setOpen(false);
     } catch (error) {
-      toast.error("Failed to create Ramadan Year");
+      toast.error(t("ramadan_year_create_failed"));
     }
   };
 
@@ -41,44 +43,44 @@ function RamadanModal() {
       <DialogTrigger asChild>
         <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2 font-medium">
           <IoMdAdd className="text-lg" />
-          Add Ramadan Year
+          {t("add_ramadan_year")}
         </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold text-gray-800">
-            Create Ramadan Year
+            {t("create_ramadan_year")}
           </DialogTitle>
           <p className="text-sm text-gray-500">
-            input ramadan year and title like Ramadan (2026)
+            {t("input_ramadan_year_desc")}
           </p>
         </DialogHeader>
 
         <FormProviderWrapper<FormData> onSubmit={onSubmit}>
           <div className="space-y-4 mt-4">
             <RHFInput
-              label="Ramadan Year"
+              label={t("ramadan_year")}
               name="ramadanYear"
-              placeholder="Enter Ramadan year"
+              placeholder={t("enter_ramadan_year")}
             />
             <RHFInput
-              label="Title Name"
+              label={t("title_name")}
               name="titleName"
-              placeholder="Enter participant's name"
-              rules={{ required: "Participant name is required" }}
+              placeholder={t("enter_participant_name")}
+              rules={{ required: t("participant_name_required") }}
             />
           </div>
 
           <DialogFooter className="mt-6 flex justify-end gap-2">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("cancel")}</Button>
             </DialogClose>
             <Button
               type="submit"
               className="bg-teal-600 hover:bg-teal-700 text-white"
             >
-              {isLoading ? "Saving.." : "Save"}
+              {isLoading ? t("saving") : t("save")}
             </Button>
           </DialogFooter>
         </FormProviderWrapper>

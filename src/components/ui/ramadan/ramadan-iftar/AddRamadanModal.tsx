@@ -15,12 +15,12 @@ import {
 import RHFDatePicker from "@/src/components/shared/RHFDatePicker";
 import RHFInput from "@/src/components/shared/RHFInput";
 import { FormProviderWrapper } from "../../../shared/FormProviderWrapper";
-import { FcNumericalSorting21 } from "react-icons/fc";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import { useCreateifterlistMutation } from "@/src/redux/features/ramadan/iftarlist";
 import toast from "react-hot-toast";
 import RHFSearchSelect from "@/src/components/shared/RHFSearchSelect";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type Doner = {
   serialNumber: string;
@@ -38,6 +38,7 @@ function AddRamadanModal() {
   const [open, setOpen] = useState(false);
   const [createIftar, { isLoading }] = useCreateifterlistMutation();
   const { data: ramadanYear } = useGetRamadanYearQuery(undefined);
+  const { t } = useTranslationContext();
 
   const ramadanYearOptions =
     ramadanYear?.result?.data?.map((year: any) => ({
@@ -46,8 +47,6 @@ function AddRamadanModal() {
     })) || [];
 
   const onSubmit = async (data: OthersCollectionForm) => {
-    console.log("Form Submitted:", data);
-
     const payload = {
       ramadanyearId: data.ramadanYear,
       doners: data.doners.map((item) => ({
@@ -58,16 +57,12 @@ function AddRamadanModal() {
       })),
     };
 
-    console.log("Payload to send:", payload);
-
     try {
-      const result = await createIftar(payload).unwrap();
-      console.log("Iftar list created successfully", result);
-      toast.success("Iftar list created successfully!");
+      await createIftar(payload).unwrap();
+      toast.success(t("iftar_create_success"));
       setOpen(false);
     } catch (error: any) {
-      console.log("Iftar creation error", error);
-      toast.error(error?.data?.message || "Failed to create iftar list");
+      toast.error(error?.data?.message || t("iftar_create_failed"));
     }
   };
 
@@ -76,7 +71,7 @@ function AddRamadanModal() {
       <DialogTrigger asChild>
         <Button className="bg-teal-500 hover:bg-teal-600 text-white font-medium flex justify-center items-center gap-1">
           <IoMdAdd />
-          Add Iftar List
+          {t("add_iftar_list")}
         </Button>
       </DialogTrigger>
 
@@ -84,9 +79,9 @@ function AddRamadanModal() {
         <div className="bg-gradient-to-r from-teal-600 to-emerald-600 p-6 text-white">
           <DialogHeader>
             <DialogTitle className="font-bold text-2xl text-white">
-              Create Iftar List
+              {t("create_iftar_list")}
             </DialogTitle>
-            <p className="text-teal-50/80 text-sm mt-1">Add donors for the Ramadan iftar schedule</p>
+            <p className="text-teal-50/80 text-sm mt-1">{t("add_donors_desc")}</p>
           </DialogHeader>
         </div>
 
@@ -103,10 +98,10 @@ function AddRamadanModal() {
             <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
               <RHFSearchSelect
                 options={ramadanYearOptions}
-                label="Ramadan Year"
+                label={t("ramadan_year")}
                 name="ramadanYear"
-                placeholder="Select Ramadan Year"
-                rules={{ required: "Ramadan Year is required!" }}
+                placeholder={t("select_date")}
+                rules={{ required: t("ramadan_year") + " is required!" }}
               />
             </div>
 
@@ -116,7 +111,7 @@ function AddRamadanModal() {
           <DialogFooter className="p-6 bg-white border-t flex justify-end gap-3">
             <DialogClose asChild>
               <Button variant="ghost" type="button" className="text-gray-500 hover:text-gray-700">
-                Cancel
+                {t("cancel")}
               </Button>
             </DialogClose>
             <Button 
@@ -124,7 +119,7 @@ function AddRamadanModal() {
               disabled={isLoading}
               className="bg-teal-600 hover:bg-teal-700 text-white px-8 shadow-lg shadow-teal-600/20 transition-all active:scale-95"
             >
-              {isLoading ? "Saving..." : "Save Iftar List"}
+              {isLoading ? t("saving") : t("save_iftar_list")}
             </Button>
           </DialogFooter>
         </FormProviderWrapper>
@@ -135,12 +130,12 @@ function AddRamadanModal() {
 
 function DonerFields() {
   const { control } = useFormContext<OthersCollectionForm>();
+  const { t } = useTranslationContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "doners",
   });
 
-  // Auto-generate serial numbers
   const handleAddDoner = () => {
     const nextSerial = (fields.length + 1).toString();
     append({
@@ -150,6 +145,7 @@ function DonerFields() {
       dayName: "",
     });
   };
+
   const dayOptions = [
     { value: "শনিবার", label: "শনিবার" },
     { value: "রবিবার", label: "রবিবার" },
@@ -164,7 +160,7 @@ function DonerFields() {
     <div className="space-y-4">
       <div className="flex justify-between items-center px-1">
         <h3 className="font-bold text-gray-800 text-lg flex items-center gap-2">
-          Donor List
+          {t("donor_list")}
           <span className="bg-teal-100 text-teal-700 text-xs py-0.5 px-2 rounded-full">{fields.length}</span>
         </h3>
       </div>
@@ -179,38 +175,38 @@ function DonerFields() {
               <div className="grid grid-cols-3 gap-2">
                 <div className="col-span-1">
                   <RHFInput
-                    label="SN"
+                    label={t("serial_number")}
                     name={`doners.${index}.serialNumber`}
                     placeholder="No"
                     defaultValue={field.serialNumber}
-                    rules={{ required: "Req" }}
+                    rules={{ required: t("serial_required") }}
                   />
                 </div>
                 <div className="col-span-2">
                   <RHFInput
-                    label="Donor Name"
+                    label={t("donor_name")}
                     name={`doners.${index}.name`}
-                    placeholder="Full Name"
+                    placeholder={t("full_name")}
                     defaultValue={field.name}
-                    rules={{ required: "Name req" }}
+                    rules={{ required: t("name_required") }}
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <RHFDatePicker
-                  label="Iftar Date"
+                  label={t("iftar_date")}
                   name={`doners.${index}.iftarDate`}
-                  placeholder="Select Date"
-                  rules={{ required: "Date req" }}
+                  placeholder={t("select_date")}
+                  rules={{ required: t("date_required") }}
                 />
                 <RHFSearchSelect
-                  label="Day"
+                  label={t("day_name")}
                   name={`doners.${index}.dayName`}
-                  placeholder="Day"
+                  placeholder={t("day_name")}
                   defaultValue={field.dayName}
                   options={dayOptions}
-                  rules={{ required: "Day req" }}
+                  rules={{ required: t("day_required") }}
                 />
               </div>
             </div>
@@ -220,7 +216,7 @@ function DonerFields() {
                 type="button"
                 onClick={() => remove(index)}
                 className="absolute -top-2 -right-2 bg-white border border-red-100 text-red-500 rounded-full p-1.5 shadow-sm hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100"
-                title="Remove Doner"
+                title={t("delete")}
               >
                 <IoMdClose size={16} />
               </button>
@@ -235,22 +231,21 @@ function DonerFields() {
             type="button"
             onClick={handleAddDoner}
             className="flex items-center gap-2 px-6 py-2.5 rounded-full border-2 border-dashed border-teal-200 text-teal-600 font-semibold hover:bg-teal-50 hover:border-teal-300 transition-all active:scale-95 group"
-            title="Add Doner"
+            title={t("add_another_donor")}
           >
             <IoMdAdd size={20} className="group-hover:rotate-90 transition-transform" />
-            Add Another Donor
+            {t("add_another_donor")}
           </button>
         </div>
       )}
 
       {fields.length >= 31 && (
         <p className="text-xs text-red-500 text-center font-medium">
-          Maximum 31 donors allowed for this Ramadan year
+          {t("max_donors_warning")}
         </p>
       )}
     </div>
   );
 }
-
 
 export default AddRamadanModal;

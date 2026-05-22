@@ -12,7 +12,11 @@ export const paymentApi = baseApi.injectEndpoints({
     }),
  
     getPaymentCredentials: builder.query({
-      query: () => "/bkash-credentials",
+      query: (mosqueId?: string) => ({
+        url: "/bkash-credentials",
+        method: "GET",
+        params: mosqueId ? { mosqueId } : undefined,
+      }),
       providesTags: ["paymentCredentials"],
     }),
 
@@ -34,6 +38,14 @@ export const paymentApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["donations"],
     }),
+
+    deleteBkashCredentials: builder.mutation({
+      query: () => ({
+        url: "/bkash-credentials",
+        method: "DELETE",
+      }),
+      invalidatesTags: ["paymentCredentials"],
+    }),
   }),
 });
 
@@ -42,4 +54,5 @@ export const {
   useGetPaymentCredentialsQuery,
   useGetDonationHistoryQuery,
   useCreatePaymentMutation, // এটি নতুন যোগ করা হয়েছে
+  useDeleteBkashCredentialsMutation,
 } = paymentApi;

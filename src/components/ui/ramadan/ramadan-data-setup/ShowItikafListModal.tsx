@@ -12,6 +12,7 @@ import {
 } from "@/src/components/ui/dialog";
 import { useGetRamadanIdBaseListQuery } from "@/src/redux/features/ramadan/itikafApi";
 import { FaEye } from "react-icons/fa";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString("en-GB");
@@ -19,6 +20,7 @@ function formatDate(dateString: string) {
 
 function ShowItikafListModal({ id }: { id: string }) {
   const { data: itkafList, isLoading } = useGetRamadanIdBaseListQuery(id);
+  const { t } = useTranslationContext();
 
   return (
     <Dialog>
@@ -34,19 +36,19 @@ function ShowItikafListModal({ id }: { id: string }) {
       <DialogContent className="md:min-w-2xl w-full mx-auto">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold text-gray-800">
-            Itikaf List
+            {t("itikaf_list")}
           </DialogTitle>
         </DialogHeader>
 
         {/* Loading */}
         {isLoading && (
-          <p className="text-center text-gray-600">Loading...</p>
+          <p className="text-center text-gray-600">{t("creating")}</p>
         )}
 
         {/* No Data */}
         {!isLoading && (!itkafList?.result || itkafList?.result?.length === 0) && (
           <p className="text-center text-red-500 font-semibold">
-            No Itikaf Record Found!
+            {t("no_itikaf_record")}
           </p>
         )}
 
@@ -56,10 +58,10 @@ function ShowItikafListModal({ id }: { id: string }) {
             <table className="table-auto w-full text-sm border border-gray-300">
               <thead className="bg-teal-600 text-white">
                 <tr>
-                  <th className="p-2 border">SL</th>
-                  <th className="p-2 border">Name</th>
-                  <th className="p-2 border">From Date</th>
-                  <th className="p-2 border">To Date</th>
+                  <th className="p-2 border">{t("sn")}</th>
+                  <th className="p-2 border">{t("name")}</th>
+                  <th className="p-2 border">{t("from_date")}</th>
+                  <th className="p-2 border">{t("to_date")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -78,7 +80,7 @@ function ShowItikafListModal({ id }: { id: string }) {
 
         <DialogFooter className="mt-6 flex justify-end gap-2">
           <DialogClose asChild>
-            <Button variant="outline">Close</Button>
+            <Button variant="outline">{t("close")}</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

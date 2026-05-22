@@ -19,6 +19,7 @@ import { useCreateItikafMutation } from "@/src/redux/features/ramadan/itikafApi"
 import { useGetRamadanYearQuery } from "@/src/redux/features/ramadan/ramadanDataSetUpApi";
 import toast from "react-hot-toast";
 import RHFSearchSelect from "@/src/components/shared/RHFSearchSelect";
+import { useTranslationContext } from "@/src/contexts/TranslationContext";
 
 type ItikafFormData = {
   name: string;
@@ -31,6 +32,7 @@ function AddItikafModal() {
   const [open, setOpen] = useState(false);
   const [createItikaf, { isLoading }] = useCreateItikafMutation();
   const { data: ramadanYear } = useGetRamadanYearQuery(undefined);
+  const { t } = useTranslationContext();
 
   const ramadanYearOptions =
     ramadanYear?.result?.data?.map((year: any) => ({
@@ -46,10 +48,10 @@ function AddItikafModal() {
     };
     try {
       const res = await createItikaf(payload).unwrap();
-      toast.success(res?.message || "Itikaf created successfully");
+      toast.success(res?.message || t("itikaf_created_success"));
       setOpen(false);
     } catch (error) {
-      toast.error("Failed to create Itikaf");
+      toast.error(t("itikaf_created_failed"));
     }
   };
 
@@ -58,58 +60,59 @@ function AddItikafModal() {
       <DialogTrigger asChild>
         <Button className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2 font-medium">
           <IoMdAdd className="text-lg" />
-          Add Itikaf Participant
+          {t("add_itikaf_participant")}
         </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold text-gray-800">
-            Add Participant for Ramadan I‘tikāf
+            {t("add_itikaf_participant")}
           </DialogTitle>
           <p className="text-sm text-gray-500">
-            Fill in the details below to add a new I‘tikāf participant.
+            {t("add_participant_itikaf_desc")}
           </p>
         </DialogHeader>
 
         <FormProviderWrapper<ItikafFormData> onSubmit={onSubmit}>
           <div className="space-y-4 mt-4">
             <RHFSearchSelect
-              label="Ramadan Year"
+              label={t("ramadan_year")}
               name="ramadanId"
-              placeholder="Enter Ramadan year"
+              placeholder={t("enter_ramadan_year")}
               options={ramadanYearOptions}
-              rules={{ required: "Ramadan year is required" }}
+              rules={{ required: t("ramadan_year") + " is required" }}
             />
             <RHFInput
-              label="Participant Name"
+              label={t("participant_name")}
               name="name"
-              placeholder="Enter participant's name"
-              rules={{ required: "Participant name is required" }}
+              placeholder={t("enter_participant_name")}
+              rules={{ required: t("participant_name_required") }}
             />
             <RHFDatePicker
-              label="From Date"
+              label={t("from_date")}
               name="fromDate"
-              placeholder="Select start date"
-              rules={{ required: "Start date is required" }}
+              placeholder={t("select_start_date")}
+              rules={{ required: t("from_date") + " is required" }}
             />
             <RHFDatePicker
-              label="To Date"
+              label={t("to_date")}
               name="toDate"
-              placeholder="Select end date"
-              rules={{ required: "End date is required" }}
+              placeholder={t("select_end_date")}
+              rules={{ required: t("to_date") + " is required" }}
             />
           </div>
 
           <DialogFooter className="mt-6 flex justify-end gap-2">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("cancel")}</Button>
             </DialogClose>
             <Button
               type="submit"
               className="bg-teal-600 hover:bg-teal-700 text-white"
+              disabled={isLoading}
             >
-              Save Participant
+              {isLoading ? t("saving") : t("save_participant")}
             </Button>
           </DialogFooter>
         </FormProviderWrapper>

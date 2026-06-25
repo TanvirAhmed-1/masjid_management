@@ -72,7 +72,10 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   }, [pathname]);
 
   const toggleSection = (title: string) => {
-    setOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
+    setOpenSections((prev) => {
+      const isOpen = !prev[title];
+      return { [title]: isOpen };
+    });
   };
 
   const isActiveRoute = (route: string) => {
